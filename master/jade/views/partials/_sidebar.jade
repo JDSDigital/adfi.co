@@ -1,14 +1,14 @@
 block active
   //- This block is used to set the active view name
-  //- then we check it against the sidebar configuration 
-  //- to set as active the current sidebar item 
+  //- then we check it against the sidebar configuration
+  //- to set as active the current sidebar item
 
 mixin build_sidebar_tree(tree)
   - each item in tree
 
     //- check only items, we will active parents later using client-side JS
     - item.active = (sidebar_active==item.href)
-    
+
     li(class=(item.heading?'nav-heading':'')+' '+(item.active?'active':''))
       - var label = item.label || 'label label-success'
       - if (item.heading)

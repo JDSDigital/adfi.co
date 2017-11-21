@@ -166,6 +166,11 @@ $nav-top-item-desktop-active:   $nav-top-item-mobile-active;
   .nav > li {
     position: static;
     float: left;
+    .navbar-title {
+      margin-top: 10px;
+      color: #FFF;
+      font-weight: 300;
+    }
   }
 
   // fullwidth dropdowns
@@ -272,6 +277,11 @@ $nav-top-item-desktop-active:   $nav-top-item-mobile-active;
         color: $nav-top-item-desktop-active;
       }
     }
+    .navbar-nav > li > .navbar-title {
+      margin-top: 10px;
+      color: #FFF;
+      font-weight: 300;
+    }
 
     // relocate search toggle button
     .navbar-nav > li > [data-toggle='navbar-search'] {
@@ -344,4 +354,3 @@ $nav-top-item-desktop-active:   $nav-top-item-mobile-active;
     }
   }
 }
-

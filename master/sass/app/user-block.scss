@@ -1,7 +1,7 @@
 /* ========================================================================
      Component: user-block
  ========================================================================== */
- 
+
  // for use as navbar item
 .has-user-block {
   display: block;
@@ -15,10 +15,10 @@
   padding: 25px 0 10px;
   cursor: pointer;
   @include clearfix();
-  
+
   > .user-block-picture {
     position: relative;
-    width: 60px;
+    width: 50px;
     margin: 0 auto;
     > img {
       max-width: 100%;
@@ -44,6 +44,10 @@
       color: #aaa;
     }
   }
+}
+.user-block-picture {
+  margin-top: 2px;
+  margin-bottom: 2px;
 }
 
 .user-block-status {

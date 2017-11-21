@@ -1,11 +1,11 @@
 doctype html
 html(lang="en")
-  
+
   head
 
     include views/partials/_head
 
-  body
+  body.undefined-text-text.offsidebar-open.aside-collapsed.aside-collapsed-text
 
     .wrapper
       // top navbar
@@ -17,17 +17,17 @@ html(lang="en")
         include views/partials/_sidebar
 
       // offsidebar
-      aside.offsidebar.hide
-        include views/partials/_offsidebar
+      // aside.offsidebar.hide
+      //   include views/partials/_offsidebar
 
       // Main section
       section
 
         // Page content
         .content-wrapper
-    
+
           block content
-        
+
       // Page footer
       footer
         include views/partials/_footer

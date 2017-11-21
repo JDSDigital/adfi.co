@@ -947,6 +947,10 @@ _:-ms-lang(x), .layout-fixed .wrapper > .aside > .aside-inner {
   .nav-wrapper .nav > li {
     position: static;
     float: right; }
+    .nav-wrapper .nav > li .navbar-title {
+      margin-top: 10px;
+      color: #FFF;
+      font-weight: 300; }
   .nav-wrapper .navbar-nav .open .dropdown-menu {
     position: absolute;
     background-color: white;
@@ -1026,6 +1030,10 @@ _:-ms-lang(x), .layout-fixed .wrapper > .aside > .aside-inner {
       .topnavbar .navbar-nav > .open > a:hover,
       .topnavbar .navbar-nav > .open > a:focus {
         color: #117391; }
+    .topnavbar .navbar-nav > li > .navbar-title {
+      margin-top: 10px;
+      color: #FFF;
+      font-weight: 300; }
     .topnavbar .navbar-nav > li > [data-toggle='navbar-search'] {
       position: static; }
   .nav-wrapper {
@@ -2595,7 +2603,7 @@ x:-o-prefocus, .radial-bar {
     clear: both; }
   .user-block > .user-block-picture {
     position: relative;
-    width: 60px;
+    width: 50px;
     margin: 0 auto; }
     .user-block > .user-block-picture > img {
       max-width: 100%;
@@ -2612,6 +2620,10 @@ x:-o-prefocus, .radial-bar {
     .user-block .user-block-info .user-block-role {
       font-size: 12px;
       color: #aaa; }
+
+.user-block-picture {
+  margin-top: 2px;
+  margin-bottom: 2px; }
 
 .user-block-status {
   position: relative; }
