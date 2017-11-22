@@ -2,15 +2,31 @@
   "sidebar": [
     {
       "text": "Main Navigation",
-      "heading": "true",
-      "translate": "sidebar.heading.HEADER"
+      "heading": "true"
     },
     {
       "text": "Dashboard",
       "href": "#",
       "icon": "icon-speedometer",
-      "label": "label label-info",
-      "translate": "sidebar.nav.DASHBOARD"
+      "label": "label label-info"
+    },
+    {
+      "text": "Monitoreo",
+      "href": "#",
+      "icon": "icon-graph",
+      "label": "label label-info"
+    },
+    {
+      "text": "Routers",
+      "href": "#",
+      "icon": "fa fa-wifi",
+      "label": "label label-info"
+    },
+    {
+      "text": "Reportes",
+      "href": "#",
+      "icon": "icon-chart",
+      "label": "label label-info"
     }
   ]
 }

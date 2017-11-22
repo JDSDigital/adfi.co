@@ -23,6 +23,7 @@
     > img {
       max-width: 100%;
       height: auto;
+      float: left;
     }
   }
 
@@ -57,6 +58,24 @@
     bottom: 0;
     right: 0;
     border: 2px solid #fff;
+  }
+  h4 {
+    float: right;
+    margin: 15px 10px;
+    color: white;
+    font-weight: 300;
+    i {
+      margin-left: 10px;
+      font-size: 12px;
+    }
+  }
+}
+
+.user-block-update {
+  h4 {
+    margin: 17px 30px;
+    color: white;
+    font-weight: 300;
   }
 }
 

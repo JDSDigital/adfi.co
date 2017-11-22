@@ -1,2 +1,4149 @@
-!function(e,t){"function"==typeof define&&define.amd?define(["d3"],function(i){return e.Rickshaw=t(i)}):"object"==typeof exports?module.exports=t(require("d3")):e.Rickshaw=t(d3)}(this,function(e){var t={namespace:function(e,i){for(var n=e.split("."),r=t,s=1,a=n.length;s<a;s++){var h=n[s];r[h]=r[h]||{},r=r[h]}return r},keys:function(e){var t=[];for(var i in e)t.push(i);return t},extend:function(e,t){for(var i in t)e[i]=t[i];return e},clone:function(e){return JSON.parse(JSON.stringify(e))}};return function(e){function t(e){return d.call(e)===y}function i(e,t){for(var i in t)t.hasOwnProperty(i)&&(e[i]=t[i]);return e}function n(e){if(r(e)!==v)throw new TypeError;var t=[];for(var i in e)e.hasOwnProperty(i)&&t.push(i);return t}function r(e){switch(e){case null:return u;case void 0:return f}switch(typeof e){case"boolean":return p;case"number":return m;case"string":return g}return v}function s(e){return void 0===e}function a(e){var t=e.toString().match(/^[\s\(]*function[^(]*\(([^)]*)\)/)[1].replace(/\/\/.*?[\r\n]|\/\*(?:.|[\r\n])*?\*\//g,"").replace(/\s+/g,"").split(",");return 1!=t.length||t[0]?t:[]}function h(e,t){var i=e;return function(){var e=o([l(i,this)],arguments);return t.apply(this,e)}}function o(e,t){for(var i=e.length,n=t.length;n--;)e[i+n]=t[n];return e}function c(e,t){return e=w.call(e,0),o(e,t)}function l(e,t){if(arguments.length<2&&s(arguments[0]))return this;var i=e,n=w.call(arguments,2);return function(){var e=c(n,arguments);return i.apply(t,e)}}var d=Object.prototype.toString,u="Null",f="Undefined",p="Boolean",m="Number",g="String",v="Object",y="[object Function]",w=Array.prototype.slice,k=function(){},x=function(){function e(){}function r(){function n(){this.initialize.apply(this,arguments)}var r=null,s=[].slice.apply(arguments);if(t(s[0])&&(r=s.shift()),i(n,x.Methods),n.superclass=r,n.subclasses=[],r){e.prototype=r.prototype,n.prototype=new e;try{r.subclasses.push(n)}catch(e){}}for(var a=0,h=s.length;a<h;a++)n.addMethods(s[a]);return n.prototype.initialize||(n.prototype.initialize=k),n.prototype.constructor=n,n}function s(e){var i=this.superclass&&this.superclass.prototype,r=n(e);o&&(e.toString!=Object.prototype.toString&&r.push("toString"),e.valueOf!=Object.prototype.valueOf&&r.push("valueOf"));for(var s=0,c=r.length;s<c;s++){var d=r[s],u=e[d];if(i&&t(u)&&"$super"==a(u)[0]){var f=u;u=h(function(e){return function(){return i[e].apply(this,arguments)}}(d),f),u.valueOf=l(f.valueOf,f),u.toString=l(f.toString,f)}this.prototype[d]=u}return this}var o=function(){for(var e in{toString:1})if("toString"===e)return!1;return!0}();return{create:r,Methods:{addMethods:s}}}();e.exports?e.exports.Class=x:e.Class=x}(t),t.namespace("Rickshaw.Compat.ClassList"),t.Compat.ClassList=function(){"undefined"==typeof document||"classList"in document.createElement("a")||function(e){"use strict";var t=(e.HTMLElement||e.Element).prototype,i=Object,n=String.prototype.trim||function(){return this.replace(/^\s+|\s+$/g,"")},r=Array.prototype.indexOf||function(e){for(var t=0,i=this.length;t<i;t++)if(t in this&&this[t]===e)return t;return-1},s=function(e,t){this.name=e,this.code=DOMException[e],this.message=t},a=function(e,t){if(""===t)throw new s("SYNTAX_ERR","An invalid or illegal string was specified");if(/\s/.test(t))throw new s("INVALID_CHARACTER_ERR","String contains an invalid character");return r.call(e,t)},h=function(e){for(var t=n.call(e.className),i=t?t.split(/\s+/):[],r=0,s=i.length;r<s;r++)this.push(i[r]);this._updateClassName=function(){e.className=this.toString()}},o=h.prototype=[],c=function(){return new h(this)};if(s.prototype=Error.prototype,o.item=function(e){return this[e]||null},o.contains=function(e){return e+="",-1!==a(this,e)},o.add=function(e){e+="",-1===a(this,e)&&(this.push(e),this._updateClassName())},o.remove=function(e){e+="";var t=a(this,e);-1!==t&&(this.splice(t,1),this._updateClassName())},o.toggle=function(e){e+="",-1===a(this,e)?this.add(e):this.remove(e)},o.toString=function(){return this.join(" ")},i.defineProperty){var l={get:c,enumerable:!0,configurable:!0};try{i.defineProperty(t,"classList",l)}catch(e){-2146823252===e.number&&(l.enumerable=!1,i.defineProperty(t,"classList",l))}}else i.prototype.__defineGetter__&&t.__defineGetter__("classList",c)}(window)},("undefined"!=typeof RICKSHAW_NO_COMPAT&&!RICKSHAW_NO_COMPAT||"undefined"==typeof RICKSHAW_NO_COMPAT)&&new t.Compat.ClassList,t.namespace("Rickshaw.Graph"),t.Graph=function(i){var n=this;this.initialize=function(t){if(!t.element)throw"Rickshaw.Graph needs a reference to an element";if(1!==t.element.nodeType)throw"Rickshaw.Graph element was defined but not an HTML element";this.element=t.element,this.series=t.series,this.window={},this.updateCallbacks=[],this.configureCallbacks=[],this.defaults={interpolation:"cardinal",offset:"zero",min:void 0,max:void 0,preserve:!1,xScale:void 0,yScale:void 0,stack:!0},this._loadRenderers(),this.configure(t),this.validateSeries(t.series),this.series.active=function(){return n.series.filter(function(e){return!e.disabled})},this.setSize({width:t.width,height:t.height}),this.element.classList.add("rickshaw_graph"),this.vis=e.select(this.element).append("svg:svg").attr("width",this.width).attr("height",this.height),this.discoverRange()},this._loadRenderers=function(){for(var e in t.Graph.Renderer)if(e&&t.Graph.Renderer.hasOwnProperty(e)){var i=t.Graph.Renderer[e];i&&i.prototype&&i.prototype.render&&n.registerRenderer(new i({graph:n}))}},this.validateSeries=function(e){if(!(Array.isArray(e)||e instanceof t.Series)){throw"series is not an array: "+Object.prototype.toString.apply(e)}e.forEach(function(e){if(!(e instanceof Object))throw"series element is not an object: "+e;if(!e.data)throw"series has no data: "+JSON.stringify(e);if(!Array.isArray(e.data))throw"series data is not an array: "+JSON.stringify(e.data);if(e.data.length>0){var t=e.data[0].x,i=e.data[0].y;if("number"!=typeof t||"number"!=typeof i&&null!==i)throw"x and y properties of points should be numbers instead of "+typeof t+" and "+typeof i}if(e.data.length>=3&&(e.data[2].x<e.data[1].x||e.data[1].x<e.data[0].x||e.data[e.data.length-1].x<e.data[0].x))throw"series data needs to be sorted on x values for series name: "+e.name},this)},this.dataDomain=function(){var t=this.series.map(function(e){return e.data});return[e.min(t.map(function(e){return e[0].x})),e.max(t.map(function(e){return e[e.length-1].x}))]},this.discoverRange=function(){var t=this.renderer.domain();this.x=(this.xScale||e.scale.linear()).copy().domain(t.x).range([0,this.width]),this.y=(this.yScale||e.scale.linear()).copy().domain(t.y).range([this.height,0]),this.x.magnitude=e.scale.linear().domain([t.x[0]-t.x[0],t.x[1]-t.x[0]]).range([0,this.width]),this.y.magnitude=e.scale.linear().domain([t.y[0]-t.y[0],t.y[1]-t.y[0]]).range([0,this.height])},this.render=function(){this.stackData();this.discoverRange(),this.renderer.render(),this.updateCallbacks.forEach(function(e){e()})},this.update=this.render,this.stackData=function(){var i=this.series.active().map(function(e){return e.data}).map(function(e){return e.filter(function(e){return this._slice(e)},this)},this),r=this.preserve;r||this.series.forEach(function(e){e.scale&&(r=!0)}),i=r?t.clone(i):i,this.series.active().forEach(function(e,t){if(e.scale){var n=i[t];n&&n.forEach(function(t){t.y=e.scale(t.y)})}}),this.stackData.hooks.data.forEach(function(e){i=e.f.apply(n,[i])});var s;if(!this.renderer.unstack){this._validateStackable();var a=e.layout.stack();a.offset(n.offset),s=a(i)}s=s||i,this.renderer.unstack&&s.forEach(function(e){e.forEach(function(e){e.y0=void 0===e.y0?0:e.y0})}),this.stackData.hooks.after.forEach(function(e){s=e.f.apply(n,[i])});var h=0;return this.series.forEach(function(e){e.disabled||(e.stack=s[h++])}),this.stackedData=s,s},this._validateStackable=function(){var e,t=this.series;t.forEach(function(t){if((e=e||t.data.length)&&t.data.length!=e)throw"stacked series cannot have differing numbers of points: "+e+" vs "+t.data.length+"; see Rickshaw.Series.fill()"},this)},this.stackData.hooks={data:[],after:[]},this._slice=function(e){if(this.window.xMin||this.window.xMax){var t=!0;return this.window.xMin&&e.x<this.window.xMin&&(t=!1),this.window.xMax&&e.x>this.window.xMax&&(t=!1),t}return!0},this.onUpdate=function(e){this.updateCallbacks.push(e)},this.onConfigure=function(e){this.configureCallbacks.push(e)},this.registerRenderer=function(e){this._renderers=this._renderers||{},this._renderers[e.name]=e},this.configure=function(e){this.config=this.config||{},(e.width||e.height)&&this.setSize(e),t.keys(this.defaults).forEach(function(t){this.config[t]=t in e?e[t]:t in this?this[t]:this.defaults[t]},this),t.keys(this.config).forEach(function(e){this[e]=this.config[e]},this),"stack"in e&&(e.unstack=!e.stack);var i=e.renderer||this.renderer&&this.renderer.name||"stack";this.setRenderer(i,e),this.configureCallbacks.forEach(function(t){t(e)})},this.setRenderer=function(e,t){if("function"==typeof e)this.renderer=new e({graph:n}),this.registerRenderer(this.renderer);else{if(!this._renderers[e])throw"couldn't find renderer "+e;this.renderer=this._renderers[e]}"object"==typeof t&&this.renderer.configure(t)},this.setSize=function(e){if(e=e||{},"undefined"!=typeof window)var t=window.getComputedStyle(this.element,null),i=parseInt(t.getPropertyValue("width"),10),n=parseInt(t.getPropertyValue("height"),10);this.width=e.width||i||400,this.height=e.height||n||250,this.vis&&this.vis.attr("width",this.width).attr("height",this.height)},this.initialize(i)},t.namespace("Rickshaw.Fixtures.Color"),t.Fixtures.Color=function(){this.schemes={},this.schemes.spectrum14=["#ecb796","#dc8f70","#b2a470","#92875a","#716c49","#d2ed82","#bbe468","#a1d05d","#e7cbe6","#d8aad6","#a888c2","#9dc2d3","#649eb9","#387aa3"].reverse(),this.schemes.spectrum2000=["#57306f","#514c76","#646583","#738394","#6b9c7d","#84b665","#a7ca50","#bfe746","#e2f528","#fff726","#ecdd00","#d4b11d","#de8800","#de4800","#c91515","#9a0000","#7b0429","#580839","#31082b"],this.schemes.spectrum2001=["#2f243f","#3c2c55","#4a3768","#565270","#6b6b7c","#72957f","#86ad6e","#a1bc5e","#b8d954","#d3e04e","#ccad2a","#cc8412","#c1521d","#ad3821","#8a1010","#681717","#531e1e","#3d1818","#320a1b"],this.schemes.classic9=["#423d4f","#4a6860","#848f39","#a2b73c","#ddcb53","#c5a32f","#7d5836","#963b20","#7c2626","#491d37","#2f254a"].reverse(),this.schemes.httpStatus={503:"#ea5029",502:"#d23f14",500:"#bf3613",410:"#efacea",409:"#e291dc",403:"#f457e8",408:"#e121d2",401:"#b92dae",405:"#f47ceb",404:"#a82a9f",400:"#b263c6",301:"#6fa024",302:"#87c32b",307:"#a0d84c",304:"#28b55c",200:"#1a4f74",206:"#27839f",201:"#52adc9",202:"#7c979f",203:"#a5b8bd",204:"#c1cdd1"},this.schemes.colorwheel=["#b5b6a9","#858772","#785f43","#96557e","#4682b4","#65b9ac","#73c03a","#cb513a"].reverse(),this.schemes.cool=["#5e9d2f","#73c03a","#4682b4","#7bc3b8","#a9884e","#c1b266","#a47493","#c09fb5"],this.schemes.munin=["#00cc00","#0066b3","#ff8000","#ffcc00","#330099","#990099","#ccff00","#ff0000","#808080","#008f00","#00487d","#b35a00","#b38f00","#6b006b","#8fb300","#b30000","#bebebe","#80ff80","#80c9ff","#ffc080","#ffe680","#aa80ff","#ee00cc","#ff8080","#666600","#ffbfff","#00ffcc","#cc6699","#999900"]},t.namespace("Rickshaw.Fixtures.RandomData"),t.Fixtures.RandomData=function(e){e=e||1;var t=200,i=Math.floor((new Date).getTime()/1e3);this.addData=function(n){var r=100*Math.random()+15+t,s=n[0].length,a=1;n.forEach(function(t){var n=20*Math.random(),h=r/25+a+++15*(Math.cos(s*a*11/960)+2)+7*(Math.cos(s/7)+2)+1*(Math.cos(s/17)+2);t.push({x:s*e+i,y:h+n})}),t=.85*r},this.removeData=function(t){t.forEach(function(e){e.shift()}),i+=e}},t.namespace("Rickshaw.Fixtures.Time"),t.Fixtures.Time=function(){var t=this;this.months=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],this.units=[{name:"decade",seconds:315576e3,formatter:function(e){return 10*parseInt(e.getUTCFullYear()/10,10)}},{name:"year",seconds:31557600,formatter:function(e){return e.getUTCFullYear()}},{name:"month",seconds:2635200,formatter:function(e){return t.months[e.getUTCMonth()]}},{name:"week",seconds:604800,formatter:function(e){return t.formatDate(e)}},{name:"day",seconds:86400,formatter:function(e){return e.getUTCDate()}},{name:"6 hour",seconds:21600,formatter:function(e){return t.formatTime(e)}},{name:"hour",seconds:3600,formatter:function(e){return t.formatTime(e)}},{name:"15 minute",seconds:900,formatter:function(e){return t.formatTime(e)}},{name:"minute",seconds:60,formatter:function(e){return e.getUTCMinutes()}},{name:"15 second",seconds:15,formatter:function(e){return e.getUTCSeconds()+"s"}},{name:"second",seconds:1,formatter:function(e){return e.getUTCSeconds()+"s"}},{name:"decisecond",seconds:.1,formatter:function(e){return e.getUTCMilliseconds()+"ms"}},{name:"centisecond",seconds:.01,formatter:function(e){return e.getUTCMilliseconds()+"ms"}}],this.unit=function(e){return this.units.filter(function(t){return e==t.name}).shift()},this.formatDate=function(t){return e.time.format("%b %e")(t)},this.formatTime=function(e){return e.toUTCString().match(/(\d+:\d+):/)[1]},this.ceil=function(e,t){var i,n;if("month"==t.name){if(i=new Date(1e3*e),Date.UTC(i.getUTCFullYear(),i.getUTCMonth())/1e3==e)return e;n=i.getUTCFullYear();var r=i.getUTCMonth();return 11==r?(r=0,n+=1):r+=1,Date.UTC(n,r)/1e3}return"year"==t.name?(i=new Date(1e3*e),Date.UTC(i.getUTCFullYear(),0)/1e3==e?e:(n=i.getUTCFullYear()+1,Date.UTC(n,0)/1e3)):Math.ceil(e/t.seconds)*t.seconds}},t.namespace("Rickshaw.Fixtures.Time.Local"),t.Fixtures.Time.Local=function(){var t=this;this.months=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],this.units=[{name:"decade",seconds:315576e3,formatter:function(e){return 10*parseInt(e.getFullYear()/10,10)}},{name:"year",seconds:31557600,formatter:function(e){return e.getFullYear()}},{name:"month",seconds:2635200,formatter:function(e){return t.months[e.getMonth()]}},{name:"week",seconds:604800,formatter:function(e){return t.formatDate(e)}},{name:"day",seconds:86400,formatter:function(e){return e.getDate()}},{name:"6 hour",seconds:21600,formatter:function(e){return t.formatTime(e)}},{name:"hour",seconds:3600,formatter:function(e){return t.formatTime(e)}},{name:"15 minute",seconds:900,formatter:function(e){return t.formatTime(e)}},{name:"minute",seconds:60,formatter:function(e){return e.getMinutes()}},{name:"15 second",seconds:15,formatter:function(e){return e.getSeconds()+"s"}},{name:"second",seconds:1,formatter:function(e){return e.getSeconds()+"s"}},{name:"decisecond",seconds:.1,formatter:function(e){return e.getMilliseconds()+"ms"}},{name:"centisecond",seconds:.01,formatter:function(e){return e.getMilliseconds()+"ms"}}],this.unit=function(e){return this.units.filter(function(t){return e==t.name}).shift()},this.formatDate=function(t){return e.time.format("%b %e")(t)},this.formatTime=function(e){return e.toString().match(/(\d+:\d+):/)[1]},this.ceil=function(e,t){var i,n,r;if("day"==t.name){var s=new Date(1e3*(e+t.seconds-1)),a=new Date(0);return a.setFullYear(s.getFullYear()),a.setMonth(s.getMonth()),a.setDate(s.getDate()),a.setMilliseconds(0),a.setSeconds(0),a.setMinutes(0),a.setHours(0),a.getTime()/1e3}if("month"==t.name){if(i=new Date(1e3*e),new Date(i.getFullYear(),i.getMonth()).getTime()/1e3==e)return e;n=i.getFullYear();var h=i.getMonth();return 11==h?(h=0,n+=1):h+=1,new Date(n,h).getTime()/1e3}return"year"==t.name?(i=new Date(1e3*e),new Date(i.getUTCFullYear(),0).getTime()/1e3==e?e:(n=i.getFullYear()+1,new Date(n,0).getTime()/1e3)):(r=60*new Date(1e3*e).getTimezoneOffset(),Math.ceil((e-r)/t.seconds)*t.seconds+r)}},t.namespace("Rickshaw.Fixtures.Number"),t.Fixtures.Number.formatKMBT=function(e){var t=Math.abs(e);return t>=1e12?e/1e12+"T":t>=1e9?e/1e9+"B":t>=1e6?e/1e6+"M":t>=1e3?e/1e3+"K":t<1&&e>0?e.toFixed(2):0===t?"":e},t.Fixtures.Number.formatBase1024KMGTP=function(e){var t=Math.abs(e);return t>=0x4000000000000?e/0x4000000000000+"P":t>=1099511627776?e/1099511627776+"T":t>=1073741824?e/1073741824+"G":t>=1048576?e/1048576+"M":t>=1024?e/1024+"K":t<1&&e>0?e.toFixed(2):0===t?"":e},t.namespace("Rickshaw.Color.Palette"),t.Color.Palette=function(i){var n=new t.Fixtures.Color;if(i=i||{},this.schemes={},this.scheme=n.schemes[i.scheme]||i.scheme||n.schemes.colorwheel,this.runningIndex=0,this.generatorIndex=0,i.interpolatedStopCount){var r,s,a=this.scheme.length-1,h=[];for(r=0;r<a;r++){h.push(this.scheme[r]);var o=e.interpolateHsl(this.scheme[r],this.scheme[r+1]);for(s=1;s<i.interpolatedStopCount;s++)h.push(o(1/i.interpolatedStopCount*s))}h.push(this.scheme[this.scheme.length-1]),this.scheme=h}this.rotateCount=this.scheme.length,this.color=function(e){return this.scheme[e]||this.scheme[this.runningIndex++]||this.interpolateColor()||"#808080"},this.interpolateColor=function(){if(Array.isArray(this.scheme)){var t;return this.generatorIndex==2*this.rotateCount-1?(t=e.interpolateHsl(this.scheme[this.generatorIndex],this.scheme[0])(.5),this.generatorIndex=0,this.rotateCount*=2):(t=e.interpolateHsl(this.scheme[this.generatorIndex],this.scheme[this.generatorIndex+1])(.5),this.generatorIndex++),this.scheme.push(t),t}}},t.namespace("Rickshaw.Graph.Ajax"),t.Graph.Ajax=t.Class.create({initialize:function(e){this.dataURL=e.dataURL,this.onData=e.onData||function(e){return e},this.onComplete=e.onComplete||function(){},this.onError=e.onError||function(){},this.args=e,this.request()},request:function(){jQuery.ajax({url:this.dataURL,dataType:"json",success:this.success.bind(this),error:this.error.bind(this)})},error:function(){console.log("error loading dataURL: "+this.dataURL),this.onError(this)},success:function(e,i){e=this.onData(e),this.args.series=this._splice({data:e,series:this.args.series}),this.graph=this.graph||new t.Graph(this.args),this.graph.render(),this.onComplete(this)},_splice:function(e){var t=e.data,i=e.series;return e.series?(i.forEach(function(e){var i=e.key||e.name;if(!i)throw"series needs a key or a name";t.forEach(function(t){var n=t.key||t.name;if(!n)throw"data needs a key or a name";if(i==n){["color","name","data"].forEach(function(i){t[i]&&(e[i]=t[i])})}})}),i):t}}),t.namespace("Rickshaw.Graph.Annotate"),t.Graph.Annotate=function(e){this.graph=e.graph;this.elements={timeline:e.element};var i=this;this.data={},this.elements.timeline.classList.add("rickshaw_annotation_timeline"),this.add=function(e,t,n){i.data[e]=i.data[e]||{boxes:[]},i.data[e].boxes.push({content:t,end:n})},this.update=function(){t.keys(i.data).forEach(function(e){var t=i.data[e],n=i.graph.x(e);if(n<0||n>i.graph.x.range()[1])return t.element&&(t.line.classList.add("offscreen"),t.element.style.display="none"),void t.boxes.forEach(function(e){e.rangeElement&&e.rangeElement.classList.add("offscreen")});if(!t.element){var r=t.element=document.createElement("div");r.classList.add("annotation"),this.elements.timeline.appendChild(r),r.addEventListener("click",function(e){r.classList.toggle("active"),t.line.classList.toggle("active"),t.boxes.forEach(function(e){e.rangeElement&&e.rangeElement.classList.toggle("active")})},!1)}t.element.style.left=n+"px",t.element.style.display="block",t.boxes.forEach(function(e){var r=e.element;if(r||(r=e.element=document.createElement("div"),r.classList.add("content"),r.innerHTML=e.content,t.element.appendChild(r),t.line=document.createElement("div"),t.line.classList.add("annotation_line"),i.graph.element.appendChild(t.line),e.end&&(e.rangeElement=document.createElement("div"),e.rangeElement.classList.add("annotation_range"),i.graph.element.appendChild(e.rangeElement))),e.end){var s=n,a=Math.min(i.graph.x(e.end),i.graph.x.range()[1]);s>a&&(a=n,s=Math.max(i.graph.x(e.end),i.graph.x.range()[0]));var h=a-s;e.rangeElement.style.left=s+"px",e.rangeElement.style.width=h+"px",e.rangeElement.classList.remove("offscreen")}t.line.classList.remove("offscreen"),t.line.style.left=n+"px"})},this)},this.graph.onUpdate(function(){i.update()})},t.namespace("Rickshaw.Graph.Axis.Time"),t.Graph.Axis.Time=function(e){var i=this;this.graph=e.graph,this.elements=[],this.ticksTreatment=e.ticksTreatment||"plain",this.fixedTimeUnit=e.timeUnit;var n=e.timeFixture||new t.Fixtures.Time;this.appropriateTimeUnit=function(){var e,t=n.units,i=this.graph.x.domain(),r=i[1]-i[0];return t.forEach(function(t){Math.floor(r/t.seconds)>=2&&(e=e||t)}),e||n.units[n.units.length-1]},this.tickOffsets=function(){for(var e=this.graph.x.domain(),t=this.fixedTimeUnit||this.appropriateTimeUnit(),i=Math.ceil((e[1]-e[0])/t.seconds),r=e[0],s=[],a=0;a<i;a++){var h=n.ceil(r,t);r=h+t.seconds/2,s.push({value:h,unit:t})}return s},this.render=function(){this.elements.forEach(function(e){e.parentNode.removeChild(e)}),this.elements=[],this.tickOffsets().forEach(function(e){if(!(i.graph.x(e.value)>i.graph.x.range()[1])){var t=document.createElement("div");t.style.left=i.graph.x(e.value)+"px",t.classList.add("x_tick"),t.classList.add(i.ticksTreatment);var n=document.createElement("div");n.classList.add("title"),n.innerHTML=e.unit.formatter(new Date(1e3*e.value)),t.appendChild(n),i.graph.element.appendChild(t),i.elements.push(t)}})},this.graph.onUpdate(function(){i.render()})},t.namespace("Rickshaw.Graph.Axis.X"),t.Graph.Axis.X=function(t){var i=this;this.initialize=function(t){this.graph=t.graph,this.orientation=t.orientation||"top",this.pixelsPerTick=t.pixelsPerTick||75,t.ticks&&(this.staticTicks=t.ticks),t.tickValues&&(this.tickValues=t.tickValues),this.tickSize=t.tickSize||4,this.ticksTreatment=t.ticksTreatment||"plain",t.element?(this.element=t.element,this._discoverSize(t.element,t),this.vis=e.select(t.element).append("svg:svg").attr("height",this.height).attr("width",this.width).attr("class","rickshaw_graph x_axis_d3"),this.element=this.vis[0][0],this.element.style.position="relative",this.setSize({width:t.width,height:t.height})):this.vis=this.graph.vis,this.graph.onUpdate(function(){i.render()})},this.setSize=function(e){if(e=e||{},this.element){this._discoverSize(this.element.parentNode,e),this.vis.attr("height",this.height).attr("width",1.1*this.width);var t=Math.floor(.1*this.width/2);this.element.style.left=-1*t+"px"}},this.render=function(){void 0!==this._renderWidth&&this.graph.width!==this._renderWidth&&this.setSize({auto:!0});var i=e.svg.axis().scale(this.graph.x).orient(this.orientation);i.tickFormat(t.tickFormat||function(e){return e}),this.tickValues&&i.tickValues(this.tickValues),this.ticks=this.staticTicks||Math.floor(this.graph.width/this.pixelsPerTick);var n,r=Math.floor(.1*this.width/2)||0,s="bar"==this.graph.renderer.name&&Math.ceil(.95*this.graph.width/this.graph.series[0].data.length/2)||0;if("top"==this.orientation){n="translate("+(r+s)+","+(this.height||this.graph.height)+")"}else n="translate("+(r+s)+", 0)";this.element&&this.vis.selectAll("*").remove(),this.vis.append("svg:g").attr("class",["x_ticks_d3",this.ticksTreatment].join(" ")).attr("transform",n).call(i.ticks(this.ticks).tickSubdivide(0).tickSize(this.tickSize));var a=("bottom"==this.orientation?1:-1)*this.graph.height;this.graph.vis.append("svg:g").attr("class","x_grid_d3").call(i.ticks(this.ticks).tickSubdivide(0).tickSize(a)).selectAll("text").each(function(){this.parentNode.setAttribute("data-x-value",this.textContent)}),this._renderHeight=this.graph.height},this._discoverSize=function(e,t){if("undefined"!=typeof window){var i=window.getComputedStyle(e,null),n=parseInt(i.getPropertyValue("height"),10);if(!t.auto)var r=parseInt(i.getPropertyValue("width"),10)}this.width=1.1*(t.width||r||this.graph.width),this.height=t.height||n||40},this.initialize(t)},t.namespace("Rickshaw.Graph.Axis.Y"),t.Graph.Axis.Y=t.Class.create({initialize:function(t){this.graph=t.graph,this.orientation=t.orientation||"right",this.pixelsPerTick=t.pixelsPerTick||75,t.ticks&&(this.staticTicks=t.ticks),t.tickValues&&(this.tickValues=t.tickValues),this.tickSize=t.tickSize||4,this.ticksTreatment=t.ticksTreatment||"plain",this.tickFormat=t.tickFormat||function(e){return e},this.berthRate=.1,t.element?(this.element=t.element,this.vis=e.select(t.element).append("svg:svg").attr("class","rickshaw_graph y_axis"),this.element=this.vis[0][0],this.element.style.position="relative",this.setSize({width:t.width,height:t.height})):this.vis=this.graph.vis;var i=this;this.graph.onUpdate(function(){i.render()})},setSize:function(e){if(e=e||{},this.element){if("undefined"!=typeof window){var t=window.getComputedStyle(this.element.parentNode,null),i=parseInt(t.getPropertyValue("width"),10);if(!e.auto)var n=parseInt(t.getPropertyValue("height"),10)}this.width=e.width||i||this.graph.width*this.berthRate,this.height=e.height||n||this.graph.height,this.vis.attr("width",this.width).attr("height",this.height*(1+this.berthRate));var r=this.height*this.berthRate;"left"==this.orientation&&(this.element.style.top=-1*r+"px")}},render:function(){void 0!==this._renderHeight&&this.graph.height!==this._renderHeight&&this.setSize({auto:!0}),this.ticks=this.staticTicks||Math.floor(this.graph.height/this.pixelsPerTick);var e=this._drawAxis(this.graph.y);this._drawGrid(e),this._renderHeight=this.graph.height},_drawAxis:function(t){var i=e.svg.axis().scale(t).orient(this.orientation);if(i.tickFormat(this.tickFormat),this.tickValues&&i.tickValues(this.tickValues),"left"==this.orientation)var n=this.height*this.berthRate,r="translate("+this.width+", "+n+")";return this.element&&this.vis.selectAll("*").remove(),this.vis.append("svg:g").attr("class",["y_ticks",this.ticksTreatment].join(" ")).attr("transform",r).call(i.ticks(this.ticks).tickSubdivide(0).tickSize(this.tickSize)),i},_drawGrid:function(e){var t=("right"==this.orientation?1:-1)*this.graph.width;this.graph.vis.append("svg:g").attr("class","y_grid").call(e.ticks(this.ticks).tickSubdivide(0).tickSize(t)).selectAll("text").each(function(){this.parentNode.setAttribute("data-y-value",this.textContent)})}}),t.namespace("Rickshaw.Graph.Axis.Y.Scaled"),t.Graph.Axis.Y.Scaled=t.Class.create(t.Graph.Axis.Y,{initialize:function($super,e){if(void 0===e.scale)throw new Error("Scaled requires scale");this.scale=e.scale,void 0===e.grid?this.grid=!0:this.grid=e.grid,$super(e)},_drawAxis:function($super,t){var i=this.scale.domain(),n=this.graph.renderer.domain().y,r=[Math.min.apply(Math,i),Math.max.apply(Math,i)],s=e.scale.linear().domain([0,1]).range(r),a=[s(n[0]),s(n[1])],h=e.scale.linear().domain(r).range(a);return $super(this.scale.copy().domain(i.map(h)).range(t.range()))},_drawGrid:function($super,e){this.grid&&$super(e)}}),t.namespace("Rickshaw.Graph.Behavior.Series.Highlight"),t.Graph.Behavior.Series.Highlight=function(t){this.graph=t.graph,this.legend=t.legend;var i=this,n={},r=null,s=t.disabledColor||function(t){return e.interpolateRgb(t,e.rgb("#d8d8d8"))(.8).toString()};this.addHighlightEvents=function(e){e.element.addEventListener("mouseover",function(t){r||(r=e,i.legend.lines.forEach(function(t){if(e!==t)n[t.series.name]=n[t.series.name]||t.series.color,t.series.color=s(t.series.color);else if(i.graph.renderer.unstack&&(!t.series.renderer||t.series.renderer.unstack)){var r=i.graph.series.indexOf(t.series);t.originalIndex=r;var a=i.graph.series.splice(r,1)[0];i.graph.series.push(a)}}),i.graph.update())},!1),e.element.addEventListener("mouseout",function(t){r&&(r=null,i.legend.lines.forEach(function(t){if(e===t&&t.hasOwnProperty("originalIndex")){var r=i.graph.series.pop();i.graph.series.splice(t.originalIndex,0,r),delete t.originalIndex}n[t.series.name]&&(t.series.color=n[t.series.name])}),i.graph.update())},!1)},this.legend&&this.legend.lines.forEach(function(e){i.addHighlightEvents(e)})},t.namespace("Rickshaw.Graph.Behavior.Series.Order"),t.Graph.Behavior.Series.Order=function(e){this.graph=e.graph,this.legend=e.legend;var t=this;if(void 0===window.jQuery)throw"couldn't find jQuery at window.jQuery";if(void 0===window.jQuery.ui)throw"couldn't find jQuery UI at window.jQuery.ui";jQuery(function(){jQuery(t.legend.list).sortable({containment:"parent",tolerance:"pointer",update:function(e,i){var n=[];jQuery(t.legend.list).find("li").each(function(e,t){t.series&&n.push(t.series)});for(var r=t.graph.series.length-1;r>=0;r--)t.graph.series[r]=n.shift();t.graph.update()}}),jQuery(t.legend.list).disableSelection()}),this.graph.onUpdate(function(){var e=window.getComputedStyle(t.legend.element).height;t.legend.element.style.height=e})},t.namespace("Rickshaw.Graph.Behavior.Series.Toggle"),t.Graph.Behavior.Series.Toggle=function(e){this.graph=e.graph,this.legend=e.legend;var t=this;if(this.addAnchor=function(e){var i=document.createElement("a");i.innerHTML="&#10004;",i.classList.add("action"),e.element.insertBefore(i,e.element.firstChild),i.onclick=function(i){if(e.series.disabled)e.series.enable(),e.element.classList.remove("disabled");else{if(this.graph.series.filter(function(e){return!e.disabled}).length<=1)return;e.series.disable(),e.element.classList.add("disabled")}t.graph.update()}.bind(this),e.element.getElementsByTagName("span")[0].onclick=function(i){var n=e.series.disabled;if(!n)for(var r=0;r<t.legend.lines.length;r++){var s=t.legend.lines[r];if(e.series===s.series);else if(!s.series.disabled){n=!0;break}}n?(e.series.enable(),e.element.classList.remove("disabled"),t.legend.lines.forEach(function(t){e.series===t.series||(t.series.disable(),t.element.classList.add("disabled"))})):t.legend.lines.forEach(function(e){e.series.enable(),e.element.classList.remove("disabled")}),t.graph.update()}},this.legend){var i=jQuery;void 0!==i&&i(this.legend.list).sortable&&i(this.legend.list).sortable({start:function(e,t){t.item.bind("no.onclick",function(e){e.preventDefault()})},stop:function(e,t){setTimeout(function(){t.item.unbind("no.onclick")},250)}}),this.legend.lines.forEach(function(e){t.addAnchor(e)})}this._addBehavior=function(){this.graph.series.forEach(function(e){e.disable=function(){if(t.graph.series.length<=1)throw"only one series left";e.disabled=!0},e.enable=function(){e.disabled=!1}})},this._addBehavior(),this.updateBehaviour=function(){this._addBehavior()}},t.namespace("Rickshaw.Graph.HoverDetail"),t.Graph.HoverDetail=t.Class.create({initialize:function(e){var t=this.graph=e.graph;this.xFormatter=e.xFormatter||function(e){return new Date(1e3*e).toUTCString()},this.yFormatter=e.yFormatter||function(e){return null===e?e:e.toFixed(2)};var i=this.element=document.createElement("div");i.className="detail",this.visible=!0,t.element.appendChild(i),this.lastEvent=null,this._addListeners(),this.onShow=e.onShow,this.onHide=e.onHide,this.onRender=e.onRender,this.formatter=e.formatter||this.formatter},formatter:function(e,t,i,n,r,s){return e.name+":&nbsp;"+r},update:function(t){if((t=t||this.lastEvent)&&(this.lastEvent=t,t.target.nodeName.match(/^(path|svg|rect|circle)$/))){var i,n=this.graph,r=t.offsetX||t.layerX,s=t.offsetY||t.layerY,a=0,h=[];if(this.graph.series.active().forEach(function(t){var o=this.graph.stackedData[a++];if(o.length){var c=n.x.invert(r),l=e.scale.linear().domain([o[0].x,o.slice(-1)[0].x]).range([0,o.length-1]),d=Math.round(l(c));d==o.length-1&&d--;for(var u=Math.min(d||0,o.length-1),f=d;f<o.length-1&&(o[f]&&o[f+1]);){if(o[f].x<=c&&o[f+1].x>c){u=Math.abs(c-o[f].x)<Math.abs(c-o[f+1].x)?f:f+1;break}o[f+1].x<=c?f++:f--}u<0&&(u=0);var p=o[u],m=Math.sqrt(Math.pow(Math.abs(n.x(p.x)-r),2)+Math.pow(Math.abs(n.y(p.y+p.y0)-s),2)),g=t.xFormatter||this.xFormatter,v=t.yFormatter||this.yFormatter,y={formattedXValue:g(p.x),formattedYValue:v(t.scale?t.scale.invert(p.y):p.y),series:t,value:p,distance:m,order:a,name:t.name};(!i||m<i.distance)&&(i=y),h.push(y)}},this),i){i.active=!0;var o=i.value.x,c=i.formattedXValue;this.element.innerHTML="",this.element.style.left=n.x(o)+"px",this.visible&&this.render({points:h,detail:h,mouseX:r,mouseY:s,formattedXValue:c,domainX:o})}}},hide:function(){this.visible=!1,this.element.classList.add("inactive"),"function"==typeof this.onHide&&this.onHide()},show:function(){this.visible=!0,this.element.classList.remove("inactive"),"function"==typeof this.onShow&&this.onShow()},render:function(e){var t=this.graph,i=e.points,n=i.filter(function(e){return e.active}).shift()
-;if(null!==n.value.y){var r=n.formattedXValue,s=n.formattedYValue;this.element.innerHTML="",this.element.style.left=t.x(n.value.x)+"px";var a=document.createElement("div");a.className="x_label",a.innerHTML=r,this.element.appendChild(a);var h=document.createElement("div");h.className="item";var o=n.series,c=o.scale?o.scale.invert(n.value.y):n.value.y;h.innerHTML=this.formatter(o,n.value.x,c,r,s,n),h.style.top=this.graph.y(n.value.y0+n.value.y)+"px",this.element.appendChild(h);var l=document.createElement("div");l.className="dot",l.style.top=h.style.top,l.style.borderColor=o.color,this.element.appendChild(l),n.active&&(h.classList.add("active"),l.classList.add("active"));var d=[a,h];d.forEach(function(e){e.classList.add("left")}),this.show();var u=this._calcLayoutError(d);if(u>0){d.forEach(function(e){e.classList.remove("left"),e.classList.add("right")});this._calcLayoutError(d)>u&&d.forEach(function(e){e.classList.remove("right"),e.classList.add("left")})}"function"==typeof this.onRender&&this.onRender(e)}},_calcLayoutError:function(e){var t=this.element.parentNode.getBoundingClientRect(),i=0;e.forEach(function(e){var n=e.getBoundingClientRect();n.width&&(n.right>t.right&&(i+=n.right-t.right),n.left<t.left&&(i+=t.left-n.left))});return i},_addListeners:function(){this.graph.element.addEventListener("mousemove",function(e){this.visible=!0,this.update(e)}.bind(this),!1),this.graph.onUpdate(function(){this.update()}.bind(this)),this.graph.element.addEventListener("mouseout",function(e){!e.relatedTarget||e.relatedTarget.compareDocumentPosition(this.graph.element)&Node.DOCUMENT_POSITION_CONTAINS||this.hide()}.bind(this),!1)}}),t.namespace("Rickshaw.Graph.JSONP"),t.Graph.JSONP=t.Class.create(t.Graph.Ajax,{request:function(){jQuery.ajax({url:this.dataURL,dataType:"jsonp",success:this.success.bind(this),error:this.error.bind(this)})}}),t.namespace("Rickshaw.Graph.Legend"),t.Graph.Legend=t.Class.create({className:"rickshaw_legend",initialize:function(e){this.element=e.element,this.graph=e.graph,this.naturalOrder=e.naturalOrder,this.element.classList.add(this.className),this.list=document.createElement("ul"),this.element.appendChild(this.list),this.render(),this.graph.onUpdate(function(){})},render:function(){for(var e=this;this.list.firstChild;)this.list.removeChild(this.list.firstChild);this.lines=[];var t=this.graph.series.map(function(e){return e});this.naturalOrder||(t=t.reverse()),t.forEach(function(t){e.addLine(t)})},addLine:function(t){var i=document.createElement("li");i.className="line",t.disabled&&(i.className+=" disabled"),t.className&&e.select(i).classed(t.className,!0);var n=document.createElement("div");n.className="swatch",n.style.backgroundColor=t.color,i.appendChild(n);var r=document.createElement("span");r.className="label",r.innerHTML=t.name,i.appendChild(r),this.list.appendChild(i),i.series=t,t.noLegend&&(i.style.display="none");var s={element:i,series:t};return this.shelving&&(this.shelving.addAnchor(s),this.shelving.updateBehaviour()),this.highlighter&&this.highlighter.addHighlightEvents(s),this.lines.push(s),i}}),t.namespace("Rickshaw.Graph.RangeSlider"),t.Graph.RangeSlider=t.Class.create({initialize:function(e){var t=jQuery,i=this,n=this.element=e.element,r=this.graphs=e.graphs;r||(r=this.graph=e.graph),r.constructor!==Array&&(r=[r]),this.graph=r[0],this.slideCallbacks=[],this.build();for(var s=0;s<r.length;s++)r[s].onUpdate(function(){i.update()}.bind(i)),r[s].onConfigure(function(){t(n)[0].style.width=r[s].width+"px"}.bind(i))},build:function(){var e,t=this.element,i=jQuery,n=this,r=this.graphs||this.graph;r.constructor!==Array&&(r=[r]),this.graph=r[0],e=r[0].dataDomain(),i(function(){i(t).slider({range:!0,min:e[0],max:e[1],values:[e[0],e[1]],start:function(e,t){n.slideStarted({event:e,ui:t})},stop:function(e,t){n.slideFinished({event:e,ui:t})},slide:function(e,t){if(n.slideShouldUpdate(e,t)&&!(t.values[1]<=t.values[0]))for(var i=0;i<r.length;i++)n.processSlideChange({event:e,ui:t,graph:r[i]})}})}),r[0].onConfigure(function(){i(t)[0].style.width=r[0].width+"px"}.bind(this))},update:function(){var e=this.element,t=this.graph,i=jQuery,n=i(e).slider("option","values"),r=t.dataDomain();i(e).slider("option","min",r[0]),i(e).slider("option","max",r[1]),null==t.window.xMin&&(n[0]=r[0]),null==t.window.xMax&&(n[1]=r[1]),i(e).slider("option","values",n)},onSlide:function(e){this.slideCallbacks.push(e)},processSlideChange:function(e){var t=(e.event,e.ui),i=e.graph;i.window.xMin=t.values[0],i.window.xMax=t.values[1],i.update();var n=i.dataDomain();n[0]==t.values[0]&&(i.window.xMin=void 0),n[1]==t.values[1]&&(i.window.xMax=void 0),this.slideCallbacks.forEach(function(e){e(i,i.window.xMin,i.window.xMax)})},slideShouldUpdate:function(){return!0},slideStarted:function(){},slideFinished:function(){}}),t.namespace("Rickshaw.Graph.RangeSlider.Preview"),t.Graph.RangeSlider.Preview=t.Class.create({initialize:function(t){if(!t.element)throw"Rickshaw.Graph.RangeSlider.Preview needs a reference to an element";if(!t.graph&&!t.graphs)throw"Rickshaw.Graph.RangeSlider.Preview needs a reference to an graph or an array of graphs";this.element=t.element,this.element.style.position="relative",this.graphs=t.graph?[t.graph]:t.graphs,this.defaults={height:75,width:400,gripperColor:void 0,frameTopThickness:3,frameHandleThickness:10,frameColor:"#d4d4d4",frameOpacity:1,minimumFrameWidth:0,heightRatio:.2},this.heightRatio=t.heightRatio||this.defaults.heightRatio,this.defaults.gripperColor=e.rgb(this.defaults.frameColor).darker().toString(),this.configureCallbacks=[],this.slideCallbacks=[],this.previews=[],t.width||(this.widthFromGraph=!0),t.height||(this.heightFromGraph=!0),(this.widthFromGraph||this.heightFromGraph)&&this.graphs[0].onConfigure(function(){this.configure(t),this.render()}.bind(this)),t.width=t.width||this.graphs[0].width||this.defaults.width,t.height=t.height||this.graphs[0].height*this.heightRatio||this.defaults.height,this.configure(t),this.render()},onSlide:function(e){this.slideCallbacks.push(e)},onConfigure:function(e){this.configureCallbacks.push(e)},configure:function(e){this.config=this.config||{},this.configureCallbacks.forEach(function(t){t(e)}),t.keys(this.defaults).forEach(function(t){this.config[t]=t in e?e[t]:t in this.config?this.config[t]:this.defaults[t]},this),("width"in e||"height"in e)&&(this.widthFromGraph&&(this.config.width=this.graphs[0].width),this.heightFromGraph&&(this.config.height=this.graphs[0].height*this.heightRatio,this.previewHeight=this.config.height),this.previews.forEach(function(e){var t=this.previewHeight/this.graphs.length-2*this.config.frameTopThickness,i=this.config.width-2*this.config.frameHandleThickness;if(e.setSize({width:i,height:t}),this.svg){var n=t+2*this.config.frameHandleThickness,r=i+2*this.config.frameHandleThickness;this.svg.style("width",r+"px"),this.svg.style("height",n+"px")}},this))},render:function(){var i=this;this.svg=e.select(this.element).selectAll("svg.rickshaw_range_slider_preview").data([null]),this.previewHeight=this.config.height-2*this.config.frameTopThickness,this.previewWidth=this.config.width-2*this.config.frameHandleThickness,this.currentFrame=[0,this.previewWidth];var n=function(e,n){var r=t.extend({},e.config),s=i.previewHeight/i.graphs.length,a=e.renderer.name;t.extend(r,{element:this.appendChild(document.createElement("div")),height:s,width:i.previewWidth,series:e.series,renderer:a});var h=new t.Graph(r);i.previews.push(h),e.onUpdate(function(){h.render(),i.render()}),e.onConfigure(function(e){delete e.height,e.width=e.width-2*i.config.frameHandleThickness,h.configure(e),h.render()}),h.render()},r=e.select(this.element).selectAll("div.rickshaw_range_slider_preview_container").data(this.graphs),s="translate("+this.config.frameHandleThickness+"px, "+this.config.frameTopThickness+"px)";r.enter().append("div").classed("rickshaw_range_slider_preview_container",!0).style("-webkit-transform",s).style("-moz-transform",s).style("-ms-transform",s).style("transform",s).each(n),r.exit().remove();var a=this.graphs[0],h=e.scale.linear().domain([0,this.previewWidth]).range(a.dataDomain()),o=[a.window.xMin,a.window.xMax];this.currentFrame[0]=void 0===o[0]?0:Math.round(h.invert(o[0])),this.currentFrame[0]<0&&(this.currentFrame[0]=0),this.currentFrame[1]=void 0===o[1]?this.previewWidth:h.invert(o[1]),this.currentFrame[1]-this.currentFrame[0]<i.config.minimumFrameWidth&&(this.currentFrame[1]=(this.currentFrame[0]||0)+i.config.minimumFrameWidth),this.svg.enter().append("svg").classed("rickshaw_range_slider_preview",!0).style("height",this.config.height+"px").style("width",this.config.width+"px").style("position","absolute").style("top",0),this._renderDimming(),this._renderFrame(),this._renderGrippers(),this._renderHandles(),this._renderMiddle(),this._registerMouseEvents()},_renderDimming:function(){var e=this.svg.selectAll("path.dimming").data([null]);e.enter().append("path").attr("fill","white").attr("fill-opacity","0.7").attr("fill-rule","evenodd").classed("dimming",!0);var t="";t+=" M "+this.config.frameHandleThickness+" "+this.config.frameTopThickness,t+=" h "+this.previewWidth,t+=" v "+this.previewHeight,t+=" h "+-this.previewWidth,t+=" z ",t+=" M "+Math.max(this.currentFrame[0],this.config.frameHandleThickness)+" "+this.config.frameTopThickness,t+=" H "+Math.min(this.currentFrame[1]+2*this.config.frameHandleThickness,this.previewWidth+this.config.frameHandleThickness),t+=" v "+this.previewHeight,t+=" H "+Math.max(this.currentFrame[0],this.config.frameHandleThickness),t+=" z",e.attr("d",t)},_renderFrame:function(){var e=this.svg.selectAll("path.frame").data([null]);e.enter().append("path").attr("stroke","white").attr("stroke-width","1px").attr("stroke-linejoin","round").attr("fill",this.config.frameColor).attr("fill-opacity",this.config.frameOpacity).attr("fill-rule","evenodd").classed("frame",!0);var t="";t+=" M "+this.currentFrame[0]+" 0",t+=" H "+(this.currentFrame[1]+2*this.config.frameHandleThickness),t+=" V "+this.config.height,t+=" H "+this.currentFrame[0],t+=" z",t+=" M "+(this.currentFrame[0]+this.config.frameHandleThickness)+" "+this.config.frameTopThickness,t+=" H "+(this.currentFrame[1]+this.config.frameHandleThickness),t+=" v "+this.previewHeight,t+=" H "+(this.currentFrame[0]+this.config.frameHandleThickness),t+=" z",e.attr("d",t)},_renderGrippers:function(){var e=this.svg.selectAll("path.gripper").data([null]);e.enter().append("path").attr("stroke",this.config.gripperColor).classed("gripper",!0);var t="";[.4,.6].forEach(function(e){t+=" M "+Math.round(this.currentFrame[0]+this.config.frameHandleThickness*e)+" "+Math.round(.3*this.config.height),t+=" V "+Math.round(.7*this.config.height),t+=" M "+Math.round(this.currentFrame[1]+this.config.frameHandleThickness*(1+e))+" "+Math.round(.3*this.config.height),t+=" V "+Math.round(.7*this.config.height)}.bind(this)),e.attr("d",t)},_renderHandles:function(){var e=this.svg.selectAll("rect.left_handle").data([null]);e.enter().append("rect").attr("width",this.config.frameHandleThickness).style("cursor","ew-resize").style("fill-opacity","0").classed("left_handle",!0),e.attr("x",this.currentFrame[0]).attr("height",this.config.height);var t=this.svg.selectAll("rect.right_handle").data([null]);t.enter().append("rect").attr("width",this.config.frameHandleThickness).style("cursor","ew-resize").style("fill-opacity","0").classed("right_handle",!0),t.attr("x",this.currentFrame[1]+this.config.frameHandleThickness).attr("height",this.config.height)},_renderMiddle:function(){var e=this.svg.selectAll("rect.middle_handle").data([null]);e.enter().append("rect").style("cursor","move").style("fill-opacity","0").classed("middle_handle",!0),e.attr("width",Math.max(0,this.currentFrame[1]-this.currentFrame[0])).attr("x",this.currentFrame[0]+this.config.frameHandleThickness).attr("height",this.config.height)},_registerMouseEvents:function(){function t(t,i){o.stop=c._getClientXFromEvent(e.event,o);var n=o.stop-o.start,r=c.frameBeforeDrag.slice(0),s=c.config.minimumFrameWidth;o.rigid&&(s=c.frameBeforeDrag[1]-c.frameBeforeDrag[0]),o.left&&(r[0]=Math.max(r[0]+n,0)),o.right&&(r[1]=Math.min(r[1]+n,c.previewWidth)),r[1]-r[0]<=s&&(o.left&&(r[0]=r[1]-s),o.right&&(r[1]=r[0]+s),r[0]<=0&&(r[1]-=r[0],r[0]=0),r[1]>=c.previewWidth&&(r[0]-=r[1]-c.previewWidth,r[1]=c.previewWidth)),c.graphs.forEach(function(t){var i=e.scale.linear().interpolate(e.interpolateNumber).domain([0,c.previewWidth]).range(t.dataDomain()),n=[i(r[0]),i(r[1])];c.slideCallbacks.forEach(function(e){e(t,n[0],n[1])}),0===r[0]&&(n[0]=void 0),r[1]===c.previewWidth&&(n[1]=void 0),t.window.xMin=n[0],t.window.xMax=n[1],t.update()})}function i(){o.target=e.event.target,o.start=c._getClientXFromEvent(e.event,o),c.frameBeforeDrag=c.currentFrame.slice(),e.event.preventDefault?e.event.preventDefault():e.event.returnValue=!1,e.select(document).on("mousemove.rickshaw_range_slider_preview",t),e.select(document).on("mouseup.rickshaw_range_slider_preview",a),e.select(document).on("touchmove.rickshaw_range_slider_preview",t),e.select(document).on("touchend.rickshaw_range_slider_preview",a),e.select(document).on("touchcancel.rickshaw_range_slider_preview",a)}function n(e,t){o.left=!0,i()}function r(e,t){o.right=!0,i()}function s(e,t){o.left=!0,o.right=!0,o.rigid=!0,i()}function a(t,i){e.select(document).on("mousemove.rickshaw_range_slider_preview",null),e.select(document).on("mouseup.rickshaw_range_slider_preview",null),e.select(document).on("touchmove.rickshaw_range_slider_preview",null),e.select(document).on("touchend.rickshaw_range_slider_preview",null),e.select(document).on("touchcancel.rickshaw_range_slider_preview",null),delete c.frameBeforeDrag,o.left=!1,o.right=!1,o.rigid=!1}var h=e.select(this.element),o={target:null,start:null,stop:null,left:!1,right:!1,rigid:!1},c=this;h.select("rect.left_handle").on("mousedown",n),h.select("rect.right_handle").on("mousedown",r),h.select("rect.middle_handle").on("mousedown",s),h.select("rect.left_handle").on("touchstart",n),h.select("rect.right_handle").on("touchstart",r),h.select("rect.middle_handle").on("touchstart",s)},_getClientXFromEvent:function(e,t){switch(e.type){case"touchstart":case"touchmove":for(var i=e.changedTouches,n=null,r=0;r<i.length;r++)if(i[r].target===t.target){n=i[r];break}return null!==n?n.clientX:void 0;default:return e.clientX}}}),t.namespace("Rickshaw.Graph.Renderer"),t.Graph.Renderer=t.Class.create({initialize:function(e){this.graph=e.graph,this.tension=e.tension||this.tension,this.configure(e)},seriesPathFactory:function(){},seriesStrokeFactory:function(){},defaults:function(){return{tension:.8,strokeWidth:2,unstack:!0,padding:{top:.01,right:0,bottom:.01,left:0},stroke:!1,fill:!1,opacity:1}},domain:function(e){var t=e||this.graph.stackedData||this.graph.stackData();t=t.filter(function(e){return e&&0!==e.length});var i=1/0,n=-1/0,r=1/0,s=-1/0;return t.forEach(function(e){e.forEach(function(e){if(null!=e.y){var t=e.y+e.y0;t<r&&(r=t),t>s&&(s=t)}}),e.length&&(e[0].x<i&&(i=e[0].x),e[e.length-1].x>n&&(n=e[e.length-1].x))}),i-=(n-i)*this.padding.left,n+=(n-i)*this.padding.right,r="auto"===this.graph.min?r:this.graph.min||0,s=void 0===this.graph.max?s:this.graph.max,("auto"===this.graph.min||r<0)&&(r-=(s-r)*this.padding.bottom),void 0===this.graph.max&&(s+=(s-r)*this.padding.top),{x:[i,n],y:[r,s]}},render:function(e){e=e||{};var t=this.graph,i=e.series||t.series,n=e.vis||t.vis;n.selectAll("*").remove();var r=i.filter(function(e){return!e.disabled}).map(function(e){return e.stack}),s=n.selectAll("path.path").data(r).enter().append("svg:path").classed("path",!0).attr("d",this.seriesPathFactory());if(this.stroke)var a=n.selectAll("path.stroke").data(r).enter().append("svg:path").classed("stroke",!0).attr("d",this.seriesStrokeFactory());var h=0;i.forEach(function(e){e.disabled||(e.path=s[0][h],this.stroke&&(e.stroke=a[0][h]),this._styleSeries(e),h++)},this)},_styleSeries:function(t){var i=this.fill?t.color:"none",n=this.stroke?t.color:"none",r=t.strokeWidth?t.strokeWidth:this.strokeWidth,s=t.opacity?t.opacity:this.opacity;t.path.setAttribute("fill",i),t.path.setAttribute("stroke",n),t.path.setAttribute("stroke-width",r),t.path.setAttribute("opacity",s),t.className&&e.select(t.path).classed(t.className,!0),t.className&&this.stroke&&e.select(t.stroke).classed(t.className,!0)},configure:function(e){e=e||{},t.keys(this.defaults()).forEach(function(i){if(!e.hasOwnProperty(i))return void(this[i]=this[i]||this.graph[i]||this.defaults()[i]);"object"==typeof this.defaults()[i]?t.keys(this.defaults()[i]).forEach(function(t){this[i][t]=void 0!==e[i][t]?e[i][t]:void 0!==this[i][t]?this[i][t]:this.defaults()[i][t]},this):this[i]=void 0!==e[i]?e[i]:void 0!==this[i]?this[i]:void 0!==this.graph[i]?this.graph[i]:this.defaults()[i]},this)},setStrokeWidth:function(e){void 0!==e&&(this.strokeWidth=e)},setTension:function(e){void 0!==e&&(this.tension=e)}}),t.namespace("Rickshaw.Graph.Renderer.Line"),t.Graph.Renderer.Line=t.Class.create(t.Graph.Renderer,{name:"line",defaults:function($super){return t.extend($super(),{unstack:!0,fill:!1,stroke:!0})},seriesPathFactory:function(){var t=this.graph,i=e.svg.line().x(function(e){return t.x(e.x)}).y(function(e){return t.y(e.y)}).interpolate(this.graph.interpolation).tension(this.tension);return i.defined&&i.defined(function(e){return null!==e.y}),i}}),t.namespace("Rickshaw.Graph.Renderer.Stack"),t.Graph.Renderer.Stack=t.Class.create(t.Graph.Renderer,{name:"stack",defaults:function($super){return t.extend($super(),{fill:!0,stroke:!1,unstack:!1})},seriesPathFactory:function(){var t=this.graph,i=e.svg.area().x(function(e){return t.x(e.x)}).y0(function(e){return t.y(e.y0)}).y1(function(e){return t.y(e.y+e.y0)}).interpolate(this.graph.interpolation).tension(this.tension);return i.defined&&i.defined(function(e){return null!==e.y}),i}}),t.namespace("Rickshaw.Graph.Renderer.Bar"),t.Graph.Renderer.Bar=t.Class.create(t.Graph.Renderer,{name:"bar",defaults:function($super){var e=t.extend($super(),{gapSize:.05,unstack:!1,opacity:1});return delete e.tension,e},initialize:function($super,e){e=e||{},this.gapSize=e.gapSize||this.gapSize,$super(e)},domain:function($super){var e=$super(),t=this._frequentInterval(this.graph.stackedData.slice(-1).shift());return e.x[1]+=Number(t.magnitude),e},barWidth:function(e){var t=this._frequentInterval(e.stack);return this.graph.x.magnitude(t.magnitude)*(1-this.gapSize)},render:function(e){e=e||{};var t=this.graph,i=e.series||t.series,n=e.vis||t.vis;n.selectAll("*").remove();var r=this.barWidth(i.active()[0]),s=0,a=i.filter(function(e){return!e.disabled}).length,h=this.unstack?r/a:r,o=function(e){return"matrix("+[1,0,0,e.y<0?-1:1,0,e.y<0?2*t.y.magnitude(Math.abs(e.y)):0].join(",")+")"};i.forEach(function(e){if(!e.disabled){var i=(this.barWidth(e),n.selectAll("path").data(e.stack.filter(function(e){return null!==e.y})).enter().append("svg:rect").attr("x",function(e){return t.x(e.x)+s}).attr("y",function(e){return t.y(e.y0+Math.abs(e.y))*(e.y<0?-1:1)}).attr("width",h).attr("height",function(e){return t.y.magnitude(Math.abs(e.y))}).attr("opacity",e.opacity).attr("transform",o));Array.prototype.forEach.call(i[0],function(t){t.setAttribute("fill",e.color)}),this.unstack&&(s+=h)}},this)},_frequentInterval:function(e){for(var i={},n=0;n<e.length-1;n++){var r=e[n+1].x-e[n].x;i[r]=i[r]||0,i[r]++}var s={count:0,magnitude:1};return t.keys(i).sort(function(e,t){return Number(e)-Number(t)}).forEach(function(e){s.count<i[e]&&(s={count:i[e],magnitude:e})}),s}}),t.namespace("Rickshaw.Graph.Renderer.Area"),t.Graph.Renderer.Area=t.Class.create(t.Graph.Renderer,{name:"area",defaults:function($super){return t.extend($super(),{unstack:!1,fill:!1,stroke:!1})},seriesPathFactory:function(){var t=this.graph,i=e.svg.area().x(function(e){return t.x(e.x)}).y0(function(e){return t.y(e.y0)}).y1(function(e){return t.y(e.y+e.y0)}).interpolate(t.interpolation).tension(this.tension);return i.defined&&i.defined(function(e){return null!==e.y}),i},seriesStrokeFactory:function(){var t=this.graph,i=e.svg.line().x(function(e){return t.x(e.x)}).y(function(e){return t.y(e.y+e.y0)}).interpolate(t.interpolation).tension(this.tension);return i.defined&&i.defined(function(e){return null!==e.y}),i},render:function(e){e=e||{};var t=this.graph,i=e.series||t.series,n=e.vis||t.vis;n.selectAll("*").remove();var r=this.unstack?"append":"insert",s=i.filter(function(e){return!e.disabled}).map(function(e){return e.stack}),a=n.selectAll("path").data(s).enter()[r]("svg:g","g");a.append("svg:path").attr("d",this.seriesPathFactory()).attr("class","area"),this.stroke&&a.append("svg:path").attr("d",this.seriesStrokeFactory()).attr("class","line");var h=0;i.forEach(function(e){e.disabled||(e.path=a[0][h++],this._styleSeries(e))},this)},_styleSeries:function(t){t.path&&(e.select(t.path).select(".area").attr("fill",t.color),this.stroke&&e.select(t.path).select(".line").attr("fill","none").attr("stroke",t.stroke||e.interpolateRgb(t.color,"black")(.125)).attr("stroke-width",this.strokeWidth),t.className&&t.path.setAttribute("class",t.className))}}),t.namespace("Rickshaw.Graph.Renderer.ScatterPlot"),t.Graph.Renderer.ScatterPlot=t.Class.create(t.Graph.Renderer,{name:"scatterplot",defaults:function($super){return t.extend($super(),{unstack:!0,fill:!0,stroke:!1,padding:{top:.01,right:.01,bottom:.01,left:.01},dotSize:4})},initialize:function($super,e){$super(e)},render:function(e){e=e||{};var t=this.graph,i=e.series||t.series,n=e.vis||t.vis,r=this.dotSize;n.selectAll("*").remove(),i.forEach(function(e){if(!e.disabled){var i=e.opacity?e.opacity:1,s=n.selectAll("path").data(e.stack.filter(function(e){return null!==e.y})).enter().append("svg:circle").attr("cx",function(e){return t.x(e.x)}).attr("cy",function(e){return t.y(e.y)}).attr("r",function(e){return"r"in e?e.r:r}).attr("opacity",function(e){return"opacity"in e?e.opacity:i});e.className&&s.classed(e.className,!0),Array.prototype.forEach.call(s[0],function(t){t.setAttribute("fill",e.color)})}},this)}}),t.namespace("Rickshaw.Graph.Renderer.Multi"),t.Graph.Renderer.Multi=t.Class.create(t.Graph.Renderer,{name:"multi",initialize:function($super,e){$super(e)},defaults:function($super){return t.extend($super(),{unstack:!0,fill:!1,stroke:!0})},configure:function($super,e){e=e||{},this.config=e,$super(e)},domain:function($super){this.graph.stackData();var t=[],i=this._groups();return this._stack(i),i.forEach(function(e){var i=e.series.filter(function(e){return!e.disabled}).map(function(e){return e.stack});if(i.length){var n=null;n=e.renderer&&e.renderer.domain?e.renderer.domain(i):$super(i),t.push(n)}}),{x:[e.min(t.map(function(e){return e.x[0]})),e.max(t.map(function(e){return e.x[1]}))],y:[e.min(t.map(function(e){return e.y[0]})),e.max(t.map(function(e){return e.y[1]}))]}},_groups:function(){var i=this.graph,n={};i.series.forEach(function(r){if(!r.disabled){if(!n[r.renderer]){var s=document.createElementNS("http://www.w3.org/2000/svg","g");i.vis[0][0].appendChild(s);var a=i._renderers[r.renderer],h={};[this.defaults(),a.defaults(),this.config,this.graph].forEach(function(e){t.extend(h,e)}),a.configure(h),n[r.renderer]={renderer:a,series:[],vis:e.select(s)}}n[r.renderer].series.push(r)}},this);var r=[];return Object.keys(n).forEach(function(e){var t=n[e];r.push(t)}),r},_stack:function(i){return i.forEach(function(i){var n=i.series.filter(function(e){return!e.disabled}),r=n.map(function(e){return e.stack});if(!i.renderer.unstack){var s=e.layout.stack(),a=t.clone(s(r));n.forEach(function(e,i){e._stack=t.clone(a[i])})}},this),i},render:function(){this.graph.series.forEach(function(e){if(!e.renderer)throw new Error("Each series needs a renderer for graph 'multi' renderer")}),this.graph.vis.selectAll("*").remove();var e=this._groups();e=this._stack(e),e.forEach(function(e){var t=e.series.filter(function(e){return!e.disabled});t.active=function(){return t},e.renderer.render({series:t,vis:e.vis}),t.forEach(function(e){e.stack=e._stack||e.stack||e.data})})}}),t.namespace("Rickshaw.Graph.Renderer.LinePlot"),t.Graph.Renderer.LinePlot=t.Class.create(t.Graph.Renderer,{name:"lineplot",defaults:function($super){return t.extend($super(),{unstack:!0,fill:!1,stroke:!0,padding:{top:.01,right:.01,bottom:.01,left:.01},dotSize:3,strokeWidth:2})},seriesPathFactory:function(){var t=this.graph,i=e.svg.line().x(function(e){return t.x(e.x)}).y(function(e){return t.y(e.y)}).interpolate(this.graph.interpolation).tension(this.tension);return i.defined&&i.defined(function(e){return null!==e.y}),i},render:function(e){e=e||{};var t=this.graph,i=e.series||t.series,n=e.vis||t.vis,r=this.dotSize;n.selectAll("*").remove();var s=i.filter(function(e){return!e.disabled}).map(function(e){return e.stack}),a=n.selectAll("path").data(s).enter().append("svg:path").attr("d",this.seriesPathFactory()),h=0;i.forEach(function(e){e.disabled||(e.path=a[0][h++],this._styleSeries(e))},this),i.forEach(function(e){if(!e.disabled){var i=n.selectAll("x").data(e.stack.filter(function(e){return null!==e.y})).enter().append("svg:circle").attr("cx",function(e){return t.x(e.x)}).attr("cy",function(e){return t.y(e.y)}).attr("r",function(e){return"r"in e?e.r:r});Array.prototype.forEach.call(i[0],function(t){t&&(t.setAttribute("data-color",e.color),t.setAttribute("fill","white"),t.setAttribute("stroke",e.color),t.setAttribute("stroke-width",this.strokeWidth))}.bind(this))}},this)}}),t.namespace("Rickshaw.Graph.Smoother"),t.Graph.Smoother=t.Class.create({initialize:function(e){this.graph=e.graph,this.element=e.element,this.aggregationScale=1,this.build(),this.graph.stackData.hooks.data.push({name:"smoother",orderPosition:50,f:this.transformer.bind(this)})},build:function(){var e=this,t=jQuery;this.element&&t(function(){t(e.element).slider({min:1,max:100,slide:function(t,i){e.setScale(i.value)}})})},setScale:function(e){if(e<1)throw"scale out of range: "+e;this.aggregationScale=e,this.graph.update()},transformer:function(e){if(1==this.aggregationScale)return e;var t=[];return e.forEach(function(e){for(var i=[];e.length;){var n=0,r=0,s=e.splice(0,this.aggregationScale);s.forEach(function(e){n+=e.x/s.length,r+=e.y/s.length}),i.push({x:n,y:r})}t.push(i)}.bind(this)),t}}),t.namespace("Rickshaw.Graph.Socketio"),t.Graph.Socketio=t.Class.create(t.Graph.Ajax,{request:function(){var e=this;io.connect(this.dataURL).on("rickshaw",function(t){e.success(t)})}}),t.namespace("Rickshaw.Series"),t.Series=t.Class.create(Array,{initialize:function(e,i,n){n=n||{},this.palette=new t.Color.Palette(i),this.timeBase=void 0===n.timeBase?Math.floor((new Date).getTime()/1e3):n.timeBase;var r=void 0===n.timeInterval?1e3:n.timeInterval;this.setTimeInterval(r),e&&"object"==typeof e&&Array.isArray(e)&&e.forEach(function(e){this.addItem(e)},this)},addItem:function(e){if(void 0===e.name)throw"addItem() needs a name";e.color=e.color||this.palette.color(e.name),e.data=e.data||[],0===e.data.length&&this.length&&this.getIndex()>0?this[0].data.forEach(function(t){e.data.push({x:t.x,y:0})}):0===e.data.length&&e.data.push({x:this.timeBase-(this.timeInterval||0),y:0}),this.push(e),this.legend&&this.legend.addLine(this.itemByName(e.name))},addData:function(e,i){var n=this.getIndex();t.keys(e).forEach(function(e){this.itemByName(e)||this.addItem({name:e})},this),this.forEach(function(t){t.data.push({x:i||(n*this.timeInterval||1)+this.timeBase,y:e[t.name]||0})},this)},getIndex:function(){return this[0]&&this[0].data&&this[0].data.length?this[0].data.length:0},itemByName:function(e){for(var t=0;t<this.length;t++)if(this[t].name==e)return this[t]},setTimeInterval:function(e){this.timeInterval=e/1e3},setTimeBase:function(e){this.timeBase=e},dump:function(){var e={timeBase:this.timeBase,timeInterval:this.timeInterval,items:[]};return this.forEach(function(t){var i={color:t.color,name:t.name,data:[]};t.data.forEach(function(e){i.data.push({x:e.x,y:e.y})}),e.items.push(i)}),e},load:function(e){e.timeInterval&&(this.timeInterval=e.timeInterval),e.timeBase&&(this.timeBase=e.timeBase),e.items&&e.items.forEach(function(e){this.push(e),this.legend&&this.legend.addLine(this.itemByName(e.name))},this)}}),t.Series.zeroFill=function(e){t.Series.fill(e,0)},t.Series.fill=function(e,t){for(var i,n=0,r=e.map(function(e){return e.data});n<Math.max.apply(null,r.map(function(e){return e.length}));)i=Math.min.apply(null,r.filter(function(e){return e[n]}).map(function(e){return e[n].x})),r.forEach(function(e){e[n]&&e[n].x==i||e.splice(n,0,{x:i,y:t})}),n++},t.namespace("Rickshaw.Series.FixedDuration"),t.Series.FixedDuration=t.Class.create(t.Series,{initialize:function(e,i,n){if(n=n||{},void 0===n.timeInterval)throw new Error("FixedDuration series requires timeInterval");if(void 0===n.maxDataPoints)throw new Error("FixedDuration series requires maxDataPoints");if(this.palette=new t.Color.Palette(i),this.timeBase=void 0===n.timeBase?Math.floor((new Date).getTime()/1e3):n.timeBase,this.setTimeInterval(n.timeInterval),this[0]&&this[0].data&&this[0].data.length?(this.currentSize=this[0].data.length,this.currentIndex=this[0].data.length):(this.currentSize=0,this.currentIndex=0),this.maxDataPoints=n.maxDataPoints,e&&"object"==typeof e&&Array.isArray(e)&&(e.forEach(function(e){this.addItem(e)},this),this.currentSize+=1,this.currentIndex+=1),this.timeBase-=(this.maxDataPoints-this.currentSize)*this.timeInterval,void 0!==this.maxDataPoints&&this.currentSize<this.maxDataPoints)for(var r=this.maxDataPoints-this.currentSize-1;r>1;r--)this.currentSize+=1,this.currentIndex+=1,this.forEach(function(e){e.data.unshift({x:((r-1)*this.timeInterval||1)+this.timeBase,y:0,i:r})},this)},addData:function($super,e,t){if($super(e,t),this.currentSize+=1,this.currentIndex+=1,void 0!==this.maxDataPoints)for(;this.currentSize>this.maxDataPoints;)this.dropData()},dropData:function(){this.forEach(function(e){e.data.splice(0,1)}),this.currentSize-=1},getIndex:function(){return this.currentIndex}}),t});
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        define(['d3'], function (d3) {
+            return (root.Rickshaw = factory(d3));
+        });
+    } else if (typeof exports === 'object') {
+        module.exports = factory(require('d3'));
+    } else {
+        root.Rickshaw = factory(d3);
+    }
+}(this, function (d3) {
+/* jshint -W079 */ 
+
+var Rickshaw = {
+
+	namespace: function(namespace, obj) {
+
+		var parts = namespace.split('.');
+
+		var parent = Rickshaw;
+
+		for(var i = 1, length = parts.length; i < length; i++) {
+			var currentPart = parts[i];
+			parent[currentPart] = parent[currentPart] || {};
+			parent = parent[currentPart];
+		}
+		return parent;
+	},
+
+	keys: function(obj) {
+		var keys = [];
+		for (var key in obj) keys.push(key);
+		return keys;
+	},
+
+	extend: function(destination, source) {
+
+		for (var property in source) {
+			destination[property] = source[property];
+		}
+		return destination;
+	},
+
+	clone: function(obj) {
+		return JSON.parse(JSON.stringify(obj));
+	}
+};
+/* Adapted from https://github.com/Jakobo/PTClass */
+
+/*
+Copyright (c) 2005-2010 Sam Stephenson
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+/* Based on Alex Arnell's inheritance implementation. */
+/** section: Language
+ * class Class
+ *
+ *  Manages Prototype's class-based OOP system.
+ *
+ *  Refer to Prototype's web site for a [tutorial on classes and
+ *  inheritance](http://prototypejs.org/learn/class-inheritance).
+**/
+(function(globalContext) {
+/* ------------------------------------ */
+/* Import from object.js                */
+/* ------------------------------------ */
+var _toString = Object.prototype.toString,
+    NULL_TYPE = 'Null',
+    UNDEFINED_TYPE = 'Undefined',
+    BOOLEAN_TYPE = 'Boolean',
+    NUMBER_TYPE = 'Number',
+    STRING_TYPE = 'String',
+    OBJECT_TYPE = 'Object',
+    FUNCTION_CLASS = '[object Function]';
+function isFunction(object) {
+  return _toString.call(object) === FUNCTION_CLASS;
+}
+function extend(destination, source) {
+  for (var property in source) if (source.hasOwnProperty(property)) // modify protect primitive slaughter
+    destination[property] = source[property];
+  return destination;
+}
+function keys(object) {
+  if (Type(object) !== OBJECT_TYPE) { throw new TypeError(); }
+  var results = [];
+  for (var property in object) {
+    if (object.hasOwnProperty(property)) {
+      results.push(property);
+    }
+  }
+  return results;
+}
+function Type(o) {
+  switch(o) {
+    case null: return NULL_TYPE;
+    case (void 0): return UNDEFINED_TYPE;
+  }
+  var type = typeof o;
+  switch(type) {
+    case 'boolean': return BOOLEAN_TYPE;
+    case 'number':  return NUMBER_TYPE;
+    case 'string':  return STRING_TYPE;
+  }
+  return OBJECT_TYPE;
+}
+function isUndefined(object) {
+  return typeof object === "undefined";
+}
+/* ------------------------------------ */
+/* Import from Function.js              */
+/* ------------------------------------ */
+var slice = Array.prototype.slice;
+function argumentNames(fn) {
+  var names = fn.toString().match(/^[\s\(]*function[^(]*\(([^)]*)\)/)[1]
+    .replace(/\/\/.*?[\r\n]|\/\*(?:.|[\r\n])*?\*\//g, '')
+    .replace(/\s+/g, '').split(',');
+  return names.length == 1 && !names[0] ? [] : names;
+}
+function wrap(fn, wrapper) {
+  var __method = fn;
+  return function() {
+    var a = update([bind(__method, this)], arguments);
+    return wrapper.apply(this, a);
+  }
+}
+function update(array, args) {
+  var arrayLength = array.length, length = args.length;
+  while (length--) array[arrayLength + length] = args[length];
+  return array;
+}
+function merge(array, args) {
+  array = slice.call(array, 0);
+  return update(array, args);
+}
+function bind(fn, context) {
+  if (arguments.length < 2 && isUndefined(arguments[0])) return this;
+  var __method = fn, args = slice.call(arguments, 2);
+  return function() {
+    var a = merge(args, arguments);
+    return __method.apply(context, a);
+  }
+}
+
+/* ------------------------------------ */
+/* Import from Prototype.js             */
+/* ------------------------------------ */
+var emptyFunction = function(){};
+
+var Class = (function() {
+  
+  // Some versions of JScript fail to enumerate over properties, names of which 
+  // correspond to non-enumerable properties in the prototype chain
+  var IS_DONTENUM_BUGGY = (function(){
+    for (var p in { toString: 1 }) {
+      // check actual property name, so that it works with augmented Object.prototype
+      if (p === 'toString') return false;
+    }
+    return true;
+  })();
+  
+  function subclass() {};
+  function create() {
+    var parent = null, properties = [].slice.apply(arguments);
+    if (isFunction(properties[0]))
+      parent = properties.shift();
+
+    function klass() {
+      this.initialize.apply(this, arguments);
+    }
+
+    extend(klass, Class.Methods);
+    klass.superclass = parent;
+    klass.subclasses = [];
+
+    if (parent) {
+      subclass.prototype = parent.prototype;
+      klass.prototype = new subclass;
+      try { parent.subclasses.push(klass) } catch(e) {}
+    }
+
+    for (var i = 0, length = properties.length; i < length; i++)
+      klass.addMethods(properties[i]);
+
+    if (!klass.prototype.initialize)
+      klass.prototype.initialize = emptyFunction;
+
+    klass.prototype.constructor = klass;
+    return klass;
+  }
+
+  function addMethods(source) {
+    var ancestor   = this.superclass && this.superclass.prototype,
+        properties = keys(source);
+
+    // IE6 doesn't enumerate `toString` and `valueOf` (among other built-in `Object.prototype`) properties,
+    // Force copy if they're not Object.prototype ones.
+    // Do not copy other Object.prototype.* for performance reasons
+    if (IS_DONTENUM_BUGGY) {
+      if (source.toString != Object.prototype.toString)
+        properties.push("toString");
+      if (source.valueOf != Object.prototype.valueOf)
+        properties.push("valueOf");
+    }
+
+    for (var i = 0, length = properties.length; i < length; i++) {
+      var property = properties[i], value = source[property];
+      if (ancestor && isFunction(value) &&
+          argumentNames(value)[0] == "$super") {
+        var method = value;
+        value = wrap((function(m) {
+          return function() { return ancestor[m].apply(this, arguments); };
+        })(property), method);
+
+        value.valueOf = bind(method.valueOf, method);
+        value.toString = bind(method.toString, method);
+      }
+      this.prototype[property] = value;
+    }
+
+    return this;
+  }
+
+  return {
+    create: create,
+    Methods: {
+      addMethods: addMethods
+    }
+  };
+})();
+
+if (globalContext.exports) {
+  globalContext.exports.Class = Class;
+}
+else {
+  globalContext.Class = Class;
+}
+})(Rickshaw);
+Rickshaw.namespace('Rickshaw.Compat.ClassList');
+
+Rickshaw.Compat.ClassList = function() {
+
+	/* adapted from http://purl.eligrey.com/github/classList.js/blob/master/classList.js */
+
+	if (typeof document !== "undefined" && !("classList" in document.createElement("a"))) {
+
+	(function (view) {
+
+	"use strict";
+
+	var
+		  classListProp = "classList"
+		, protoProp = "prototype"
+		, elemCtrProto = (view.HTMLElement || view.Element)[protoProp]
+		, objCtr = Object
+		, strTrim = String[protoProp].trim || function () {
+			return this.replace(/^\s+|\s+$/g, "");
+		}
+		, arrIndexOf = Array[protoProp].indexOf || function (item) {
+			var
+				  i = 0
+				, len = this.length
+			;
+			for (; i < len; i++) {
+				if (i in this && this[i] === item) {
+					return i;
+				}
+			}
+			return -1;
+		}
+		// Vendors: please allow content code to instantiate DOMExceptions
+		, DOMEx = function (type, message) {
+			this.name = type;
+			this.code = DOMException[type];
+			this.message = message;
+		}
+		, checkTokenAndGetIndex = function (classList, token) {
+			if (token === "") {
+				throw new DOMEx(
+					  "SYNTAX_ERR"
+					, "An invalid or illegal string was specified"
+				);
+			}
+			if (/\s/.test(token)) {
+				throw new DOMEx(
+					  "INVALID_CHARACTER_ERR"
+					, "String contains an invalid character"
+				);
+			}
+			return arrIndexOf.call(classList, token);
+		}
+		, ClassList = function (elem) {
+			var
+				  trimmedClasses = strTrim.call(elem.className)
+				, classes = trimmedClasses ? trimmedClasses.split(/\s+/) : []
+				, i = 0
+				, len = classes.length
+			;
+			for (; i < len; i++) {
+				this.push(classes[i]);
+			}
+			this._updateClassName = function () {
+				elem.className = this.toString();
+			};
+		}
+		, classListProto = ClassList[protoProp] = []
+		, classListGetter = function () {
+			return new ClassList(this);
+		}
+	;
+	// Most DOMException implementations don't allow calling DOMException's toString()
+	// on non-DOMExceptions. Error's toString() is sufficient here.
+	DOMEx[protoProp] = Error[protoProp];
+	classListProto.item = function (i) {
+		return this[i] || null;
+	};
+	classListProto.contains = function (token) {
+		token += "";
+		return checkTokenAndGetIndex(this, token) !== -1;
+	};
+	classListProto.add = function (token) {
+		token += "";
+		if (checkTokenAndGetIndex(this, token) === -1) {
+			this.push(token);
+			this._updateClassName();
+		}
+	};
+	classListProto.remove = function (token) {
+		token += "";
+		var index = checkTokenAndGetIndex(this, token);
+		if (index !== -1) {
+			this.splice(index, 1);
+			this._updateClassName();
+		}
+	};
+	classListProto.toggle = function (token) {
+		token += "";
+		if (checkTokenAndGetIndex(this, token) === -1) {
+			this.add(token);
+		} else {
+			this.remove(token);
+		}
+	};
+	classListProto.toString = function () {
+		return this.join(" ");
+	};
+
+	if (objCtr.defineProperty) {
+		var classListPropDesc = {
+			  get: classListGetter
+			, enumerable: true
+			, configurable: true
+		};
+		try {
+			objCtr.defineProperty(elemCtrProto, classListProp, classListPropDesc);
+		} catch (ex) { // IE 8 doesn't support enumerable:true
+			if (ex.number === -0x7FF5EC54) {
+				classListPropDesc.enumerable = false;
+				objCtr.defineProperty(elemCtrProto, classListProp, classListPropDesc);
+			}
+		}
+	} else if (objCtr[protoProp].__defineGetter__) {
+		elemCtrProto.__defineGetter__(classListProp, classListGetter);
+	}
+
+	}(window));
+
+	}
+};
+
+if ( (typeof RICKSHAW_NO_COMPAT !== "undefined" && !RICKSHAW_NO_COMPAT) || typeof RICKSHAW_NO_COMPAT === "undefined") {
+	new Rickshaw.Compat.ClassList();
+}
+Rickshaw.namespace('Rickshaw.Graph');
+
+Rickshaw.Graph = function(args) {
+
+	var self = this;
+
+	this.initialize = function(args) {
+
+		if (!args.element) throw "Rickshaw.Graph needs a reference to an element";
+		if (args.element.nodeType !== 1) throw "Rickshaw.Graph element was defined but not an HTML element";
+
+		this.element = args.element;
+		this.series = args.series;
+		this.window = {};
+
+		this.updateCallbacks = [];
+		this.configureCallbacks = [];
+
+		this.defaults = {
+			interpolation: 'cardinal',
+			offset: 'zero',
+			min: undefined,
+			max: undefined,
+			preserve: false,
+			xScale: undefined,
+			yScale: undefined,
+			stack: true
+		};
+
+		this._loadRenderers();
+		this.configure(args);
+		this.validateSeries(args.series);
+
+		this.series.active = function() { return self.series.filter( function(s) { return !s.disabled } ) };
+		this.setSize({ width: args.width, height: args.height });
+		this.element.classList.add('rickshaw_graph');
+
+		this.vis = d3.select(this.element)
+			.append("svg:svg")
+			.attr('width', this.width)
+			.attr('height', this.height);
+
+		this.discoverRange();
+	};
+
+	this._loadRenderers = function() {
+
+		for (var name in Rickshaw.Graph.Renderer) {
+			if (!name || !Rickshaw.Graph.Renderer.hasOwnProperty(name)) continue;
+			var r = Rickshaw.Graph.Renderer[name];
+			if (!r || !r.prototype || !r.prototype.render) continue;
+			self.registerRenderer(new r( { graph: self } ));
+		}
+	};
+
+	this.validateSeries = function(series) {
+
+		if (!Array.isArray(series) && !(series instanceof Rickshaw.Series)) {
+			var seriesSignature = Object.prototype.toString.apply(series);
+			throw "series is not an array: " + seriesSignature;
+		}
+
+		var pointsCount;
+
+		series.forEach( function(s) {
+
+			if (!(s instanceof Object)) {
+				throw "series element is not an object: " + s;
+			}
+			if (!(s.data)) {
+				throw "series has no data: " + JSON.stringify(s);
+			}
+			if (!Array.isArray(s.data)) {
+				throw "series data is not an array: " + JSON.stringify(s.data);
+			}
+			
+			if (s.data.length > 0) {
+				var x = s.data[0].x;
+				var y = s.data[0].y;
+
+				if (typeof x != 'number' || ( typeof y != 'number' && y !== null ) ) {
+					throw "x and y properties of points should be numbers instead of " +
+						(typeof x) + " and " + (typeof y);
+				}
+			}
+
+			if (s.data.length >= 3) {
+				// probe to sanity check sort order
+				if (s.data[2].x < s.data[1].x || s.data[1].x < s.data[0].x || s.data[s.data.length - 1].x < s.data[0].x) {
+					throw "series data needs to be sorted on x values for series name: " + s.name;
+				}
+			}
+
+		}, this );
+	};
+
+	this.dataDomain = function() {
+
+		var data = this.series.map( function(s) { return s.data } );
+
+		var min = d3.min( data.map( function(d) { return d[0].x } ) );
+		var max = d3.max( data.map( function(d) { return d[d.length - 1].x } ) );
+
+		return [min, max];
+	};
+
+	this.discoverRange = function() {
+
+		var domain = this.renderer.domain();
+
+		// this.*Scale is coming from the configuration dictionary
+		// which may be referenced by the Graph creator, or shared
+		// with other Graphs. We need to ensure we copy the scale
+		// so that our mutations do not change the object given to us.
+		// Hence the .copy()
+		this.x = (this.xScale || d3.scale.linear()).copy().domain(domain.x).range([0, this.width]);
+		this.y = (this.yScale || d3.scale.linear()).copy().domain(domain.y).range([this.height, 0]);
+
+		this.x.magnitude = d3.scale.linear()
+			.domain([domain.x[0] - domain.x[0], domain.x[1] - domain.x[0]])
+			.range([0, this.width]);
+
+		this.y.magnitude = d3.scale.linear()
+			.domain([domain.y[0] - domain.y[0], domain.y[1] - domain.y[0]])
+			.range([0, this.height]);
+	};
+
+	this.render = function() {
+
+		var stackedData = this.stackData();
+		this.discoverRange();
+
+		this.renderer.render();
+
+		this.updateCallbacks.forEach( function(callback) {
+			callback();
+		} );
+
+	};
+
+	this.update = this.render;
+
+	this.stackData = function() {
+
+		var data = this.series.active()
+			.map( function(d) { return d.data } )
+			.map( function(d) { return d.filter( function(d) { return this._slice(d) }, this ) }, this);
+
+		var preserve = this.preserve;
+		if (!preserve) {
+			this.series.forEach( function(series) {
+				if (series.scale) {
+					// data must be preserved when a scale is used
+					preserve = true;
+				}
+			} );
+		}
+
+		data = preserve ? Rickshaw.clone(data) : data;
+
+		this.series.active().forEach( function(series, index) {
+			if (series.scale) {
+				// apply scale to each series
+				var seriesData = data[index];
+				if(seriesData) {
+					seriesData.forEach( function(d) {
+						d.y = series.scale(d.y);
+					} );
+				}
+			}
+		} );
+
+		this.stackData.hooks.data.forEach( function(entry) {
+			data = entry.f.apply(self, [data]);
+		} );
+
+		var stackedData;
+
+		if (!this.renderer.unstack) {
+
+			this._validateStackable();
+
+			var layout = d3.layout.stack();
+			layout.offset( self.offset );
+			stackedData = layout(data);
+		}
+
+		stackedData = stackedData || data;
+
+		if (this.renderer.unstack) {
+			stackedData.forEach( function(seriesData) {
+				seriesData.forEach( function(d) {
+					d.y0 = d.y0 === undefined ? 0 : d.y0;
+				} );
+			} );
+		}
+
+		this.stackData.hooks.after.forEach( function(entry) {
+			stackedData = entry.f.apply(self, [data]);
+		} );
+
+		var i = 0;
+		this.series.forEach( function(series) {
+			if (series.disabled) return;
+			series.stack = stackedData[i++];
+		} );
+
+		this.stackedData = stackedData;
+		return stackedData;
+	};
+
+	this._validateStackable = function() {
+
+		var series = this.series;
+		var pointsCount;
+
+		series.forEach( function(s) {
+
+			pointsCount = pointsCount || s.data.length;
+
+			if (pointsCount && s.data.length != pointsCount) {
+				throw "stacked series cannot have differing numbers of points: " +
+					pointsCount + " vs " + s.data.length + "; see Rickshaw.Series.fill()";
+			}
+
+		}, this );
+	};
+
+	this.stackData.hooks = { data: [], after: [] };
+
+	this._slice = function(d) {
+
+		if (this.window.xMin || this.window.xMax) {
+
+			var isInRange = true;
+
+			if (this.window.xMin && d.x < this.window.xMin) isInRange = false;
+			if (this.window.xMax && d.x > this.window.xMax) isInRange = false;
+
+			return isInRange;
+		}
+
+		return true;
+	};
+
+	this.onUpdate = function(callback) {
+		this.updateCallbacks.push(callback);
+	};
+
+	this.onConfigure = function(callback) {
+		this.configureCallbacks.push(callback);
+	};
+
+	this.registerRenderer = function(renderer) {
+		this._renderers = this._renderers || {};
+		this._renderers[renderer.name] = renderer;
+	};
+
+	this.configure = function(args) {
+
+		this.config = this.config || {};
+
+		if (args.width || args.height) {
+			this.setSize(args);
+		}
+
+		Rickshaw.keys(this.defaults).forEach( function(k) {
+			this.config[k] = k in args ? args[k]
+				: k in this ? this[k]
+				: this.defaults[k];
+		}, this );
+
+		Rickshaw.keys(this.config).forEach( function(k) {
+			this[k] = this.config[k];
+		}, this );
+
+		if ('stack' in args) args.unstack = !args.stack;
+
+		var renderer = args.renderer || (this.renderer && this.renderer.name) || 'stack';
+		this.setRenderer(renderer, args);
+
+		this.configureCallbacks.forEach( function(callback) {
+			callback(args);
+		} );
+	};
+
+	this.setRenderer = function(r, args) {
+		if (typeof r == 'function') {
+			this.renderer = new r( { graph: self } );
+			this.registerRenderer(this.renderer);
+		} else {
+			if (!this._renderers[r]) {
+				throw "couldn't find renderer " + r;
+			}
+			this.renderer = this._renderers[r];
+		}
+
+		if (typeof args == 'object') {
+			this.renderer.configure(args);
+		}
+	};
+
+	this.setSize = function(args) {
+
+		args = args || {};
+
+		if (typeof window !== 'undefined') {
+			var style = window.getComputedStyle(this.element, null);
+			var elementWidth = parseInt(style.getPropertyValue('width'), 10);
+			var elementHeight = parseInt(style.getPropertyValue('height'), 10);
+		}
+
+		this.width = args.width || elementWidth || 400;
+		this.height = args.height || elementHeight || 250;
+
+		this.vis && this.vis
+			.attr('width', this.width)
+			.attr('height', this.height);
+	};
+
+	this.initialize(args);
+};
+Rickshaw.namespace('Rickshaw.Fixtures.Color');
+
+Rickshaw.Fixtures.Color = function() {
+
+	this.schemes = {};
+
+	this.schemes.spectrum14 = [
+		'#ecb796',
+		'#dc8f70',
+		'#b2a470',
+		'#92875a',
+		'#716c49',
+		'#d2ed82',
+		'#bbe468',
+		'#a1d05d',
+		'#e7cbe6',
+		'#d8aad6',
+		'#a888c2',
+		'#9dc2d3',
+		'#649eb9',
+		'#387aa3'
+	].reverse();
+
+	this.schemes.spectrum2000 = [
+		'#57306f',
+		'#514c76',
+		'#646583',
+		'#738394',
+		'#6b9c7d',
+		'#84b665',
+		'#a7ca50',
+		'#bfe746',
+		'#e2f528',
+		'#fff726',
+		'#ecdd00',
+		'#d4b11d',
+		'#de8800',
+		'#de4800',
+		'#c91515',
+		'#9a0000',
+		'#7b0429',
+		'#580839',
+		'#31082b'
+	];
+
+	this.schemes.spectrum2001 = [
+		'#2f243f',
+		'#3c2c55',
+		'#4a3768',
+		'#565270',
+		'#6b6b7c',
+		'#72957f',
+		'#86ad6e',
+		'#a1bc5e',
+		'#b8d954',
+		'#d3e04e',
+		'#ccad2a',
+		'#cc8412',
+		'#c1521d',
+		'#ad3821',
+		'#8a1010',
+		'#681717',
+		'#531e1e',
+		'#3d1818',
+		'#320a1b'
+	];
+
+	this.schemes.classic9 = [
+		'#423d4f',
+		'#4a6860',
+		'#848f39',
+		'#a2b73c',
+		'#ddcb53',
+		'#c5a32f',
+		'#7d5836',
+		'#963b20',
+		'#7c2626',
+		'#491d37',
+		'#2f254a'
+	].reverse();
+
+	this.schemes.httpStatus = {
+		503: '#ea5029',
+		502: '#d23f14',
+		500: '#bf3613',
+		410: '#efacea',
+		409: '#e291dc',
+		403: '#f457e8',
+		408: '#e121d2',
+		401: '#b92dae',
+		405: '#f47ceb',
+		404: '#a82a9f',
+		400: '#b263c6',
+		301: '#6fa024',
+		302: '#87c32b',
+		307: '#a0d84c',
+		304: '#28b55c',
+		200: '#1a4f74',
+		206: '#27839f',
+		201: '#52adc9',
+		202: '#7c979f',
+		203: '#a5b8bd',
+		204: '#c1cdd1'
+	};
+
+	this.schemes.colorwheel = [
+		'#b5b6a9',
+		'#858772',
+		'#785f43',
+		'#96557e',
+		'#4682b4',
+		'#65b9ac',
+		'#73c03a',
+		'#cb513a'
+	].reverse();
+
+	this.schemes.cool = [
+		'#5e9d2f',
+		'#73c03a',
+		'#4682b4',
+		'#7bc3b8',
+		'#a9884e',
+		'#c1b266',
+		'#a47493',
+		'#c09fb5'
+	];
+
+	this.schemes.munin = [
+		'#00cc00',
+		'#0066b3',
+		'#ff8000',
+		'#ffcc00',
+		'#330099',
+		'#990099',
+		'#ccff00',
+		'#ff0000',
+		'#808080',
+		'#008f00',
+		'#00487d',
+		'#b35a00',
+		'#b38f00',
+		'#6b006b',
+		'#8fb300',
+		'#b30000',
+		'#bebebe',
+		'#80ff80',
+		'#80c9ff',
+		'#ffc080',
+		'#ffe680',
+		'#aa80ff',
+		'#ee00cc',
+		'#ff8080',
+		'#666600',
+		'#ffbfff',
+		'#00ffcc',
+		'#cc6699',
+		'#999900'
+	];
+};
+Rickshaw.namespace('Rickshaw.Fixtures.RandomData');
+
+Rickshaw.Fixtures.RandomData = function(timeInterval) {
+
+	var addData;
+	timeInterval = timeInterval || 1;
+
+	var lastRandomValue = 200;
+
+	var timeBase = Math.floor(new Date().getTime() / 1000);
+
+	this.addData = function(data) {
+
+		var randomValue = Math.random() * 100 + 15 + lastRandomValue;
+		var index = data[0].length;
+
+		var counter = 1;
+
+		data.forEach( function(series) {
+			var randomVariance = Math.random() * 20;
+			var v = randomValue / 25  + counter++ +
+				(Math.cos((index * counter * 11) / 960) + 2) * 15 +
+				(Math.cos(index / 7) + 2) * 7 +
+				(Math.cos(index / 17) + 2) * 1;
+
+			series.push( { x: (index * timeInterval) + timeBase, y: v + randomVariance } );
+		} );
+
+		lastRandomValue = randomValue * 0.85;
+	};
+
+	this.removeData = function(data) {
+		data.forEach( function(series) {
+			series.shift();
+		} );
+		timeBase += timeInterval;
+	};
+};
+
+Rickshaw.namespace('Rickshaw.Fixtures.Time');
+
+Rickshaw.Fixtures.Time = function() {
+
+	var self = this;
+
+	this.months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+	this.units = [
+		{
+			name: 'decade',
+			seconds: 86400 * 365.25 * 10,
+			formatter: function(d) { return (parseInt(d.getUTCFullYear() / 10, 10) * 10) }
+		}, {
+			name: 'year',
+			seconds: 86400 * 365.25,
+			formatter: function(d) { return d.getUTCFullYear() }
+		}, {
+			name: 'month',
+			seconds: 86400 * 30.5,
+			formatter: function(d) { return self.months[d.getUTCMonth()] }
+		}, {
+			name: 'week',
+			seconds: 86400 * 7,
+			formatter: function(d) { return self.formatDate(d) }
+		}, {
+			name: 'day',
+			seconds: 86400,
+			formatter: function(d) { return d.getUTCDate() }
+		}, {
+			name: '6 hour',
+			seconds: 3600 * 6,
+			formatter: function(d) { return self.formatTime(d) }
+		}, {
+			name: 'hour',
+			seconds: 3600,
+			formatter: function(d) { return self.formatTime(d) }
+		}, {
+			name: '15 minute',
+			seconds: 60 * 15,
+			formatter: function(d) { return self.formatTime(d) }
+		}, {
+			name: 'minute',
+			seconds: 60,
+			formatter: function(d) { return d.getUTCMinutes() }
+		}, {
+			name: '15 second',
+			seconds: 15,
+			formatter: function(d) { return d.getUTCSeconds() + 's' }
+		}, {
+			name: 'second',
+			seconds: 1,
+			formatter: function(d) { return d.getUTCSeconds() + 's' }
+		}, {
+			name: 'decisecond',
+			seconds: 1/10,
+			formatter: function(d) { return d.getUTCMilliseconds() + 'ms' }
+		}, {
+			name: 'centisecond',
+			seconds: 1/100,
+			formatter: function(d) { return d.getUTCMilliseconds() + 'ms' }
+		}
+	];
+
+	this.unit = function(unitName) {
+		return this.units.filter( function(unit) { return unitName == unit.name } ).shift();
+	};
+
+	this.formatDate = function(d) {
+		return d3.time.format('%b %e')(d);
+	};
+
+	this.formatTime = function(d) {
+		return d.toUTCString().match(/(\d+:\d+):/)[1];
+	};
+
+	this.ceil = function(time, unit) {
+
+		var date, floor, year;
+
+		if (unit.name == 'month') {
+
+			date = new Date(time * 1000);
+
+			floor = Date.UTC(date.getUTCFullYear(), date.getUTCMonth()) / 1000;
+			if (floor == time) return time;
+
+			year = date.getUTCFullYear();
+			var month = date.getUTCMonth();
+
+			if (month == 11) {
+				month = 0;
+				year = year + 1;
+			} else {
+				month += 1;
+			}
+
+			return Date.UTC(year, month) / 1000;
+		}
+
+		if (unit.name == 'year') {
+
+			date = new Date(time * 1000);
+
+			floor = Date.UTC(date.getUTCFullYear(), 0) / 1000;
+			if (floor == time) return time;
+
+			year = date.getUTCFullYear() + 1;
+
+			return Date.UTC(year, 0) / 1000;
+		}
+
+		return Math.ceil(time / unit.seconds) * unit.seconds;
+	};
+};
+Rickshaw.namespace('Rickshaw.Fixtures.Time.Local');
+
+Rickshaw.Fixtures.Time.Local = function() {
+
+	var self = this;
+
+	this.months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+	this.units = [
+		{
+			name: 'decade',
+			seconds: 86400 * 365.25 * 10,
+			formatter: function(d) { return (parseInt(d.getFullYear() / 10, 10) * 10) }
+		}, {
+			name: 'year',
+			seconds: 86400 * 365.25,
+			formatter: function(d) { return d.getFullYear() }
+		}, {
+			name: 'month',
+			seconds: 86400 * 30.5,
+			formatter: function(d) { return self.months[d.getMonth()] }
+		}, {
+			name: 'week',
+			seconds: 86400 * 7,
+			formatter: function(d) { return self.formatDate(d) }
+		}, {
+			name: 'day',
+			seconds: 86400,
+			formatter: function(d) { return d.getDate() }
+		}, {
+			name: '6 hour',
+			seconds: 3600 * 6,
+			formatter: function(d) { return self.formatTime(d) }
+		}, {
+			name: 'hour',
+			seconds: 3600,
+			formatter: function(d) { return self.formatTime(d) }
+		}, {
+			name: '15 minute',
+			seconds: 60 * 15,
+			formatter: function(d) { return self.formatTime(d) }
+		}, {
+			name: 'minute',
+			seconds: 60,
+			formatter: function(d) { return d.getMinutes() }
+		}, {
+			name: '15 second',
+			seconds: 15,
+			formatter: function(d) { return d.getSeconds() + 's' }
+		}, {
+			name: 'second',
+			seconds: 1,
+			formatter: function(d) { return d.getSeconds() + 's' }
+		}, {
+			name: 'decisecond',
+			seconds: 1/10,
+			formatter: function(d) { return d.getMilliseconds() + 'ms' }
+		}, {
+			name: 'centisecond',
+			seconds: 1/100,
+			formatter: function(d) { return d.getMilliseconds() + 'ms' }
+		}
+	];
+
+	this.unit = function(unitName) {
+		return this.units.filter( function(unit) { return unitName == unit.name } ).shift();
+	};
+
+	this.formatDate = function(d) {
+		return d3.time.format('%b %e')(d);
+	};
+
+	this.formatTime = function(d) {
+		return d.toString().match(/(\d+:\d+):/)[1];
+	};
+
+	this.ceil = function(time, unit) {
+
+		var date, floor, year, offset;
+
+		if (unit.name == 'day') {
+
+			var nearFuture = new Date((time + unit.seconds - 1) * 1000);
+
+			var rounded = new Date(0);
+			rounded.setFullYear(nearFuture.getFullYear());
+			rounded.setMonth(nearFuture.getMonth());
+			rounded.setDate(nearFuture.getDate());
+			rounded.setMilliseconds(0);
+			rounded.setSeconds(0);
+			rounded.setMinutes(0);
+			rounded.setHours(0);
+
+			return rounded.getTime() / 1000;
+		}
+
+		if (unit.name == 'month') {
+
+			date = new Date(time * 1000);
+
+			floor = new Date(date.getFullYear(), date.getMonth()).getTime() / 1000;
+			if (floor == time) return time;
+
+			year = date.getFullYear();
+			var month = date.getMonth();
+
+			if (month == 11) {
+				month = 0;
+				year = year + 1;
+			} else {
+				month += 1;
+			}
+
+			return new Date(year, month).getTime() / 1000;
+		}
+
+		if (unit.name == 'year') {
+
+			date = new Date(time * 1000);
+
+			floor = new Date(date.getUTCFullYear(), 0).getTime() / 1000;
+			if (floor == time) return time;
+
+			year = date.getFullYear() + 1;
+
+			return new Date(year, 0).getTime() / 1000;
+		}
+		offset = new Date(time * 1000).getTimezoneOffset() * 60;
+		return Math.ceil((time - offset) / unit.seconds) * unit.seconds + offset;
+	};
+};
+Rickshaw.namespace('Rickshaw.Fixtures.Number');
+
+Rickshaw.Fixtures.Number.formatKMBT = function(y) {
+	var abs_y = Math.abs(y);
+	if (abs_y >= 1000000000000)   { return y / 1000000000000 + "T" }
+	else if (abs_y >= 1000000000) { return y / 1000000000 + "B" }
+	else if (abs_y >= 1000000)    { return y / 1000000 + "M" }
+	else if (abs_y >= 1000)       { return y / 1000 + "K" }
+	else if (abs_y < 1 && y > 0)  { return y.toFixed(2) }
+	else if (abs_y === 0)         { return '' }
+	else                      { return y }
+};
+
+Rickshaw.Fixtures.Number.formatBase1024KMGTP = function(y) {
+    var abs_y = Math.abs(y);
+    if (abs_y >= 1125899906842624)  { return y / 1125899906842624 + "P" }
+    else if (abs_y >= 1099511627776){ return y / 1099511627776 + "T" }
+    else if (abs_y >= 1073741824)   { return y / 1073741824 + "G" }
+    else if (abs_y >= 1048576)      { return y / 1048576 + "M" }
+    else if (abs_y >= 1024)         { return y / 1024 + "K" }
+    else if (abs_y < 1 && y > 0)    { return y.toFixed(2) }
+    else if (abs_y === 0)           { return '' }
+    else                        { return y }
+};
+Rickshaw.namespace("Rickshaw.Color.Palette");
+
+Rickshaw.Color.Palette = function(args) {
+
+	var color = new Rickshaw.Fixtures.Color();
+
+	args = args || {};
+	this.schemes = {};
+
+	this.scheme = color.schemes[args.scheme] || args.scheme || color.schemes.colorwheel;
+	this.runningIndex = 0;
+	this.generatorIndex = 0;
+
+	if (args.interpolatedStopCount) {
+		var schemeCount = this.scheme.length - 1;
+		var i, j, scheme = [];
+		for (i = 0; i < schemeCount; i++) {
+			scheme.push(this.scheme[i]);
+			var generator = d3.interpolateHsl(this.scheme[i], this.scheme[i + 1]);
+			for (j = 1; j < args.interpolatedStopCount; j++) {
+				scheme.push(generator((1 / args.interpolatedStopCount) * j));
+			}
+		}
+		scheme.push(this.scheme[this.scheme.length - 1]);
+		this.scheme = scheme;
+	}
+	this.rotateCount = this.scheme.length;
+
+	this.color = function(key) {
+		return this.scheme[key] || this.scheme[this.runningIndex++] || this.interpolateColor() || '#808080';
+	};
+
+	this.interpolateColor = function() {
+		if (!Array.isArray(this.scheme)) return;
+		var color;
+		if (this.generatorIndex == this.rotateCount * 2 - 1) {
+			color = d3.interpolateHsl(this.scheme[this.generatorIndex], this.scheme[0])(0.5);
+			this.generatorIndex = 0;
+			this.rotateCount *= 2;
+		} else {
+			color = d3.interpolateHsl(this.scheme[this.generatorIndex], this.scheme[this.generatorIndex + 1])(0.5);
+			this.generatorIndex++;
+		}
+		this.scheme.push(color);
+		return color;
+	};
+
+};
+Rickshaw.namespace('Rickshaw.Graph.Ajax');
+
+Rickshaw.Graph.Ajax = Rickshaw.Class.create( {
+
+	initialize: function(args) {
+
+		this.dataURL = args.dataURL;
+
+		this.onData = args.onData || function(d) { return d };
+		this.onComplete = args.onComplete || function() {};
+		this.onError = args.onError || function() {};
+
+		this.args = args; // pass through to Rickshaw.Graph
+
+		this.request();
+	},
+
+	request: function() {
+
+		jQuery.ajax( {
+			url: this.dataURL,
+			dataType: 'json',
+			success: this.success.bind(this),
+			error: this.error.bind(this)
+		} );
+	},
+
+	error: function() {
+
+		console.log("error loading dataURL: " + this.dataURL);
+		this.onError(this);
+	},
+
+	success: function(data, status) {
+
+		data = this.onData(data);
+		this.args.series = this._splice({ data: data, series: this.args.series });
+
+		this.graph = this.graph || new Rickshaw.Graph(this.args);
+		this.graph.render();
+
+		this.onComplete(this);
+	},
+
+	_splice: function(args) {
+
+		var data = args.data;
+		var series = args.series;
+
+		if (!args.series) return data;
+
+		series.forEach( function(s) {
+
+			var seriesKey = s.key || s.name;
+			if (!seriesKey) throw "series needs a key or a name";
+
+			data.forEach( function(d) {
+
+				var dataKey = d.key || d.name;
+				if (!dataKey) throw "data needs a key or a name";
+
+				if (seriesKey == dataKey) {
+					var properties = ['color', 'name', 'data'];
+					properties.forEach( function(p) {
+						if (d[p]) s[p] = d[p];
+					} );
+				}
+			} );
+		} );
+
+		return series;
+	}
+} );
+
+Rickshaw.namespace('Rickshaw.Graph.Annotate');
+
+Rickshaw.Graph.Annotate = function(args) {
+
+	var graph = this.graph = args.graph;
+	this.elements = { timeline: args.element };
+	
+	var self = this;
+
+	this.data = {};
+
+	this.elements.timeline.classList.add('rickshaw_annotation_timeline');
+
+	this.add = function(time, content, end_time) {
+		self.data[time] = self.data[time] || {'boxes': []};
+		self.data[time].boxes.push({content: content, end: end_time});
+	};
+
+	this.update = function() {
+
+		Rickshaw.keys(self.data).forEach( function(time) {
+
+			var annotation = self.data[time];
+			var left = self.graph.x(time);
+
+			if (left < 0 || left > self.graph.x.range()[1]) {
+				if (annotation.element) {
+					annotation.line.classList.add('offscreen');
+					annotation.element.style.display = 'none';
+				}
+
+				annotation.boxes.forEach( function(box) {
+					if ( box.rangeElement ) box.rangeElement.classList.add('offscreen');
+				});
+
+				return;
+			}
+
+			if (!annotation.element) {
+				var element = annotation.element = document.createElement('div');
+				element.classList.add('annotation');
+				this.elements.timeline.appendChild(element);
+				element.addEventListener('click', function(e) {
+					element.classList.toggle('active');
+					annotation.line.classList.toggle('active');
+					annotation.boxes.forEach( function(box) {
+						if ( box.rangeElement ) box.rangeElement.classList.toggle('active');
+					});
+				}, false);
+					
+			}
+
+			annotation.element.style.left = left + 'px';
+			annotation.element.style.display = 'block';
+
+			annotation.boxes.forEach( function(box) {
+
+
+				var element = box.element;
+
+				if (!element) {
+					element = box.element = document.createElement('div');
+					element.classList.add('content');
+					element.innerHTML = box.content;
+					annotation.element.appendChild(element);
+
+					annotation.line = document.createElement('div');
+					annotation.line.classList.add('annotation_line');
+					self.graph.element.appendChild(annotation.line);
+
+					if ( box.end ) {
+						box.rangeElement = document.createElement('div');
+						box.rangeElement.classList.add('annotation_range');
+						self.graph.element.appendChild(box.rangeElement);
+					}
+
+				}
+
+				if ( box.end ) {
+
+					var annotationRangeStart = left;
+					var annotationRangeEnd   = Math.min( self.graph.x(box.end), self.graph.x.range()[1] );
+
+					// annotation makes more sense at end
+					if ( annotationRangeStart > annotationRangeEnd ) {
+						annotationRangeEnd   = left;
+						annotationRangeStart = Math.max( self.graph.x(box.end), self.graph.x.range()[0] );
+					}
+
+					var annotationRangeWidth = annotationRangeEnd - annotationRangeStart;
+
+					box.rangeElement.style.left  = annotationRangeStart + 'px';
+					box.rangeElement.style.width = annotationRangeWidth + 'px';
+
+					box.rangeElement.classList.remove('offscreen');
+				}
+
+				annotation.line.classList.remove('offscreen');
+				annotation.line.style.left = left + 'px';
+			} );
+		}, this );
+	};
+
+	this.graph.onUpdate( function() { self.update() } );
+};
+Rickshaw.namespace('Rickshaw.Graph.Axis.Time');
+
+Rickshaw.Graph.Axis.Time = function(args) {
+
+	var self = this;
+
+	this.graph = args.graph;
+	this.elements = [];
+	this.ticksTreatment = args.ticksTreatment || 'plain';
+	this.fixedTimeUnit = args.timeUnit;
+
+	var time = args.timeFixture || new Rickshaw.Fixtures.Time();
+
+	this.appropriateTimeUnit = function() {
+
+		var unit;
+		var units = time.units;
+
+		var domain = this.graph.x.domain();
+		var rangeSeconds = domain[1] - domain[0];
+
+		units.forEach( function(u) {
+			if (Math.floor(rangeSeconds / u.seconds) >= 2) {
+				unit = unit || u;
+			}
+		} );
+
+		return (unit || time.units[time.units.length - 1]);
+	};
+
+	this.tickOffsets = function() {
+
+		var domain = this.graph.x.domain();
+
+		var unit = this.fixedTimeUnit || this.appropriateTimeUnit();
+		var count = Math.ceil((domain[1] - domain[0]) / unit.seconds);
+
+		var runningTick = domain[0];
+
+		var offsets = [];
+
+		for (var i = 0; i < count; i++) {
+
+			var tickValue = time.ceil(runningTick, unit);
+			runningTick = tickValue + unit.seconds / 2;
+
+			offsets.push( { value: tickValue, unit: unit } );
+		}
+
+		return offsets;
+	};
+
+	this.render = function() {
+
+		this.elements.forEach( function(e) {
+			e.parentNode.removeChild(e);
+		} );
+
+		this.elements = [];
+
+		var offsets = this.tickOffsets();
+
+		offsets.forEach( function(o) {
+			
+			if (self.graph.x(o.value) > self.graph.x.range()[1]) return;
+	
+			var element = document.createElement('div');
+			element.style.left = self.graph.x(o.value) + 'px';
+			element.classList.add('x_tick');
+			element.classList.add(self.ticksTreatment);
+
+			var title = document.createElement('div');
+			title.classList.add('title');
+			title.innerHTML = o.unit.formatter(new Date(o.value * 1000));
+			element.appendChild(title);
+
+			self.graph.element.appendChild(element);
+			self.elements.push(element);
+
+		} );
+	};
+
+	this.graph.onUpdate( function() { self.render() } );
+};
+
+Rickshaw.namespace('Rickshaw.Graph.Axis.X');
+
+Rickshaw.Graph.Axis.X = function(args) {
+
+	var self = this;
+	var berthRate = 0.10;
+
+	this.initialize = function(args) {
+
+		this.graph = args.graph;
+		this.orientation = args.orientation || 'top';
+
+		this.pixelsPerTick = args.pixelsPerTick || 75;
+		if (args.ticks) this.staticTicks = args.ticks;
+		if (args.tickValues) this.tickValues = args.tickValues;
+
+		this.tickSize = args.tickSize || 4;
+		this.ticksTreatment = args.ticksTreatment || 'plain';
+
+		if (args.element) {
+
+			this.element = args.element;
+			this._discoverSize(args.element, args);
+
+			this.vis = d3.select(args.element)
+				.append("svg:svg")
+				.attr('height', this.height)
+				.attr('width', this.width)
+				.attr('class', 'rickshaw_graph x_axis_d3');
+
+			this.element = this.vis[0][0];
+			this.element.style.position = 'relative';
+
+			this.setSize({ width: args.width, height: args.height });
+
+		} else {
+			this.vis = this.graph.vis;
+		}
+
+		this.graph.onUpdate( function() { self.render() } );
+	};
+
+	this.setSize = function(args) {
+
+		args = args || {};
+		if (!this.element) return;
+
+		this._discoverSize(this.element.parentNode, args);
+
+		this.vis
+			.attr('height', this.height)
+			.attr('width', this.width * (1 + berthRate));
+
+		var berth = Math.floor(this.width * berthRate / 2);
+		this.element.style.left = -1 * berth + 'px';
+	};
+
+	this.render = function() {
+
+		if (this._renderWidth !== undefined && this.graph.width !== this._renderWidth) this.setSize({ auto: true });
+
+		var axis = d3.svg.axis().scale(this.graph.x).orient(this.orientation);
+		axis.tickFormat( args.tickFormat || function(x) { return x } );
+		if (this.tickValues) axis.tickValues(this.tickValues);
+
+		this.ticks = this.staticTicks || Math.floor(this.graph.width / this.pixelsPerTick);
+
+		var berth = Math.floor(this.width * berthRate / 2) || 0;
+		var bar_offset = this.graph.renderer.name == "bar" && Math.ceil(this.graph.width * 0.95 / this.graph.series[0].data.length / 2) || 0;
+
+		var transform;
+
+		if (this.orientation == 'top') {
+			var yOffset = this.height || this.graph.height;
+			transform = 'translate(' + (berth + bar_offset) + ',' + yOffset + ')';
+		} else {
+			transform = 'translate(' + (berth + bar_offset) + ', 0)';
+		}
+
+		if (this.element) {
+			this.vis.selectAll('*').remove();
+		}
+
+		this.vis
+			.append("svg:g")
+			.attr("class", ["x_ticks_d3", this.ticksTreatment].join(" "))
+			.attr("transform", transform)
+			.call(axis.ticks(this.ticks).tickSubdivide(0).tickSize(this.tickSize));
+
+		var gridSize = (this.orientation == 'bottom' ? 1 : -1) * this.graph.height;
+
+		this.graph.vis
+			.append("svg:g")
+			.attr("class", "x_grid_d3")
+			.call(axis.ticks(this.ticks).tickSubdivide(0).tickSize(gridSize))
+			.selectAll('text')
+			.each(function() { this.parentNode.setAttribute('data-x-value', this.textContent) });
+
+		this._renderHeight = this.graph.height;
+	};
+
+	this._discoverSize = function(element, args) {
+
+		if (typeof window !== 'undefined') {
+
+			var style = window.getComputedStyle(element, null);
+			var elementHeight = parseInt(style.getPropertyValue('height'), 10);
+
+			if (!args.auto) {
+				var elementWidth = parseInt(style.getPropertyValue('width'), 10);
+			}
+		}
+
+		this.width = (args.width || elementWidth || this.graph.width) * (1 + berthRate);
+		this.height = args.height || elementHeight || 40;
+	};
+
+	this.initialize(args);
+};
+
+Rickshaw.namespace('Rickshaw.Graph.Axis.Y');
+
+Rickshaw.Graph.Axis.Y = Rickshaw.Class.create( {
+
+	initialize: function(args) {
+
+		this.graph = args.graph;
+		this.orientation = args.orientation || 'right';
+
+		this.pixelsPerTick = args.pixelsPerTick || 75;
+		if (args.ticks) this.staticTicks = args.ticks;
+		if (args.tickValues) this.tickValues = args.tickValues;
+
+		this.tickSize = args.tickSize || 4;
+		this.ticksTreatment = args.ticksTreatment || 'plain';
+
+		this.tickFormat = args.tickFormat || function(y) { return y };
+
+		this.berthRate = 0.10;
+
+		if (args.element) {
+
+			this.element = args.element;
+			this.vis = d3.select(args.element)
+				.append("svg:svg")
+				.attr('class', 'rickshaw_graph y_axis');
+
+			this.element = this.vis[0][0];
+			this.element.style.position = 'relative';
+
+			this.setSize({ width: args.width, height: args.height });
+
+		} else {
+			this.vis = this.graph.vis;
+		}
+
+		var self = this;
+		this.graph.onUpdate( function() { self.render() } );
+	},
+
+	setSize: function(args) {
+
+		args = args || {};
+
+		if (!this.element) return;
+
+		if (typeof window !== 'undefined') {
+
+			var style = window.getComputedStyle(this.element.parentNode, null);
+			var elementWidth = parseInt(style.getPropertyValue('width'), 10);
+
+			if (!args.auto) {
+				var elementHeight = parseInt(style.getPropertyValue('height'), 10);
+			}
+		}
+
+		this.width = args.width || elementWidth || this.graph.width * this.berthRate;
+		this.height = args.height || elementHeight || this.graph.height;
+
+		this.vis
+			.attr('width', this.width)
+			.attr('height', this.height * (1 + this.berthRate));
+
+		var berth = this.height * this.berthRate;
+
+		if (this.orientation == 'left') {
+			this.element.style.top = -1 * berth + 'px';
+		}
+	},
+
+	render: function() {
+
+		if (this._renderHeight !== undefined && this.graph.height !== this._renderHeight) this.setSize({ auto: true });
+
+		this.ticks = this.staticTicks || Math.floor(this.graph.height / this.pixelsPerTick);
+
+		var axis = this._drawAxis(this.graph.y);
+
+		this._drawGrid(axis);
+
+		this._renderHeight = this.graph.height;
+	},
+
+	_drawAxis: function(scale) {
+		var axis = d3.svg.axis().scale(scale).orient(this.orientation);
+		axis.tickFormat(this.tickFormat);
+		if (this.tickValues) axis.tickValues(this.tickValues);
+
+		if (this.orientation == 'left') {
+			var berth = this.height * this.berthRate;
+			var transform = 'translate(' + this.width + ', ' + berth + ')';
+		}
+
+		if (this.element) {
+			this.vis.selectAll('*').remove();
+		}
+
+		this.vis
+			.append("svg:g")
+			.attr("class", ["y_ticks", this.ticksTreatment].join(" "))
+			.attr("transform", transform)
+			.call(axis.ticks(this.ticks).tickSubdivide(0).tickSize(this.tickSize));
+
+		return axis;
+	},
+
+	_drawGrid: function(axis) {
+		var gridSize = (this.orientation == 'right' ? 1 : -1) * this.graph.width;
+
+		this.graph.vis
+			.append("svg:g")
+			.attr("class", "y_grid")
+			.call(axis.ticks(this.ticks).tickSubdivide(0).tickSize(gridSize))
+			.selectAll('text')
+			.each(function() { this.parentNode.setAttribute('data-y-value', this.textContent) });
+	}
+} );
+Rickshaw.namespace('Rickshaw.Graph.Axis.Y.Scaled');
+
+Rickshaw.Graph.Axis.Y.Scaled = Rickshaw.Class.create( Rickshaw.Graph.Axis.Y, {
+
+  initialize: function($super, args) {
+
+    if (typeof(args.scale) === 'undefined') {
+      throw new Error('Scaled requires scale');
+    }
+
+    this.scale = args.scale;
+
+    if (typeof(args.grid) === 'undefined') {
+      this.grid = true;
+    } else {
+      this.grid = args.grid;
+    }
+
+    $super(args);
+
+  },
+
+  _drawAxis: function($super, scale) {
+    // Adjust scale's domain to compensate for adjustments to the
+    // renderer's domain (e.g. padding).
+    var domain = this.scale.domain();
+    var renderDomain = this.graph.renderer.domain().y;
+
+    var extents = [
+      Math.min.apply(Math, domain),
+      Math.max.apply(Math, domain)];
+
+    // A mapping from the ideal render domain [0, 1] to the extent
+    // of the original scale's domain.  This is used to calculate
+    // the extents of the adjusted domain.
+    var extentMap = d3.scale.linear().domain([0, 1]).range(extents);
+
+    var adjExtents = [
+      extentMap(renderDomain[0]),
+      extentMap(renderDomain[1])];
+
+    // A mapping from the original domain to the adjusted domain.
+    var adjustment = d3.scale.linear().domain(extents).range(adjExtents);
+
+    // Make a copy of the custom scale, apply the adjusted domain, and
+    // copy the range to match the graph's scale.
+    var adjustedScale = this.scale.copy()
+      .domain(domain.map(adjustment))
+      .range(scale.range());
+
+    return $super(adjustedScale);
+  },
+
+  _drawGrid: function($super, axis) {
+    if (this.grid) {
+      // only draw the axis if the grid option is true
+      $super(axis);
+    }
+  }
+} );
+Rickshaw.namespace('Rickshaw.Graph.Behavior.Series.Highlight');
+
+Rickshaw.Graph.Behavior.Series.Highlight = function(args) {
+
+	this.graph = args.graph;
+	this.legend = args.legend;
+
+	var self = this;
+
+	var colorSafe = {};
+	var activeLine = null;
+
+	var disabledColor = args.disabledColor || function(seriesColor) {
+		return d3.interpolateRgb(seriesColor, d3.rgb('#d8d8d8'))(0.8).toString();
+	};
+
+	this.addHighlightEvents = function (l) {
+
+		l.element.addEventListener( 'mouseover', function(e) {
+
+			if (activeLine) return;
+			else activeLine = l;
+
+			self.legend.lines.forEach( function(line) {
+
+				if (l === line) {
+
+					// if we're not in a stacked renderer bring active line to the top
+					if (self.graph.renderer.unstack && (line.series.renderer ? line.series.renderer.unstack : true)) {
+
+						var seriesIndex = self.graph.series.indexOf(line.series);
+						line.originalIndex = seriesIndex;
+
+						var series = self.graph.series.splice(seriesIndex, 1)[0];
+						self.graph.series.push(series);
+					}
+					return;
+				}
+
+				colorSafe[line.series.name] = colorSafe[line.series.name] || line.series.color;
+				line.series.color = disabledColor(line.series.color);
+
+			} );
+
+			self.graph.update();
+
+		}, false );
+
+		l.element.addEventListener( 'mouseout', function(e) {
+
+			if (!activeLine) return;
+			else activeLine = null;
+
+			self.legend.lines.forEach( function(line) {
+
+				// return reordered series to its original place
+				if (l === line && line.hasOwnProperty('originalIndex')) {
+
+					var series = self.graph.series.pop();
+					self.graph.series.splice(line.originalIndex, 0, series);
+					delete line.originalIndex;
+				}
+
+				if (colorSafe[line.series.name]) {
+					line.series.color = colorSafe[line.series.name];
+				}
+			} );
+
+			self.graph.update();
+
+		}, false );
+	};
+
+	if (this.legend) {
+		this.legend.lines.forEach( function(l) {
+			self.addHighlightEvents(l);
+		} );
+	}
+
+};
+Rickshaw.namespace('Rickshaw.Graph.Behavior.Series.Order');
+
+Rickshaw.Graph.Behavior.Series.Order = function(args) {
+
+	this.graph = args.graph;
+	this.legend = args.legend;
+
+	var self = this;
+
+	if (typeof window.jQuery == 'undefined') {
+		throw "couldn't find jQuery at window.jQuery";
+	}
+
+	if (typeof window.jQuery.ui == 'undefined') {
+		throw "couldn't find jQuery UI at window.jQuery.ui";
+	}
+
+	jQuery(function() {
+		jQuery(self.legend.list).sortable( {
+			containment: 'parent',
+			tolerance: 'pointer',
+			update: function( event, ui ) {
+				var series = [];
+				jQuery(self.legend.list).find('li').each( function(index, item) {
+					if (!item.series) return;
+					series.push(item.series);
+				} );
+
+				for (var i = self.graph.series.length - 1; i >= 0; i--) {
+					self.graph.series[i] = series.shift();
+				}
+
+				self.graph.update();
+			}
+		} );
+		jQuery(self.legend.list).disableSelection();
+	});
+
+	//hack to make jquery-ui sortable behave
+	this.graph.onUpdate( function() { 
+		var h = window.getComputedStyle(self.legend.element).height;
+		self.legend.element.style.height = h;
+	} );
+};
+Rickshaw.namespace('Rickshaw.Graph.Behavior.Series.Toggle');
+
+Rickshaw.Graph.Behavior.Series.Toggle = function(args) {
+
+	this.graph = args.graph;
+	this.legend = args.legend;
+
+	var self = this;
+
+	this.addAnchor = function(line) {
+
+		var anchor = document.createElement('a');
+		anchor.innerHTML = '&#10004;';
+		anchor.classList.add('action');
+		line.element.insertBefore(anchor, line.element.firstChild);
+
+		anchor.onclick = function(e) {
+			if (line.series.disabled) {
+				line.series.enable();
+				line.element.classList.remove('disabled');
+			} else { 
+				if (this.graph.series.filter(function(s) { return !s.disabled }).length <= 1) return;
+				line.series.disable();
+				line.element.classList.add('disabled');
+			}
+
+			self.graph.update();
+
+		}.bind(this);
+		
+                var label = line.element.getElementsByTagName('span')[0];
+                label.onclick = function(e){
+
+                        var disableAllOtherLines = line.series.disabled;
+                        if ( ! disableAllOtherLines ) {
+                                for ( var i = 0; i < self.legend.lines.length; i++ ) {
+                                        var l = self.legend.lines[i];
+                                        if ( line.series === l.series ) {
+                                                // noop
+                                        } else if ( l.series.disabled ) {
+                                                // noop
+                                        } else {
+                                                disableAllOtherLines = true;
+                                                break;
+                                        }
+                                }
+                        }
+
+                        // show all or none
+                        if ( disableAllOtherLines ) {
+
+                                // these must happen first or else we try ( and probably fail ) to make a no line graph
+                                line.series.enable();
+                                line.element.classList.remove('disabled');
+
+                                self.legend.lines.forEach(function(l){
+                                        if ( line.series === l.series ) {
+                                                // noop
+                                        } else {
+                                                l.series.disable();
+                                                l.element.classList.add('disabled');
+                                        }
+                                });
+
+                        } else {
+
+                                self.legend.lines.forEach(function(l){
+                                        l.series.enable();
+                                        l.element.classList.remove('disabled');
+                                });
+
+                        }
+
+                        self.graph.update();
+
+                };
+
+	};
+
+	if (this.legend) {
+
+		var $ = jQuery;
+		if (typeof $ != 'undefined' && $(this.legend.list).sortable) {
+
+			$(this.legend.list).sortable( {
+				start: function(event, ui) {
+					ui.item.bind('no.onclick',
+						function(event) {
+							event.preventDefault();
+						}
+					);
+				},
+				stop: function(event, ui) {
+					setTimeout(function(){
+						ui.item.unbind('no.onclick');
+					}, 250);
+				}
+			});
+		}
+
+		this.legend.lines.forEach( function(l) {
+			self.addAnchor(l);
+		} );
+	}
+
+	this._addBehavior = function() {
+
+		this.graph.series.forEach( function(s) {
+			
+			s.disable = function() {
+
+				if (self.graph.series.length <= 1) {
+					throw('only one series left');
+				}
+				
+				s.disabled = true;
+			};
+
+			s.enable = function() {
+				s.disabled = false;
+			};
+		} );
+	};
+	this._addBehavior();
+
+	this.updateBehaviour = function () { this._addBehavior() };
+
+};
+Rickshaw.namespace('Rickshaw.Graph.HoverDetail');
+
+Rickshaw.Graph.HoverDetail = Rickshaw.Class.create({
+
+	initialize: function(args) {
+
+		var graph = this.graph = args.graph;
+
+		this.xFormatter = args.xFormatter || function(x) {
+			return new Date( x * 1000 ).toUTCString();
+		};
+
+		this.yFormatter = args.yFormatter || function(y) {
+			return y === null ? y : y.toFixed(2);
+		};
+
+		var element = this.element = document.createElement('div');
+		element.className = 'detail';
+
+		this.visible = true;
+		graph.element.appendChild(element);
+
+		this.lastEvent = null;
+		this._addListeners();
+
+		this.onShow = args.onShow;
+		this.onHide = args.onHide;
+		this.onRender = args.onRender;
+
+		this.formatter = args.formatter || this.formatter;
+
+	},
+
+	formatter: function(series, x, y, formattedX, formattedY, d) {
+		return series.name + ':&nbsp;' + formattedY;
+	},
+
+	update: function(e) {
+
+		e = e || this.lastEvent;
+		if (!e) return;
+		this.lastEvent = e;
+
+		if (!e.target.nodeName.match(/^(path|svg|rect|circle)$/)) return;
+
+		var graph = this.graph;
+
+		var eventX = e.offsetX || e.layerX;
+		var eventY = e.offsetY || e.layerY;
+
+		var j = 0;
+		var points = [];
+		var nearestPoint;
+
+		this.graph.series.active().forEach( function(series) {
+
+			var data = this.graph.stackedData[j++];
+
+			if (!data.length)
+				return;
+
+			var domainX = graph.x.invert(eventX);
+
+			var domainIndexScale = d3.scale.linear()
+				.domain([data[0].x, data.slice(-1)[0].x])
+				.range([0, data.length - 1]);
+
+			var approximateIndex = Math.round(domainIndexScale(domainX));
+			if (approximateIndex == data.length - 1) approximateIndex--;
+
+			var dataIndex = Math.min(approximateIndex || 0, data.length - 1);
+
+			for (var i = approximateIndex; i < data.length - 1;) {
+
+				if (!data[i] || !data[i + 1]) break;
+
+				if (data[i].x <= domainX && data[i + 1].x > domainX) {
+					dataIndex = Math.abs(domainX - data[i].x) < Math.abs(domainX - data[i + 1].x) ? i : i + 1;
+					break;
+				}
+
+				if (data[i + 1].x <= domainX) { i++ } else { i-- }
+			}
+
+			if (dataIndex < 0) dataIndex = 0;
+			var value = data[dataIndex];
+
+			var distance = Math.sqrt(
+				Math.pow(Math.abs(graph.x(value.x) - eventX), 2) +
+				Math.pow(Math.abs(graph.y(value.y + value.y0) - eventY), 2)
+			);
+
+			var xFormatter = series.xFormatter || this.xFormatter;
+			var yFormatter = series.yFormatter || this.yFormatter;
+
+			var point = {
+				formattedXValue: xFormatter(value.x),
+				formattedYValue: yFormatter(series.scale ? series.scale.invert(value.y) : value.y),
+				series: series,
+				value: value,
+				distance: distance,
+				order: j,
+				name: series.name
+			};
+
+			if (!nearestPoint || distance < nearestPoint.distance) {
+				nearestPoint = point;
+			}
+
+			points.push(point);
+
+		}, this );
+
+		if (!nearestPoint)
+			return;
+
+		nearestPoint.active = true;
+
+		var domainX = nearestPoint.value.x;
+		var formattedXValue = nearestPoint.formattedXValue;
+
+		this.element.innerHTML = '';
+		this.element.style.left = graph.x(domainX) + 'px';
+
+		this.visible && this.render( {
+			points: points,
+			detail: points, // for backwards compatibility
+			mouseX: eventX,
+			mouseY: eventY,
+			formattedXValue: formattedXValue,
+			domainX: domainX
+		} );
+	},
+
+	hide: function() {
+		this.visible = false;
+		this.element.classList.add('inactive');
+
+		if (typeof this.onHide == 'function') {
+			this.onHide();
+		}
+	},
+
+	show: function() {
+		this.visible = true;
+		this.element.classList.remove('inactive');
+
+		if (typeof this.onShow == 'function') {
+			this.onShow();
+		}
+	},
+
+	render: function(args) {
+
+		var graph = this.graph;
+		var points = args.points;
+		var point = points.filter( function(p) { return p.active } ).shift();
+
+		if (point.value.y === null) return;
+
+		var formattedXValue = point.formattedXValue;
+		var formattedYValue = point.formattedYValue;
+
+		this.element.innerHTML = '';
+		this.element.style.left = graph.x(point.value.x) + 'px';
+
+		var xLabel = document.createElement('div');
+
+		xLabel.className = 'x_label';
+		xLabel.innerHTML = formattedXValue;
+		this.element.appendChild(xLabel);
+
+		var item = document.createElement('div');
+
+		item.className = 'item';
+
+		// invert the scale if this series displays using a scale
+		var series = point.series;
+		var actualY = series.scale ? series.scale.invert(point.value.y) : point.value.y;
+
+		item.innerHTML = this.formatter(series, point.value.x, actualY, formattedXValue, formattedYValue, point);
+		item.style.top = this.graph.y(point.value.y0 + point.value.y) + 'px';
+
+		this.element.appendChild(item);
+
+		var dot = document.createElement('div');
+
+		dot.className = 'dot';
+		dot.style.top = item.style.top;
+		dot.style.borderColor = series.color;
+
+		this.element.appendChild(dot);
+
+		if (point.active) {
+			item.classList.add('active');
+			dot.classList.add('active');
+		}
+
+		// Assume left alignment until the element has been displayed and
+		// bounding box calculations are possible.
+		var alignables = [xLabel, item];
+		alignables.forEach(function(el) {
+			el.classList.add('left');
+		});
+
+		this.show();
+
+		// If left-alignment results in any error, try right-alignment.
+		var leftAlignError = this._calcLayoutError(alignables);
+		if (leftAlignError > 0) {
+			alignables.forEach(function(el) {
+				el.classList.remove('left');
+				el.classList.add('right');
+			});
+
+			// If right-alignment is worse than left alignment, switch back.
+			var rightAlignError = this._calcLayoutError(alignables);
+			if (rightAlignError > leftAlignError) {
+				alignables.forEach(function(el) {
+					el.classList.remove('right');
+					el.classList.add('left');
+				});
+			}
+		}
+
+		if (typeof this.onRender == 'function') {
+			this.onRender(args);
+		}
+	},
+
+	_calcLayoutError: function(alignables) {
+		// Layout error is calculated as the number of linear pixels by which
+		// an alignable extends past the left or right edge of the parent.
+		var parentRect = this.element.parentNode.getBoundingClientRect();
+
+		var error = 0;
+		var alignRight = alignables.forEach(function(el) {
+			var rect = el.getBoundingClientRect();
+			if (!rect.width) {
+				return;
+			}
+
+			if (rect.right > parentRect.right) {
+				error += rect.right - parentRect.right;
+			}
+
+			if (rect.left < parentRect.left) {
+				error += parentRect.left - rect.left;
+			}
+		});
+		return error;
+	},
+
+	_addListeners: function() {
+
+		this.graph.element.addEventListener(
+			'mousemove',
+			function(e) {
+				this.visible = true;
+				this.update(e);
+			}.bind(this),
+			false
+		);
+
+		this.graph.onUpdate( function() { this.update() }.bind(this) );
+
+		this.graph.element.addEventListener(
+			'mouseout',
+			function(e) {
+				if (e.relatedTarget && !(e.relatedTarget.compareDocumentPosition(this.graph.element) & Node.DOCUMENT_POSITION_CONTAINS)) {
+					this.hide();
+				}
+			}.bind(this),
+			false
+		);
+	}
+});
+Rickshaw.namespace('Rickshaw.Graph.JSONP');
+
+Rickshaw.Graph.JSONP = Rickshaw.Class.create( Rickshaw.Graph.Ajax, {
+
+	request: function() {
+
+		jQuery.ajax( {
+			url: this.dataURL,
+			dataType: 'jsonp',
+			success: this.success.bind(this),
+			error: this.error.bind(this)
+		} );
+	}
+} );
+Rickshaw.namespace('Rickshaw.Graph.Legend');
+
+Rickshaw.Graph.Legend = Rickshaw.Class.create( {
+
+	className: 'rickshaw_legend',
+
+	initialize: function(args) {
+		this.element = args.element;
+		this.graph = args.graph;
+		this.naturalOrder = args.naturalOrder;
+
+		this.element.classList.add(this.className);
+
+		this.list = document.createElement('ul');
+		this.element.appendChild(this.list);
+
+		this.render();
+
+		// we could bind this.render.bind(this) here
+		// but triggering the re-render would lose the added
+		// behavior of the series toggle
+		this.graph.onUpdate( function() {} );
+	},
+
+	render: function() {
+		var self = this;
+
+		while ( this.list.firstChild ) {
+			this.list.removeChild( this.list.firstChild );
+		}
+		this.lines = [];
+
+		var series = this.graph.series
+			.map( function(s) { return s } );
+
+		if (!this.naturalOrder) {
+			series = series.reverse();
+		}
+
+		series.forEach( function(s) {
+			self.addLine(s);
+		} );
+
+
+	},
+
+	addLine: function (series) {
+		var line = document.createElement('li');
+		line.className = 'line';
+		if (series.disabled) {
+			line.className += ' disabled';
+		}
+		if (series.className) {
+			d3.select(line).classed(series.className, true);
+		}
+		var swatch = document.createElement('div');
+		swatch.className = 'swatch';
+		swatch.style.backgroundColor = series.color;
+
+		line.appendChild(swatch);
+
+		var label = document.createElement('span');
+		label.className = 'label';
+		label.innerHTML = series.name;
+
+		line.appendChild(label);
+		this.list.appendChild(line);
+
+		line.series = series;
+
+		if (series.noLegend) {
+			line.style.display = 'none';
+		}
+
+		var _line = { element: line, series: series };
+		if (this.shelving) {
+			this.shelving.addAnchor(_line);
+			this.shelving.updateBehaviour();
+		}
+		if (this.highlighter) {
+			this.highlighter.addHighlightEvents(_line);
+		}
+		this.lines.push(_line);
+		return line;
+	}
+} );
+
+Rickshaw.namespace('Rickshaw.Graph.RangeSlider');
+
+Rickshaw.Graph.RangeSlider = Rickshaw.Class.create({
+
+	initialize: function(args) {
+
+		var $ = jQuery;
+		var self = this;
+		var element = this.element = args.element;
+		var graphs = this.graphs = args.graphs;
+		if (!graphs) {
+			graphs = this.graph = args.graph;
+		}
+		if (graphs.constructor !== Array) {
+			graphs = [graphs];
+		}
+		this.graph = graphs[0];
+
+		this.slideCallbacks = [];
+
+		this.build();
+
+		for (var i = 0; i < graphs.length; i++) {
+			graphs[i].onUpdate(function() {
+				self.update();
+			}.bind(self));
+
+			graphs[i].onConfigure(function() {
+				$(element)[0].style.width = graphs[i].width + 'px';
+			}.bind(self));
+		}
+
+	},
+
+	build: function() {
+
+		var domain;
+		var element = this.element;
+		var $ = jQuery;
+		var self = this;
+		var graphs = this.graphs || this.graph;
+
+		if (graphs.constructor !== Array) {
+			graphs = [graphs];
+		}
+
+		// base the slider's min/max on the first graph
+		this.graph = graphs[0];
+		domain = graphs[0].dataDomain();
+
+		$(function() {
+			$(element).slider({
+				range: true,
+				min: domain[0],
+				max: domain[1],
+				values: [
+					domain[0],
+					domain[1]
+				],
+				start: function(event, ui) {
+					self.slideStarted({ event: event, ui: ui });
+				},
+				stop: function(event, ui) {
+					self.slideFinished({ event: event, ui: ui });
+				},
+				slide: function(event, ui) {
+					if (!self.slideShouldUpdate(event, ui))
+						return;
+
+					if (ui.values[1] <= ui.values[0]) return;
+
+					for (var i = 0; i < graphs.length; i++) {
+						self.processSlideChange({
+							event: event,
+							ui: ui,
+							graph: graphs[i]
+						});
+					}
+				}
+			} );
+		} );
+
+		graphs[0].onConfigure(function() {
+			$(element)[0].style.width = graphs[0].width + 'px';
+		}.bind(this));
+
+	},
+
+	update: function() {
+
+		var element = this.element;
+		var graph = this.graph;
+		var $ = jQuery;
+
+		var values = $(element).slider('option', 'values');
+
+		var domain = graph.dataDomain();
+
+		$(element).slider('option', 'min', domain[0]);
+		$(element).slider('option', 'max', domain[1]);
+
+		if (graph.window.xMin == null) {
+			values[0] = domain[0];
+		}
+		if (graph.window.xMax == null) {
+			values[1] = domain[1];
+		}
+
+		$(element).slider('option', 'values', values);
+	},
+
+	onSlide: function(callback) {
+		this.slideCallbacks.push(callback);
+	},
+
+	processSlideChange: function(args) {
+		var event = args.event;
+		var ui = args.ui;
+		var graph = args.graph;
+
+		graph.window.xMin = ui.values[0];
+		graph.window.xMax = ui.values[1];
+		graph.update();
+
+		var domain = graph.dataDomain();
+
+		// if we're at an extreme, stick there
+		if (domain[0] == ui.values[0]) {
+			graph.window.xMin = undefined;
+		}
+
+		if (domain[1] == ui.values[1]) {
+			graph.window.xMax = undefined;
+		}
+
+		this.slideCallbacks.forEach(function(callback) {
+			callback(graph, graph.window.xMin, graph.window.xMax);
+		});
+
+	},
+
+	// allows the slide updates to bail out if sliding is not permitted
+	slideShouldUpdate: function() {
+		return true;
+	},
+
+	slideStarted: function() {
+		return;
+	},
+
+	slideFinished: function() {
+		return;
+	}
+});
+
+Rickshaw.namespace('Rickshaw.Graph.RangeSlider.Preview');
+
+Rickshaw.Graph.RangeSlider.Preview = Rickshaw.Class.create({
+
+	initialize: function(args) {
+
+		if (!args.element) throw "Rickshaw.Graph.RangeSlider.Preview needs a reference to an element";
+		if (!args.graph && !args.graphs) throw "Rickshaw.Graph.RangeSlider.Preview needs a reference to an graph or an array of graphs";
+
+		this.element = args.element;
+		this.element.style.position = 'relative';
+
+		this.graphs = args.graph ? [ args.graph ] : args.graphs;
+
+		this.defaults = {
+			height: 75,
+			width: 400,
+			gripperColor: undefined,
+			frameTopThickness: 3,
+			frameHandleThickness: 10,
+			frameColor: "#d4d4d4",
+			frameOpacity: 1,
+			minimumFrameWidth: 0,
+			heightRatio: 0.2
+		};
+
+		this.heightRatio = args.heightRatio || this.defaults.heightRatio;
+		this.defaults.gripperColor = d3.rgb(this.defaults.frameColor).darker().toString(); 
+
+		this.configureCallbacks = [];
+		this.slideCallbacks = [];
+
+		this.previews = [];
+
+		if (!args.width) this.widthFromGraph = true;
+		if (!args.height) this.heightFromGraph = true;
+
+		if (this.widthFromGraph || this.heightFromGraph) {
+			this.graphs[0].onConfigure(function () {
+				this.configure(args); this.render();
+			}.bind(this));
+		}
+
+		args.width = args.width || this.graphs[0].width || this.defaults.width;
+		args.height = args.height || this.graphs[0].height * this.heightRatio || this.defaults.height;
+
+		this.configure(args);
+		this.render();
+	},
+
+	onSlide: function(callback) {
+		this.slideCallbacks.push(callback);
+	},
+
+	onConfigure: function(callback) {
+		this.configureCallbacks.push(callback);
+	},
+
+	configure: function(args) {
+
+		this.config = this.config || {};
+
+		this.configureCallbacks.forEach(function(callback) {
+			callback(args);
+		});
+
+		Rickshaw.keys(this.defaults).forEach(function(k) {
+			this.config[k] = k in args ? args[k]
+				: k in this.config ? this.config[k]
+				: this.defaults[k];
+		}, this);
+
+		if ('width' in args || 'height' in args) {
+
+			if (this.widthFromGraph) {
+				this.config.width = this.graphs[0].width;
+			}
+
+			if (this.heightFromGraph) {
+				this.config.height = this.graphs[0].height * this.heightRatio;
+				this.previewHeight = this.config.height;
+			}
+
+			this.previews.forEach(function(preview) {
+
+				var height = this.previewHeight / this.graphs.length - this.config.frameTopThickness * 2;
+				var width = this.config.width - this.config.frameHandleThickness * 2;
+				preview.setSize({ width: width, height: height });
+
+				if (this.svg) {
+					var svgHeight = height + this.config.frameHandleThickness * 2;
+					var svgWidth = width + this.config.frameHandleThickness * 2;
+					this.svg.style("width", svgWidth + "px");
+					this.svg.style("height", svgHeight + "px");
+				}
+			}, this);
+		}
+	},
+
+	render: function() {
+
+		var self = this;
+
+		this.svg = d3.select(this.element)
+			.selectAll("svg.rickshaw_range_slider_preview")
+			.data([null]);
+
+		this.previewHeight = this.config.height - (this.config.frameTopThickness * 2);
+		this.previewWidth = this.config.width - (this.config.frameHandleThickness * 2);
+
+		this.currentFrame = [0, this.previewWidth];
+
+		var buildGraph = function(parent, index) {
+
+			var graphArgs = Rickshaw.extend({}, parent.config);
+			var height = self.previewHeight / self.graphs.length;
+			var renderer = parent.renderer.name;
+
+			Rickshaw.extend(graphArgs, {
+				element: this.appendChild(document.createElement("div")),
+				height: height,
+				width: self.previewWidth,
+				series: parent.series,
+				renderer: renderer
+			});
+
+			var graph = new Rickshaw.Graph(graphArgs);
+			self.previews.push(graph);
+
+			parent.onUpdate(function() { graph.render(); self.render() });
+
+			parent.onConfigure(function(args) { 
+				// don't propagate height
+				delete args.height;
+				args.width = args.width - self.config.frameHandleThickness * 2;
+				graph.configure(args);
+				graph.render();
+			});
+
+			graph.render();
+		};
+
+		var graphContainer = d3.select(this.element)
+			.selectAll("div.rickshaw_range_slider_preview_container")
+			.data(this.graphs);
+
+		var translateCommand = "translate(" +
+			this.config.frameHandleThickness + "px, " +
+			this.config.frameTopThickness + "px)";
+
+		graphContainer.enter()
+			.append("div")
+			.classed("rickshaw_range_slider_preview_container", true)
+			.style("-webkit-transform", translateCommand)
+			.style("-moz-transform", translateCommand)
+			.style("-ms-transform", translateCommand)
+			.style("transform", translateCommand)
+			.each(buildGraph);
+
+		graphContainer.exit()
+			.remove();
+
+		// Use the first graph as the "master" for the frame state
+		var masterGraph = this.graphs[0];
+
+		var domainScale = d3.scale.linear()
+			.domain([0, this.previewWidth])
+			.range(masterGraph.dataDomain());
+
+		var currentWindow = [masterGraph.window.xMin, masterGraph.window.xMax];
+
+		this.currentFrame[0] = currentWindow[0] === undefined ? 
+			0 : Math.round(domainScale.invert(currentWindow[0]));
+
+		if (this.currentFrame[0] < 0) this.currentFrame[0] = 0;
+
+		this.currentFrame[1] = currentWindow[1] === undefined ?
+			this.previewWidth : domainScale.invert(currentWindow[1]);
+
+		if (this.currentFrame[1] - this.currentFrame[0] < self.config.minimumFrameWidth) {
+			this.currentFrame[1] = (this.currentFrame[0] || 0) + self.config.minimumFrameWidth;
+		}
+
+		this.svg.enter()
+			.append("svg")
+			.classed("rickshaw_range_slider_preview", true)
+			.style("height", this.config.height + "px")
+			.style("width", this.config.width + "px")
+			.style("position", "absolute")
+			.style("top", 0);
+
+		this._renderDimming();
+		this._renderFrame();
+		this._renderGrippers();
+		this._renderHandles();
+		this._renderMiddle();
+
+		this._registerMouseEvents();
+	},
+
+	_renderDimming: function() {
+
+		var element = this.svg
+			.selectAll("path.dimming")
+			.data([null]);
+
+		element.enter()
+			.append("path")
+			.attr("fill", "white")
+			.attr("fill-opacity", "0.7")
+			.attr("fill-rule", "evenodd")
+			.classed("dimming", true);
+
+		var path = "";
+		path += " M " + this.config.frameHandleThickness + " " + this.config.frameTopThickness;
+		path += " h " + this.previewWidth;
+		path += " v " + this.previewHeight;
+		path += " h " + -this.previewWidth;
+		path += " z ";
+		path += " M " + Math.max(this.currentFrame[0], this.config.frameHandleThickness) + " " + this.config.frameTopThickness;
+		path += " H " + Math.min(this.currentFrame[1] + this.config.frameHandleThickness * 2, this.previewWidth + this.config.frameHandleThickness);
+		path += " v " + this.previewHeight;
+		path += " H " + Math.max(this.currentFrame[0], this.config.frameHandleThickness);
+		path += " z";
+
+		element.attr("d", path);
+	},
+
+	_renderFrame: function() {
+
+		var element = this.svg
+			.selectAll("path.frame")
+			.data([null]);
+
+		element.enter()
+			.append("path")
+			.attr("stroke", "white")
+			.attr("stroke-width", "1px")
+			.attr("stroke-linejoin", "round")
+			.attr("fill", this.config.frameColor)
+			.attr("fill-opacity", this.config.frameOpacity)
+			.attr("fill-rule", "evenodd")
+			.classed("frame", true);
+
+		var path = "";
+		path += " M " + this.currentFrame[0] + " 0";
+		path += " H " + (this.currentFrame[1] + (this.config.frameHandleThickness * 2));
+		path += " V " + this.config.height;
+		path += " H " + (this.currentFrame[0]);
+		path += " z";
+		path += " M " + (this.currentFrame[0] + this.config.frameHandleThickness) + " " + this.config.frameTopThickness;
+		path += " H " + (this.currentFrame[1] + this.config.frameHandleThickness);
+		path += " v " + this.previewHeight;
+		path += " H " + (this.currentFrame[0] + this.config.frameHandleThickness);
+		path += " z";
+
+		element.attr("d", path);
+	},
+
+	_renderGrippers: function() {
+
+		var gripper = this.svg.selectAll("path.gripper")
+			.data([null]);
+
+		gripper.enter()
+			.append("path")
+			.attr("stroke", this.config.gripperColor)
+			.classed("gripper", true);
+
+		var path = "";
+
+		[0.4, 0.6].forEach(function(spacing) {
+			path += " M " + Math.round((this.currentFrame[0] + (this.config.frameHandleThickness * spacing))) + " " + Math.round(this.config.height * 0.3);
+			path += " V " + Math.round(this.config.height * 0.7);
+			path += " M " + Math.round((this.currentFrame[1] + (this.config.frameHandleThickness * (1 + spacing)))) + " " + Math.round(this.config.height * 0.3);
+			path += " V " + Math.round(this.config.height * 0.7);
+		}.bind(this));
+
+		gripper.attr("d", path);
+	},
+
+	_renderHandles: function() {
+
+		var leftHandle = this.svg.selectAll("rect.left_handle")
+			.data([null]);
+
+		leftHandle.enter()
+			.append("rect")
+			.attr('width', this.config.frameHandleThickness)
+			.style("cursor", "ew-resize")
+			.style("fill-opacity", "0")
+			.classed("left_handle", true);
+
+		leftHandle
+			.attr('x', this.currentFrame[0])
+			.attr('height', this.config.height);
+
+		var rightHandle = this.svg.selectAll("rect.right_handle")
+			.data([null]);
+
+		rightHandle.enter()
+			.append("rect")
+			.attr('width', this.config.frameHandleThickness)
+			.style("cursor", "ew-resize")
+			.style("fill-opacity", "0")
+			.classed("right_handle", true);
+
+		rightHandle
+			.attr('x', this.currentFrame[1] + this.config.frameHandleThickness)
+			.attr('height', this.config.height);
+	},
+
+	_renderMiddle: function() {
+
+		var middleHandle = this.svg.selectAll("rect.middle_handle")
+			.data([null]);
+
+		middleHandle.enter()
+			.append("rect")
+			.style("cursor", "move")
+			.style("fill-opacity", "0")
+			.classed("middle_handle", true);
+
+		middleHandle
+			.attr('width', Math.max(0, this.currentFrame[1] - this.currentFrame[0]))
+			.attr('x', this.currentFrame[0] + this.config.frameHandleThickness)
+			.attr('height', this.config.height);
+	},
+
+	_registerMouseEvents: function() {
+
+		var element = d3.select(this.element);
+
+		var drag = {
+			target: null,
+			start: null,
+			stop: null,
+			left: false,
+			right: false,
+			rigid: false
+		};
+
+		var self = this;
+
+		function onMousemove(datum, index) {
+
+			drag.stop = self._getClientXFromEvent(d3.event, drag);
+			var distanceTraveled = drag.stop - drag.start;
+			var frameAfterDrag = self.frameBeforeDrag.slice(0);
+			var minimumFrameWidth = self.config.minimumFrameWidth;
+
+			if (drag.rigid) {
+				minimumFrameWidth = self.frameBeforeDrag[1] - self.frameBeforeDrag[0];
+			}
+			if (drag.left) {
+				frameAfterDrag[0] = Math.max(frameAfterDrag[0] + distanceTraveled, 0);
+			}
+			if (drag.right) {
+				frameAfterDrag[1] = Math.min(frameAfterDrag[1] + distanceTraveled, self.previewWidth);
+			}
+
+			var currentFrameWidth = frameAfterDrag[1] - frameAfterDrag[0];
+
+			if (currentFrameWidth <= minimumFrameWidth) {
+
+				if (drag.left) {
+					frameAfterDrag[0] = frameAfterDrag[1] - minimumFrameWidth;
+				}
+				if (drag.right) {
+					frameAfterDrag[1] = frameAfterDrag[0] + minimumFrameWidth;
+				}
+				if (frameAfterDrag[0] <= 0) {
+					frameAfterDrag[1] -= frameAfterDrag[0];
+					frameAfterDrag[0] = 0;
+				}
+				if (frameAfterDrag[1] >= self.previewWidth) {
+					frameAfterDrag[0] -= (frameAfterDrag[1] - self.previewWidth);
+					frameAfterDrag[1] = self.previewWidth;
+				}
+			}
+
+			self.graphs.forEach(function(graph) {
+
+				var domainScale = d3.scale.linear()
+					.interpolate(d3.interpolateNumber)
+					.domain([0, self.previewWidth])
+					.range(graph.dataDomain());
+
+				var windowAfterDrag = [
+					domainScale(frameAfterDrag[0]),
+					domainScale(frameAfterDrag[1])
+				];
+
+				self.slideCallbacks.forEach(function(callback) {
+					callback(graph, windowAfterDrag[0], windowAfterDrag[1]);
+				});
+
+				if (frameAfterDrag[0] === 0) {
+					windowAfterDrag[0] = undefined;
+				}
+				if (frameAfterDrag[1] === self.previewWidth) {
+					windowAfterDrag[1] = undefined;
+				}
+				graph.window.xMin = windowAfterDrag[0];
+				graph.window.xMax = windowAfterDrag[1];
+
+				graph.update();
+			});
+		}
+
+		function onMousedown() {
+			drag.target = d3.event.target;
+			drag.start = self._getClientXFromEvent(d3.event, drag);
+			self.frameBeforeDrag = self.currentFrame.slice();
+			d3.event.preventDefault ? d3.event.preventDefault() : d3.event.returnValue = false;
+			d3.select(document).on("mousemove.rickshaw_range_slider_preview", onMousemove);
+			d3.select(document).on("mouseup.rickshaw_range_slider_preview", onMouseup);
+			d3.select(document).on("touchmove.rickshaw_range_slider_preview", onMousemove);
+			d3.select(document).on("touchend.rickshaw_range_slider_preview", onMouseup);
+			d3.select(document).on("touchcancel.rickshaw_range_slider_preview", onMouseup);
+		}
+
+		function onMousedownLeftHandle(datum, index) {
+			drag.left = true;
+			onMousedown();
+		}
+
+		function onMousedownRightHandle(datum, index) {
+			drag.right = true;
+			onMousedown();
+		}
+
+		function onMousedownMiddleHandle(datum, index) {
+			drag.left = true;
+			drag.right = true;
+			drag.rigid = true;
+			onMousedown();
+		}
+
+		function onMouseup(datum, index) {
+			d3.select(document).on("mousemove.rickshaw_range_slider_preview", null);
+			d3.select(document).on("mouseup.rickshaw_range_slider_preview", null);
+			d3.select(document).on("touchmove.rickshaw_range_slider_preview", null);
+			d3.select(document).on("touchend.rickshaw_range_slider_preview", null);
+			d3.select(document).on("touchcancel.rickshaw_range_slider_preview", null);
+			delete self.frameBeforeDrag;
+			drag.left = false;
+			drag.right = false;
+			drag.rigid = false;
+		}
+
+		element.select("rect.left_handle").on("mousedown", onMousedownLeftHandle);
+		element.select("rect.right_handle").on("mousedown", onMousedownRightHandle);
+		element.select("rect.middle_handle").on("mousedown", onMousedownMiddleHandle);
+		element.select("rect.left_handle").on("touchstart", onMousedownLeftHandle);
+		element.select("rect.right_handle").on("touchstart", onMousedownRightHandle);
+		element.select("rect.middle_handle").on("touchstart", onMousedownMiddleHandle);
+	},
+
+	_getClientXFromEvent: function(event, drag) {
+
+		switch (event.type) {
+			case 'touchstart':
+			case 'touchmove':
+				var touchList = event.changedTouches;
+				var touch = null;
+				for (var touchIndex = 0; touchIndex < touchList.length; touchIndex++) {
+					if (touchList[touchIndex].target === drag.target) {
+						touch = touchList[touchIndex];
+						break;
+					}
+				}
+				return touch !== null ? touch.clientX : undefined;
+
+			default:
+				return event.clientX;
+		}
+	}
+});
+
+Rickshaw.namespace("Rickshaw.Graph.Renderer");
+
+Rickshaw.Graph.Renderer = Rickshaw.Class.create( {
+
+	initialize: function(args) {
+		this.graph = args.graph;
+		this.tension = args.tension || this.tension;
+		this.configure(args);
+	},
+
+	seriesPathFactory: function() {
+		//implement in subclass
+	},
+
+	seriesStrokeFactory: function() {
+		// implement in subclass
+	},
+
+	defaults: function() {
+		return {
+			tension: 0.8,
+			strokeWidth: 2,
+			unstack: true,
+			padding: { top: 0.01, right: 0, bottom: 0.01, left: 0 },
+			stroke: false,
+			fill: false,
+			opacity: 1
+		};
+	},
+
+	domain: function(data) {
+		// Requires that at least one series contains some data
+		var stackedData = data || this.graph.stackedData || this.graph.stackData();
+
+		// filter out any series that may be empty in the current x-domain
+		stackedData = stackedData.filter(function (a) { return a && a.length !== 0; });
+
+		var xMin = +Infinity;
+		var xMax = -Infinity;
+
+		var yMin = +Infinity;
+		var yMax = -Infinity;
+
+		stackedData.forEach( function(series) {
+
+			series.forEach( function(d) {
+
+				if (d.y == null) return;
+
+				var y = d.y + d.y0;
+
+				if (y < yMin) yMin = y;
+				if (y > yMax) yMax = y;
+			} );
+
+			if (!series.length) return;
+
+			if (series[0].x < xMin) xMin = series[0].x;
+			if (series[series.length - 1].x > xMax) xMax = series[series.length - 1].x;
+		} );
+
+		xMin -= (xMax - xMin) * this.padding.left;
+		xMax += (xMax - xMin) * this.padding.right;
+
+		yMin = this.graph.min === 'auto' ? yMin : this.graph.min || 0;
+		yMax = this.graph.max === undefined ? yMax : this.graph.max;
+
+		if (this.graph.min === 'auto' || yMin < 0) {
+			yMin -= (yMax - yMin) * this.padding.bottom;
+		}
+
+		if (this.graph.max === undefined) {
+			yMax += (yMax - yMin) * this.padding.top;
+		}
+
+		return { x: [xMin, xMax], y: [yMin, yMax] };
+	},
+
+	render: function(args) {
+
+		args = args || {};
+
+		var graph = this.graph;
+		var series = args.series || graph.series;
+
+		var vis = args.vis || graph.vis;
+		vis.selectAll('*').remove();
+
+		var data = series
+			.filter(function(s) { return !s.disabled })
+			.map(function(s) { return s.stack });
+
+		var pathNodes = vis.selectAll("path.path")
+			.data(data)
+			.enter().append("svg:path")
+			.classed('path', true)
+			.attr("d", this.seriesPathFactory());
+
+		if (this.stroke) {
+                        var strokeNodes = vis.selectAll('path.stroke')
+                                .data(data)
+                                .enter().append("svg:path")
+				.classed('stroke', true)
+				.attr("d", this.seriesStrokeFactory());
+		}
+
+		var i = 0;
+		series.forEach( function(series) {
+			if (series.disabled) return;
+			series.path = pathNodes[0][i];
+			if (this.stroke) series.stroke = strokeNodes[0][i];
+			this._styleSeries(series);
+			i++;
+		}, this );
+
+	},
+
+	_styleSeries: function(series) {
+
+		var fill = this.fill ? series.color : 'none';
+		var stroke = this.stroke ? series.color : 'none';
+		var strokeWidth = series.strokeWidth ? series.strokeWidth : this.strokeWidth;
+		var opacity = series.opacity ? series.opacity : this.opacity;
+
+		series.path.setAttribute('fill', fill);
+		series.path.setAttribute('stroke', stroke);
+		series.path.setAttribute('stroke-width', strokeWidth);
+		series.path.setAttribute('opacity', opacity);
+
+		if (series.className) {
+			d3.select(series.path).classed(series.className, true);
+		}
+		if (series.className && this.stroke) {
+			d3.select(series.stroke).classed(series.className, true);
+		}
+	},
+
+	configure: function(args) {
+
+		args = args || {};
+
+		Rickshaw.keys(this.defaults()).forEach( function(key) {
+
+			if (!args.hasOwnProperty(key)) {
+				this[key] = this[key] || this.graph[key] || this.defaults()[key];
+				return;
+			}
+
+			if (typeof this.defaults()[key] == 'object') {
+
+				Rickshaw.keys(this.defaults()[key]).forEach( function(k) {
+
+					this[key][k] =
+						args[key][k] !== undefined ? args[key][k] :
+						this[key][k] !== undefined ? this[key][k] :
+						this.defaults()[key][k];
+				}, this );
+
+			} else {
+				this[key] =
+					args[key] !== undefined ? args[key] :
+					this[key] !== undefined ? this[key] :
+					this.graph[key] !== undefined ? this.graph[key] :
+					this.defaults()[key];
+			}
+
+		}, this );
+	},
+
+	setStrokeWidth: function(strokeWidth) {
+		if (strokeWidth !== undefined) {
+			this.strokeWidth = strokeWidth;
+		}
+	},
+
+	setTension: function(tension) {
+		if (tension !== undefined) {
+			this.tension = tension;
+		}
+	}
+} );
+
+Rickshaw.namespace('Rickshaw.Graph.Renderer.Line');
+
+Rickshaw.Graph.Renderer.Line = Rickshaw.Class.create( Rickshaw.Graph.Renderer, {
+
+	name: 'line',
+
+	defaults: function($super) {
+
+		return Rickshaw.extend( $super(), {
+			unstack: true,
+			fill: false,
+			stroke: true
+		} );
+	},
+
+	seriesPathFactory: function() {
+
+		var graph = this.graph;
+
+		var factory = d3.svg.line()
+			.x( function(d) { return graph.x(d.x) } )
+			.y( function(d) { return graph.y(d.y) } )
+			.interpolate(this.graph.interpolation).tension(this.tension);
+
+		factory.defined && factory.defined( function(d) { return d.y !== null } );
+		return factory;
+	}
+} );
+
+Rickshaw.namespace('Rickshaw.Graph.Renderer.Stack');
+
+Rickshaw.Graph.Renderer.Stack = Rickshaw.Class.create( Rickshaw.Graph.Renderer, {
+
+	name: 'stack',
+
+	defaults: function($super) {
+
+		return Rickshaw.extend( $super(), {
+			fill: true,
+			stroke: false,
+			unstack: false
+		} );
+	},
+
+	seriesPathFactory: function() {
+
+		var graph = this.graph;
+
+		var factory = d3.svg.area()
+			.x( function(d) { return graph.x(d.x) } )
+			.y0( function(d) { return graph.y(d.y0) } )
+			.y1( function(d) { return graph.y(d.y + d.y0) } )
+			.interpolate(this.graph.interpolation).tension(this.tension);
+
+		factory.defined && factory.defined( function(d) { return d.y !== null } );
+		return factory;
+	}
+} );
+
+Rickshaw.namespace('Rickshaw.Graph.Renderer.Bar');
+
+Rickshaw.Graph.Renderer.Bar = Rickshaw.Class.create( Rickshaw.Graph.Renderer, {
+
+	name: 'bar',
+
+	defaults: function($super) {
+
+		var defaults = Rickshaw.extend( $super(), {
+			gapSize: 0.05,
+			unstack: false,
+			opacity: 1.0
+		} );
+
+		delete defaults.tension;
+		return defaults;
+	},
+
+	initialize: function($super, args) {
+		args = args || {};
+		this.gapSize = args.gapSize || this.gapSize;
+		$super(args);
+	},
+
+	domain: function($super) {
+
+		var domain = $super();
+
+		var frequentInterval = this._frequentInterval(this.graph.stackedData.slice(-1).shift());
+		domain.x[1] += Number(frequentInterval.magnitude);
+
+		return domain;
+	},
+
+	barWidth: function(series) {
+
+		var frequentInterval = this._frequentInterval(series.stack);
+		var barWidth = this.graph.x.magnitude(frequentInterval.magnitude) * (1 - this.gapSize);
+
+		return barWidth;
+	},
+
+	render: function(args) {
+
+		args = args || {};
+
+		var graph = this.graph;
+		var series = args.series || graph.series;
+
+		var vis = args.vis || graph.vis;
+		vis.selectAll('*').remove();
+
+		var barWidth = this.barWidth(series.active()[0]);
+		var barXOffset = 0;
+
+		var activeSeriesCount = series.filter( function(s) { return !s.disabled; } ).length;
+		var seriesBarWidth = this.unstack ? barWidth / activeSeriesCount : barWidth;
+
+		var transform = function(d) {
+			// add a matrix transform for negative values
+			var matrix = [ 1, 0, 0, (d.y < 0 ? -1 : 1), 0, (d.y < 0 ? graph.y.magnitude(Math.abs(d.y)) * 2 : 0) ];
+			return "matrix(" + matrix.join(',') + ")";
+		};
+
+		series.forEach( function(series) {
+
+			if (series.disabled) return;
+
+			var barWidth = this.barWidth(series);
+
+			var nodes = vis.selectAll("path")
+				.data(series.stack.filter( function(d) { return d.y !== null } ))
+				.enter().append("svg:rect")
+				.attr("x", function(d) { return graph.x(d.x) + barXOffset })
+				.attr("y", function(d) { return (graph.y(d.y0 + Math.abs(d.y))) * (d.y < 0 ? -1 : 1 ) })
+				.attr("width", seriesBarWidth)
+				.attr("height", function(d) { return graph.y.magnitude(Math.abs(d.y)) })
+				.attr("opacity", series.opacity)
+				.attr("transform", transform);
+
+			Array.prototype.forEach.call(nodes[0], function(n) {
+				n.setAttribute('fill', series.color);
+			} );
+
+			if (this.unstack) barXOffset += seriesBarWidth;
+
+		}, this );
+	},
+
+	_frequentInterval: function(data) {
+
+		var intervalCounts = {};
+
+		for (var i = 0; i < data.length - 1; i++) {
+			var interval = data[i + 1].x - data[i].x;
+			intervalCounts[interval] = intervalCounts[interval] || 0;
+			intervalCounts[interval]++;
+		}
+
+		var frequentInterval = { count: 0, magnitude: 1 };
+		
+		// Sorting object's keys returned to guarantee consistency when iterating over
+		// Keys order in `for .. in` loop is not specified and browsers behave differently here
+		// This results with different invterval value being calculated for different browsers
+		// See last but one section here: http://www.ecma-international.org/ecma-262/5.1/#sec-12.6.4
+		var keysSorted = Rickshaw.keys(intervalCounts).sort(function asc(a, b) { return Number(a) - Number(b); });
+		keysSorted.forEach( function(i) {
+			if (frequentInterval.count < intervalCounts[i]) {
+				frequentInterval = {
+					count: intervalCounts[i],
+					magnitude: i
+				};
+			}
+		} );
+
+		return frequentInterval;
+	}
+} );
+
+Rickshaw.namespace('Rickshaw.Graph.Renderer.Area');
+
+Rickshaw.Graph.Renderer.Area = Rickshaw.Class.create( Rickshaw.Graph.Renderer, {
+
+	name: 'area',
+
+	defaults: function($super) {
+
+		return Rickshaw.extend( $super(), {
+			unstack: false,
+			fill: false,
+			stroke: false
+		} );
+	},
+
+	seriesPathFactory: function() {
+
+		var graph = this.graph;
+
+		var factory = d3.svg.area()
+			.x( function(d) { return graph.x(d.x) } )
+			.y0( function(d) { return graph.y(d.y0) } )
+			.y1( function(d) { return graph.y(d.y + d.y0) } )
+			.interpolate(graph.interpolation).tension(this.tension);
+
+		factory.defined && factory.defined( function(d) { return d.y !== null } );
+		return factory;
+	},
+
+	seriesStrokeFactory: function() {
+
+		var graph = this.graph;
+
+		var factory = d3.svg.line()
+			.x( function(d) { return graph.x(d.x) } )
+			.y( function(d) { return graph.y(d.y + d.y0) } )
+			.interpolate(graph.interpolation).tension(this.tension);
+
+		factory.defined && factory.defined( function(d) { return d.y !== null } );
+		return factory;
+	},
+
+	render: function(args) {
+
+		args = args || {};
+
+		var graph = this.graph;
+		var series = args.series || graph.series;
+
+		var vis = args.vis || graph.vis;
+		vis.selectAll('*').remove();
+
+		// insert or stacked areas so strokes lay on top of areas
+		var method = this.unstack ? 'append' : 'insert';
+
+		var data = series
+			.filter(function(s) { return !s.disabled })
+			.map(function(s) { return s.stack });
+
+		var nodes = vis.selectAll("path")
+			.data(data)
+			.enter()[method]("svg:g", 'g');
+
+		nodes.append("svg:path")
+			.attr("d", this.seriesPathFactory())
+			.attr("class", 'area');
+
+		if (this.stroke) {
+			nodes.append("svg:path")
+				.attr("d", this.seriesStrokeFactory())
+				.attr("class", 'line');
+		}
+
+		var i = 0;
+		series.forEach( function(series) {
+			if (series.disabled) return;
+			series.path = nodes[0][i++];
+			this._styleSeries(series);
+		}, this );
+	},
+
+	_styleSeries: function(series) {
+
+		if (!series.path) return;
+
+		d3.select(series.path).select('.area')
+			.attr('fill', series.color);
+
+		if (this.stroke) {
+			d3.select(series.path).select('.line')
+				.attr('fill', 'none')
+				.attr('stroke', series.stroke || d3.interpolateRgb(series.color, 'black')(0.125))
+				.attr('stroke-width', this.strokeWidth);
+		}
+
+		if (series.className) {
+			series.path.setAttribute('class', series.className);
+		}
+	}
+} );
+
+Rickshaw.namespace('Rickshaw.Graph.Renderer.ScatterPlot');
+
+Rickshaw.Graph.Renderer.ScatterPlot = Rickshaw.Class.create( Rickshaw.Graph.Renderer, {
+
+	name: 'scatterplot',
+
+	defaults: function($super) {
+
+		return Rickshaw.extend( $super(), {
+			unstack: true,
+			fill: true,
+			stroke: false,
+			padding:{ top: 0.01, right: 0.01, bottom: 0.01, left: 0.01 },
+			dotSize: 4
+		} );
+	},
+
+	initialize: function($super, args) {
+		$super(args);
+	},
+
+	render: function(args) {
+
+		args = args || {};
+
+		var graph = this.graph;
+
+		var series = args.series || graph.series;
+		var vis = args.vis || graph.vis;
+
+		var dotSize = this.dotSize;
+
+		vis.selectAll('*').remove();
+
+		series.forEach( function(series) {
+
+			if (series.disabled) return;
+			var opacity = series.opacity ? series.opacity : 1;
+
+			var nodes = vis.selectAll("path")
+				.data(series.stack.filter( function(d) { return d.y !== null } ))
+				.enter().append("svg:circle")
+					.attr("cx", function(d) { return graph.x(d.x) })
+					.attr("cy", function(d) { return graph.y(d.y) })
+					.attr("r", function(d) { return ("r" in d) ? d.r : dotSize})
+					.attr("opacity", function(d) { return ("opacity" in d) ? d.opacity : opacity});
+			if (series.className) {
+				nodes.classed(series.className, true);
+			}
+			
+			Array.prototype.forEach.call(nodes[0], function(n) {
+				n.setAttribute('fill', series.color);
+			} );
+
+		}, this );
+	}
+} );
+Rickshaw.namespace('Rickshaw.Graph.Renderer.Multi');
+
+Rickshaw.Graph.Renderer.Multi = Rickshaw.Class.create( Rickshaw.Graph.Renderer, {
+
+	name: 'multi',
+
+	initialize: function($super, args) {
+
+		$super(args);
+	},
+
+	defaults: function($super) {
+
+		return Rickshaw.extend( $super(), {
+			unstack: true,
+			fill: false,
+			stroke: true 
+		} );
+	},
+
+	configure: function($super, args) {
+
+		args = args || {};
+		this.config = args;
+		$super(args);
+	},
+
+	domain: function($super) {
+
+		this.graph.stackData();
+
+		var domains = [];
+
+		var groups = this._groups();
+		this._stack(groups);
+
+		groups.forEach( function(group) {
+
+			var data = group.series
+				.filter( function(s) { return !s.disabled } )
+				.map( function(s) { return s.stack });
+
+			if (!data.length) return;
+			
+			var domain = null;
+			if (group.renderer && group.renderer.domain) {
+				domain = group.renderer.domain(data);
+			}
+			else {
+				domain = $super(data);
+			}
+			domains.push(domain);
+		});
+
+		var xMin = d3.min(domains.map( function(d) { return d.x[0] } ));
+		var xMax = d3.max(domains.map( function(d) { return d.x[1] } ));
+		var yMin = d3.min(domains.map( function(d) { return d.y[0] } ));
+		var yMax = d3.max(domains.map( function(d) { return d.y[1] } ));
+
+		return { x: [xMin, xMax], y: [yMin, yMax] };
+	},
+
+	_groups: function() {
+
+		var graph = this.graph;
+
+		var renderGroups = {};
+
+		graph.series.forEach( function(series) {
+
+			if (series.disabled) return;
+
+			if (!renderGroups[series.renderer]) {
+
+				var ns = "http://www.w3.org/2000/svg";
+				var vis = document.createElementNS(ns, 'g');
+
+				graph.vis[0][0].appendChild(vis);
+
+				var renderer = graph._renderers[series.renderer];
+
+				var config = {};
+
+				var defaults = [ this.defaults(), renderer.defaults(), this.config, this.graph ];
+				defaults.forEach(function(d) { Rickshaw.extend(config, d) });
+
+				renderer.configure(config);
+
+				renderGroups[series.renderer] = {
+					renderer: renderer,
+					series: [],
+					vis: d3.select(vis)
+				};
+			}
+				
+			renderGroups[series.renderer].series.push(series);
+
+		}, this);
+
+		var groups = [];
+
+		Object.keys(renderGroups).forEach( function(key) {
+			var group = renderGroups[key];
+			groups.push(group);
+		});
+
+		return groups;
+	},
+
+	_stack: function(groups) {
+
+		groups.forEach( function(group) {
+
+			var series = group.series
+				.filter( function(series) { return !series.disabled } );
+
+			var data = series
+				.map( function(series) { return series.stack } );
+
+			if (!group.renderer.unstack) {
+
+				var layout = d3.layout.stack();
+				var stackedData = Rickshaw.clone(layout(data));
+
+				series.forEach( function(series, index) {
+					series._stack = Rickshaw.clone(stackedData[index]);
+				});
+			}
+
+		}, this );
+
+		return groups;
+
+	},
+
+	render: function() {
+
+		this.graph.series.forEach( function(series) {
+			if (!series.renderer) {
+				throw new Error("Each series needs a renderer for graph 'multi' renderer");
+			}
+		});
+
+		this.graph.vis.selectAll('*').remove();
+
+		var groups = this._groups();
+		groups = this._stack(groups);
+
+		groups.forEach( function(group) {
+
+			var series = group.series
+				.filter( function(series) { return !series.disabled } );
+
+			series.active = function() { return series };
+
+			group.renderer.render({ series: series, vis: group.vis });
+			series.forEach(function(s) { s.stack = s._stack || s.stack || s.data; });
+		});
+	}
+
+} );
+Rickshaw.namespace('Rickshaw.Graph.Renderer.LinePlot');
+
+Rickshaw.Graph.Renderer.LinePlot = Rickshaw.Class.create( Rickshaw.Graph.Renderer, {
+
+	name: 'lineplot',
+
+	defaults: function($super) {
+
+		return Rickshaw.extend( $super(), {
+			unstack: true,
+			fill: false,
+			stroke: true,
+			padding:{ top: 0.01, right: 0.01, bottom: 0.01, left: 0.01 },
+			dotSize: 3,
+			strokeWidth: 2
+		} );
+	},
+
+	seriesPathFactory: function() {
+
+		var graph = this.graph;
+
+		var factory = d3.svg.line()
+			.x( function(d) { return graph.x(d.x) } )
+			.y( function(d) { return graph.y(d.y) } )
+			.interpolate(this.graph.interpolation).tension(this.tension);
+
+		factory.defined && factory.defined( function(d) { return d.y !== null } );
+		return factory;
+	},
+
+	render: function(args) {
+
+		args = args || {};
+
+		var graph = this.graph;
+
+		var series = args.series || graph.series;
+		var vis = args.vis || graph.vis;
+
+		var dotSize = this.dotSize;
+
+		vis.selectAll('*').remove();
+
+		var data = series
+			.filter(function(s) { return !s.disabled })
+			.map(function(s) { return s.stack });
+
+		var nodes = vis.selectAll("path")
+			.data(data)
+			.enter().append("svg:path")
+			.attr("d", this.seriesPathFactory());
+
+		var i = 0;
+		series.forEach(function(series) {
+			if (series.disabled) return;
+			series.path = nodes[0][i++];
+			this._styleSeries(series);
+		}, this);
+
+		series.forEach(function(series) {
+
+			if (series.disabled) return;
+
+			var nodes = vis.selectAll("x")
+				.data(series.stack.filter( function(d) { return d.y !== null } ))
+				.enter().append("svg:circle")
+				.attr("cx", function(d) { return graph.x(d.x) })
+				.attr("cy", function(d) { return graph.y(d.y) })
+				.attr("r", function(d) { return ("r" in d) ? d.r : dotSize});
+
+			Array.prototype.forEach.call(nodes[0], function(n) {
+				if (!n) return;
+				n.setAttribute('data-color', series.color);
+				n.setAttribute('fill', 'white');
+				n.setAttribute('stroke', series.color);
+				n.setAttribute('stroke-width', this.strokeWidth);
+
+			}.bind(this));
+
+		}, this);
+	}
+} );
+
+Rickshaw.namespace('Rickshaw.Graph.Smoother');
+
+Rickshaw.Graph.Smoother = Rickshaw.Class.create({
+
+	initialize: function(args) {
+
+		this.graph = args.graph;
+		this.element = args.element;
+		this.aggregationScale = 1;
+
+		this.build();
+
+		this.graph.stackData.hooks.data.push( {
+			name: 'smoother',
+			orderPosition: 50,
+			f: this.transformer.bind(this)
+		} );
+	},
+
+	build: function() {
+
+		var self = this;
+		var $ = jQuery;
+
+		if (this.element) {
+			$( function() {
+				$(self.element).slider( {
+					min: 1,
+					max: 100,
+					slide: function( event, ui ) {
+						self.setScale(ui.value);
+					}
+				} );
+			} );
+		}
+	},
+
+	setScale: function(scale) {
+
+		if (scale < 1) {
+			throw "scale out of range: " + scale;
+		}
+
+		this.aggregationScale = scale;
+		this.graph.update();
+	},
+
+	transformer: function(data) {
+
+		if (this.aggregationScale == 1) return data;
+
+		var aggregatedData = [];
+
+		data.forEach( function(seriesData) {
+
+			var aggregatedSeriesData = [];
+
+			while (seriesData.length) {
+
+				var avgX = 0, avgY = 0;
+				var slice = seriesData.splice(0, this.aggregationScale);
+
+				slice.forEach( function(d) {
+					avgX += d.x / slice.length;
+					avgY += d.y / slice.length;
+				} );
+
+				aggregatedSeriesData.push( { x: avgX, y: avgY } );
+			}
+
+			aggregatedData.push(aggregatedSeriesData);
+
+		}.bind(this) );
+
+		return aggregatedData;
+	}
+});
+
+Rickshaw.namespace('Rickshaw.Graph.Socketio');
+
+Rickshaw.Graph.Socketio = Rickshaw.Class.create( Rickshaw.Graph.Ajax, {
+	request: function() {
+		var socket = io.connect(this.dataURL);
+		var self = this;
+		socket.on('rickshaw', function (data) {
+			self.success(data);
+		});
+	}
+} );
+Rickshaw.namespace('Rickshaw.Series');
+
+Rickshaw.Series = Rickshaw.Class.create( Array, {
+
+	initialize: function (data, palette, options) {
+
+		options = options || {};
+
+		this.palette = new Rickshaw.Color.Palette(palette);
+
+		this.timeBase = typeof(options.timeBase) === 'undefined' ? 
+			Math.floor(new Date().getTime() / 1000) : 
+			options.timeBase;
+
+		var timeInterval = typeof(options.timeInterval) == 'undefined' ?
+			1000 :
+			options.timeInterval;
+
+		this.setTimeInterval(timeInterval);
+
+		if (data && (typeof(data) == "object") && Array.isArray(data)) {
+			data.forEach( function(item) { this.addItem(item) }, this );
+		}
+	},
+
+	addItem: function(item) {
+
+		if (typeof(item.name) === 'undefined') {
+			throw('addItem() needs a name');
+		}
+
+		item.color = (item.color || this.palette.color(item.name));
+		item.data = (item.data || []);
+
+		// backfill, if necessary
+		if ((item.data.length === 0) && this.length && (this.getIndex() > 0)) {
+			this[0].data.forEach( function(plot) {
+				item.data.push({ x: plot.x, y: 0 });
+			} );
+		} else if (item.data.length === 0) {
+			item.data.push({ x: this.timeBase - (this.timeInterval || 0), y: 0 });
+		} 
+
+		this.push(item);
+
+		if (this.legend) {
+			this.legend.addLine(this.itemByName(item.name));
+		}
+	},
+
+	addData: function(data, x) {
+
+		var index = this.getIndex();
+
+		Rickshaw.keys(data).forEach( function(name) {
+			if (! this.itemByName(name)) {
+				this.addItem({ name: name });
+			}
+		}, this );
+
+		this.forEach( function(item) {
+			item.data.push({ 
+				x: x || (index * this.timeInterval || 1) + this.timeBase, 
+				y: (data[item.name] || 0) 
+			});
+		}, this );
+	},
+
+	getIndex: function () {
+		return (this[0] && this[0].data && this[0].data.length) ? this[0].data.length : 0;
+	},
+
+	itemByName: function(name) {
+
+		for (var i = 0; i < this.length; i++) {
+			if (this[i].name == name)
+				return this[i];
+		}
+	},
+
+	setTimeInterval: function(iv) {
+		this.timeInterval = iv / 1000;
+	},
+
+	setTimeBase: function (t) {
+		this.timeBase = t;
+	},
+
+	dump: function() {
+
+		var data = {
+			timeBase: this.timeBase,
+			timeInterval: this.timeInterval,
+			items: []
+		};
+
+		this.forEach( function(item) {
+
+			var newItem = {
+				color: item.color,
+				name: item.name,
+				data: []
+			};
+
+			item.data.forEach( function(plot) {
+				newItem.data.push({ x: plot.x, y: plot.y });
+			} );
+
+			data.items.push(newItem);
+		} );
+
+		return data;
+	},
+
+	load: function(data) {
+
+		if (data.timeInterval) {
+			this.timeInterval = data.timeInterval;
+		}
+
+		if (data.timeBase) {
+			this.timeBase = data.timeBase;
+		}
+
+		if (data.items) {
+			data.items.forEach( function(item) {
+				this.push(item);
+				if (this.legend) {
+					this.legend.addLine(this.itemByName(item.name));
+				}
+
+			}, this );
+		}
+	}
+} );
+
+Rickshaw.Series.zeroFill = function(series) {
+	Rickshaw.Series.fill(series, 0);
+};
+
+Rickshaw.Series.fill = function(series, fill) {
+
+	var x;
+	var i = 0;
+
+	var data = series.map( function(s) { return s.data } );
+
+	while ( i < Math.max.apply(null, data.map( function(d) { return d.length } )) ) {
+
+		x = Math.min.apply( null, 
+			data
+				.filter(function(d) { return d[i] })
+				.map(function(d) { return d[i].x })
+		);
+
+		data.forEach( function(d) {
+			if (!d[i] || d[i].x != x) {
+				d.splice(i, 0, { x: x, y: fill });
+			}
+		} );
+
+		i++;
+	}
+};
+
+Rickshaw.namespace('Rickshaw.Series.FixedDuration');
+
+Rickshaw.Series.FixedDuration = Rickshaw.Class.create(Rickshaw.Series, {
+
+	initialize: function (data, palette, options) {
+
+		options = options || {};
+
+		if (typeof(options.timeInterval) === 'undefined') {
+			throw new Error('FixedDuration series requires timeInterval');
+		}
+
+		if (typeof(options.maxDataPoints) === 'undefined') {
+			throw new Error('FixedDuration series requires maxDataPoints');
+		}
+
+		this.palette = new Rickshaw.Color.Palette(palette);
+		this.timeBase = typeof(options.timeBase) === 'undefined' ? Math.floor(new Date().getTime() / 1000) : options.timeBase;
+		this.setTimeInterval(options.timeInterval);
+
+		if (this[0] && this[0].data && this[0].data.length) {
+			this.currentSize = this[0].data.length;
+			this.currentIndex = this[0].data.length;
+		} else {
+			this.currentSize  = 0;
+			this.currentIndex = 0;
+		}
+
+		this.maxDataPoints = options.maxDataPoints;
+
+
+		if (data && (typeof(data) == "object") && Array.isArray(data)) {
+			data.forEach( function (item) { this.addItem(item) }, this );
+			this.currentSize  += 1;
+			this.currentIndex += 1;
+		}
+
+		// reset timeBase for zero-filled values if needed
+		this.timeBase -= (this.maxDataPoints - this.currentSize) * this.timeInterval;
+
+		// zero-fill up to maxDataPoints size if we don't have that much data yet
+		if ((typeof(this.maxDataPoints) !== 'undefined') && (this.currentSize < this.maxDataPoints)) {
+			for (var i = this.maxDataPoints - this.currentSize - 1; i > 1; i--) {
+				this.currentSize  += 1;
+				this.currentIndex += 1;
+				this.forEach( function (item) {
+					item.data.unshift({ x: ((i-1) * this.timeInterval || 1) + this.timeBase, y: 0, i: i });
+				}, this );
+			}
+		}
+	},
+
+	addData: function($super, data, x) {
+
+		$super(data, x);
+
+		this.currentSize += 1;
+		this.currentIndex += 1;
+
+		if (this.maxDataPoints !== undefined) {
+			while (this.currentSize > this.maxDataPoints) {
+				this.dropData();
+			}
+		}
+	},
+
+	dropData: function() {
+
+		this.forEach(function(item) {
+			item.data.splice(0, 1);
+		} );
+
+		this.currentSize -= 1;
+	},
+
+	getIndex: function () {
+		return this.currentIndex;
+	}
+} );
+
+	return Rickshaw;
+}));

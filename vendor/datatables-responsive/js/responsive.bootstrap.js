@@ -1,1 +1,85 @@
-!function(e){"function"==typeof define&&define.amd?define(["jquery","datatables.net-bs","datatables.net-responsive"],function(d){return e(d,window,document)}):"object"==typeof exports?module.exports=function(d,a){return d||(d=window),a&&a.fn.dataTable||(a=require("datatables.net-bs")(d,a).$),a.fn.dataTable.Responsive||require("datatables.net-responsive")(d,a),e(a,d,d.document)}:e(jQuery,window,document)}(function(e,d,a,n){"use strict";var t=e.fn.dataTable,o=t.Responsive.display,i=o.modal,s=e('<div class="modal fade dtr-bs-modal" role="dialog"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body"/></div></div></div>');return o.modal=function(d){return function(a,n,t){if(e.fn.modal){if(!n){if(d&&d.header){var o=s.find("div.modal-header"),l=o.find("button").detach();o.empty().append('<h4 class="modal-title">'+d.header(a)+"</h4>").prepend(l)}s.find("div.modal-body").empty().append(t()),s.appendTo("body").modal()}}else i(a,n,t)}},t.Responsive});
+/*! Bootstrap integration for DataTables' Responsive
+ * ©2015-2016 SpryMedia Ltd - datatables.net/license
+ */
+
+(function( factory ){
+	if ( typeof define === 'function' && define.amd ) {
+		// AMD
+		define( ['jquery', 'datatables.net-bs', 'datatables.net-responsive'], function ( $ ) {
+			return factory( $, window, document );
+		} );
+	}
+	else if ( typeof exports === 'object' ) {
+		// CommonJS
+		module.exports = function (root, $) {
+			if ( ! root ) {
+				root = window;
+			}
+
+			if ( ! $ || ! $.fn.dataTable ) {
+				$ = require('datatables.net-bs')(root, $).$;
+			}
+
+			if ( ! $.fn.dataTable.Responsive ) {
+				require('datatables.net-responsive')(root, $);
+			}
+
+			return factory( $, root, root.document );
+		};
+	}
+	else {
+		// Browser
+		factory( jQuery, window, document );
+	}
+}(function( $, window, document, undefined ) {
+'use strict';
+var DataTable = $.fn.dataTable;
+
+
+var _display = DataTable.Responsive.display;
+var _original = _display.modal;
+var _modal = $(
+	'<div class="modal fade dtr-bs-modal" role="dialog">'+
+		'<div class="modal-dialog" role="document">'+
+			'<div class="modal-content">'+
+				'<div class="modal-header">'+
+					'<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>'+
+				'</div>'+
+				'<div class="modal-body"/>'+
+			'</div>'+
+		'</div>'+
+	'</div>'
+);
+
+_display.modal = function ( options ) {
+	return function ( row, update, render ) {
+		if ( ! $.fn.modal ) {
+			_original( row, update, render );
+		}
+		else {
+			if ( ! update ) {
+				if ( options && options.header ) {
+					var header = _modal.find('div.modal-header');
+					var button = header.find('button').detach();
+					
+					header
+						.empty()
+						.append( '<h4 class="modal-title">'+options.header( row )+'</h4>' )
+						.prepend( button );
+				}
+
+				_modal.find( 'div.modal-body' )
+					.empty()
+					.append( render() );
+
+				_modal
+					.appendTo( 'body' )
+					.modal();
+			}
+		}
+	};
+};
+
+
+return DataTable.Responsive;
+}));

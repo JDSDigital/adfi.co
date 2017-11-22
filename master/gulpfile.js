@@ -232,11 +232,11 @@ gulp.task('styles:themes', function() {
 
 
 // JADE PAGES
-gulp.task('templates:pages', templatePagesTask());
+gulp.task('templates:pages', templatePagesTask(true));
 gulp.task('templates:pages:forced', templatePagesTask(true));
 
 // JADE VIEWS
-gulp.task('templates:views', templatesViewTask());
+gulp.task('templates:views', templatesViewTask(true));
 gulp.task('templates:views:forced', templatesViewTask(true));
 
 //---------------
@@ -280,7 +280,7 @@ gulp.task('browsersync', function() {
 // build for production (minify)
 gulp.task('build', gulpsync.sync([
     'prod',
-    'vendor',
+    // 'vendor',
     'assets'
 ]));
 
@@ -309,7 +309,7 @@ gulp.task('usesources', function() {
 
 // default (no minify)
 gulp.task('default', gulpsync.sync([
-    'vendor',
+    // 'vendor',
     'assets',
     'watch'
 ]));

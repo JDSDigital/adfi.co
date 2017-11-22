@@ -1,1 +1,726 @@
-!function(e,t){"function"==typeof define&&define.amd?define([],t):"object"==typeof exports?module.exports=t():e.sortable=t()}(this,function(){"use strict";function e(e,t,n){var r=null;return 0===t?e:function(){var a=n||this,o=arguments;clearTimeout(r),r=setTimeout(function(){e.apply(a,o)},t)}}var t,n,r=[],a=[],o=function(e,t,n){if(void 0===n)return e&&e.h5s&&e.h5s.data&&e.h5s.data[t];e.h5s=e.h5s||{},e.h5s.data=e.h5s.data||{},e.h5s.data[t]=n},i=function(e){e.h5s&&delete e.h5s.data},s=function(e,t){return(e.matches||e.matchesSelector||e.msMatchesSelector||e.mozMatchesSelector||e.webkitMatchesSelector||e.oMatchesSelector).call(e,t)},l=function(e,t){if(!t)return Array.prototype.slice.call(e);for(var n=[],r=0;r<e.length;++r)"string"==typeof t&&s(e[r],t)&&n.push(e[r]),-1!==t.indexOf(e[r])&&n.push(e[r]);return n},d=function(e,t,n){if(e instanceof Array)for(var r=0;r<e.length;++r)d(e[r],t,n);else e.addEventListener(t,n),e.h5s=e.h5s||{},e.h5s.events=e.h5s.events||{},e.h5s.events[t]=n},c=function(e,t){if(e instanceof Array)for(var n=0;n<e.length;++n)c(e[n],t);else e.h5s&&e.h5s.events&&e.h5s.events[t]&&(e.removeEventListener(t,e.h5s.events[t]),delete e.h5s.events[t])},f=function(e,t,n){if(e instanceof Array)for(var r=0;r<e.length;++r)f(e[r],t,n);else e.setAttribute(t,n)},u=function(e,t){if(e instanceof Array)for(var n=0;n<e.length;++n)u(e[n],t);else e.removeAttribute(t)},p=function(e){var t=e.getClientRects()[0];return{left:t.left+window.scrollX,top:t.top+window.scrollY}},h=function(e){c(e,"dragstart"),c(e,"dragend"),c(e,"selectstart"),c(e,"dragover"),c(e,"dragenter"),c(e,"drop")},g=function(e){c(e,"dragover"),c(e,"dragenter"),c(e,"drop")},m=function(e,t){e.dataTransfer.effectAllowed="move",e.dataTransfer.setData("text",""),e.dataTransfer.setDragImage&&e.dataTransfer.setDragImage(t.draggedItem,t.x,t.y)},v=function(e,t){return t.x||(t.x=parseInt(e.pageX-p(t.draggedItem).left)),t.y||(t.y=parseInt(e.pageY-p(t.draggedItem).top)),t},y=function(e){return{draggedItem:e}},b=function(e,t){var n=y(t);n=v(e,n),m(e,n)},E=function(e){i(e),u(e,"aria-dropeffect")},x=function(e){u(e,"aria-grabbed"),u(e,"draggable"),u(e,"role")},I=function(e,t){return e===t||void 0!==o(e,"connectWith")&&o(e,"connectWith")===o(t,"connectWith")},w=function(e,t){var n,r=[];if(!t)return e;for(var a=0;a<e.length;++a)n=e[a].querySelectorAll(t),r=r.concat(Array.prototype.slice.call(n));return r},C=function(e){var t=o(e,"opts")||{},n=l(q(e),t.items),r=w(n,t.handle);g(e),E(e),c(r,"mousedown"),h(n),x(n)},A=function(e){var t=o(e,"opts"),n=l(q(e),t.items),r=w(n,t.handle);f(e,"aria-dropeffect","move"),f(r,"draggable","true"),"function"!=typeof(document||window.document).createElement("span").dragDrop||t.disableIEFix||d(r,"mousedown",function(){if(-1!==n.indexOf(this))this.dragDrop();else{for(var e=this.parentElement;-1===n.indexOf(e);)e=e.parentElement;e.dragDrop()}})},D=function(e){var t=o(e,"opts"),n=l(q(e),t.items),r=w(n,t.handle);f(e,"aria-dropeffect","none"),f(r,"draggable","false"),c(r,"mousedown")},S=function(e){var t=o(e,"opts"),n=l(q(e),t.items),r=w(n,t.handle);h(n),c(r,"mousedown"),g(e)},L=function(e){return e.parentElement?Array.prototype.indexOf.call(e.parentElement.children,e):0},O=function(e){return!!e.parentNode},T=function(e,t){if("string"!=typeof e)return e;var n=document.createElement(t);return n.innerHTML=e,n.firstChild},W=function(e,t){e.parentElement.insertBefore(t,e)},N=function(e,t){e.parentElement.insertBefore(t,e.nextElementSibling)},M=function(e){e.parentNode&&e.parentNode.removeChild(e)},P=function(e,t){var n=document.createEvent("Event");return t&&(n.detail=t),n.initEvent(e,!1,!0),n},Y=function(e,t){a.forEach(function(n){I(e,n)&&n.dispatchEvent(t)})},q=function(e){return e.children},z=function(i,c){var u=String(c);return c=function(e){var t={connectWith:!1,placeholder:null,dragImage:null,disableIEFix:!1,placeholderClass:"sortable-placeholder",draggingClass:"sortable-dragging",hoverClass:!1,debounce:0};for(var n in e)t[n]=e[n];return t}(c),c&&"function"==typeof c.getChildren&&(q=c.getChildren),"string"==typeof i&&(i=document.querySelectorAll(i)),i instanceof window.Element&&(i=[i]),i=Array.prototype.slice.call(i),i.forEach(function(i){if(/enable|disable|destroy/.test(u))return void z[u](i);c=o(i,"opts")||c,o(i,"opts",c),S(i);var h,g,v=l(q(i),c.items),y=c.placeholder;if(y||(y=document.createElement(/^ul|ol$/i.test(i.tagName)?"li":"div")),y=T(y,i.tagName),y.classList.add.apply(y.classList,c.placeholderClass.split(" ")),!i.getAttribute("data-sortable-id")){var E=a.length;a[E]=i,f(i,"data-sortable-id",E),f(v,"data-item-sortable-id",E)}if(o(i,"items",c.items),r.push(y),c.connectWith&&o(i,"connectWith",c.connectWith),A(i),f(v,"role","option"),f(v,"aria-grabbed","false"),c.hoverClass){var x="sortable-over";"string"==typeof c.hoverClass&&(x=c.hoverClass),d(v,"mouseenter",function(){this.classList.add(x)}),d(v,"mouseleave",function(){this.classList.remove(x)})}d(v,"dragstart",function(e){e.stopImmediatePropagation(),c.handle&&!s(e.target,c.handle)||(c.dragImage?(m(e,{draggedItem:c.dragImage,x:0,y:0}),console.log("WARNING: dragImage option is deprecated and will be removed in the future!")):b(e,this),this.classList.add(c.draggingClass),t=this,f(t,"aria-grabbed","true"),h=L(t),n=parseInt(window.getComputedStyle(t).height),g=this.parentElement,Y(i,P("sortstart",{item:t,placeholder:y,startparent:g})))}),d(v,"dragend",function(){var e;t&&(t.classList.remove(c.draggingClass),f(t,"aria-grabbed","false"),t.style.display=t.oldDisplay,delete t.oldDisplay,r.forEach(M),e=this.parentElement,Y(i,P("sortstop",{item:t,startparent:g})),h===L(t)&&g===e||Y(i,P("sortupdate",{item:t,index:l(q(e),o(e,"items")).indexOf(t),oldindex:v.indexOf(t),elementIndex:L(t),oldElementIndex:h,startparent:g,endparent:e})),t=null,n=null)}),d([i,y],"drop",function(e){var n;I(i,t.parentElement)&&(e.preventDefault(),e.stopPropagation(),n=r.filter(O)[0],N(n,t),t.dispatchEvent(P("dragend")))});var w=e(function(e,a){if(t)if(-1!==v.indexOf(e)){var o=parseInt(window.getComputedStyle(e).height),i=L(y),s=L(e);if(c.forcePlaceholderSize&&(y.style.height=n+"px"),o>n){var d=o-n,f=p(e).top;if(i<s&&a<f+d)return;if(i>s&&a>f+o-d)return}void 0===t.oldDisplay&&(t.oldDisplay=t.style.display),t.style.display="none",i<s?N(e,y):W(e,y),r.filter(function(e){return e!==y}).forEach(M)}else-1!==r.indexOf(e)||l(q(e),c.items).length||(r.forEach(M),e.appendChild(y))},c.debounce),C=function(e){I(i,t.parentElement)&&(e.preventDefault(),e.stopPropagation(),e.dataTransfer.dropEffect="move",w(this,e.pageY))};d(v.concat(i),"dragover",C),d(v.concat(i),"dragenter",C)}),i};return z.destroy=function(e){C(e)},z.enable=function(e){A(e)},z.disable=function(e){D(e)},z});
+;(function(root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define([], factory);
+  } else if (typeof exports === 'object') {
+    module.exports = factory();
+  } else {
+    root.sortable = factory();
+  }
+}(this, function() {
+/*
+ * HTML5 Sortable library
+ * https://github.com/voidberg/html5sortable
+ *
+ * Original code copyright 2012 Ali Farhadi.
+ * This version is mantained by Lukas Oppermann <lukas@vea.re>
+ * Previously also mantained by Alexandru Badiu <andu@ctrlz.ro>
+ * jQuery-independent implementation by Nazar Mokrynskyi <nazar@mokrynskyi.com>
+ *
+ * Released under the MIT license.
+ */
+'use strict'
+/*
+ * variables global to the plugin
+ */
+var dragging
+var draggingHeight
+var placeholders = []
+var sortables = []
+/**
+ * Get or set data on element
+ * @param {Element} element
+ * @param {string} key
+ * @param {*} value
+ * @return {*}
+ */
+var _data = function (element, key, value) {
+  if (value === undefined) {
+    return element && element.h5s && element.h5s.data && element.h5s.data[key]
+  } else {
+    element.h5s = element.h5s || {}
+    element.h5s.data = element.h5s.data || {}
+    element.h5s.data[key] = value
+  }
+}
+/**
+ * Remove data from element
+ * @param {Element} element
+ */
+var _removeData = function (element) {
+  if (element.h5s) {
+    delete element.h5s.data
+  }
+}
+/**
+ * Tests if an element matches a given selector. Comparable to jQuery's $(el).is('.my-class')
+ * @param {el} DOM element
+ * @param {selector} selector test against the element
+ * @retirms {boolean}
+ */
+var _matches = function (el, selector) {
+  return (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector).call(el, selector)
+}
+/**
+ * Filter only wanted nodes
+ * @param {Array|NodeList} nodes
+ * @param {Array/string} wanted
+ * @returns {Array}
+ */
+var _filter = function (nodes, wanted) {
+  if (!wanted) {
+    return Array.prototype.slice.call(nodes)
+  }
+  var result = []
+  for (var i = 0; i < nodes.length; ++i) {
+    if (typeof wanted === 'string' && _matches(nodes[i], wanted)) {
+      result.push(nodes[i])
+    }
+    if (wanted.indexOf(nodes[i]) !== -1) {
+      result.push(nodes[i])
+    }
+  }
+  return result
+}
+/**
+ * @param {Array|Element} element
+ * @param {Array|string} event
+ * @param {Function} callback
+ */
+var _on = function (element, event, callback) {
+  if (element instanceof Array) {
+    for (var i = 0; i < element.length; ++i) {
+      _on(element[i], event, callback)
+    }
+    return
+  }
+  element.addEventListener(event, callback)
+  element.h5s = element.h5s || {}
+  element.h5s.events = element.h5s.events || {}
+  element.h5s.events[event] = callback
+}
+/**
+ * @param {Array|Element} element
+ * @param {Array|string} event
+ */
+var _off = function (element, event) {
+  if (element instanceof Array) {
+    for (var i = 0; i < element.length; ++i) {
+      _off(element[i], event)
+    }
+    return
+  }
+  if (element.h5s && element.h5s.events && element.h5s.events[event]) {
+    element.removeEventListener(event, element.h5s.events[event])
+    delete element.h5s.events[event]
+  }
+}
+/**
+ * @param {Array|Element} element
+ * @param {string} attribute
+ * @param {*} value
+ */
+var _attr = function (element, attribute, value) {
+  if (element instanceof Array) {
+    for (var i = 0; i < element.length; ++i) {
+      _attr(element[i], attribute, value)
+    }
+    return
+  }
+  element.setAttribute(attribute, value)
+}
+/**
+ * @param {Array|Element} element
+ * @param {string} attribute
+ */
+var _removeAttr = function (element, attribute) {
+  if (element instanceof Array) {
+    for (var i = 0; i < element.length; ++i) {
+      _removeAttr(element[i], attribute)
+    }
+    return
+  }
+  element.removeAttribute(attribute)
+}
+/**
+ * @param {Element} element
+ * @returns {{left: *, top: *}}
+ */
+var _offset = function (element) {
+  var rect = element.getClientRects()[0]
+  return {
+    left: rect.left + window.scrollX,
+    top: rect.top + window.scrollY
+  }
+}
+/*
+ * remove event handlers from items
+ * @param {Array|NodeList} items
+ */
+var _removeItemEvents = function (items) {
+  _off(items, 'dragstart')
+  _off(items, 'dragend')
+  _off(items, 'selectstart')
+  _off(items, 'dragover')
+  _off(items, 'dragenter')
+  _off(items, 'drop')
+}
+/*
+ * Remove event handlers from sortable
+ * @param {Element} sortable a single sortable
+ */
+var _removeSortableEvents = function (sortable) {
+  _off(sortable, 'dragover')
+  _off(sortable, 'dragenter')
+  _off(sortable, 'drop')
+}
+/*
+ * Attach ghost to dataTransfer object
+ * @param {Event} original event
+ * @param {object} ghost-object with item, x and y coordinates
+ */
+var _attachGhost = function (event, ghost) {
+  // this needs to be set for HTML5 drag & drop to work
+  event.dataTransfer.effectAllowed = 'move'
+  event.dataTransfer.setData('text', '')
+
+  // check if setDragImage method is available
+  if (event.dataTransfer.setDragImage) {
+    event.dataTransfer.setDragImage(ghost.draggedItem, ghost.x, ghost.y)
+  }
+}
+/**
+ * _addGhostPos clones the dragged item and adds it as a Ghost item
+ * @param {Event} event - the event fired when dragstart is triggered
+ * @param {object} ghost - .draggedItem = Element
+ */
+var _addGhostPos = function (event, ghost) {
+  if (!ghost.x) {
+    ghost.x = parseInt(event.pageX - _offset(ghost.draggedItem).left)
+  }
+  if (!ghost.y) {
+    ghost.y = parseInt(event.pageY - _offset(ghost.draggedItem).top)
+  }
+  return ghost
+}
+/**
+ * _makeGhost decides which way to make a ghost and passes it to attachGhost
+ * @param {Element} draggedItem - the item that the user drags
+ */
+var _makeGhost = function (draggedItem) {
+  return {
+    draggedItem: draggedItem
+  }
+}
+/**
+ * _getGhost constructs ghost and attaches it to dataTransfer
+ * @param {Event} event - the original drag event object
+ * @param {Element} draggedItem - the item that the user drags
+ */
+// TODO: could draggedItem be replaced by event.target in all instances
+var _getGhost = function (event, draggedItem) {
+  // add ghost item & draggedItem to ghost object
+  var ghost = _makeGhost(draggedItem)
+  // attach ghost position
+  ghost = _addGhostPos(event, ghost)
+  // attach ghost to dataTransfer
+  _attachGhost(event, ghost)
+}
+/*
+ * Remove data from sortable
+ * @param {Element} sortable a single sortable
+ */
+var _removeSortableData = function (sortable) {
+  _removeData(sortable)
+  _removeAttr(sortable, 'aria-dropeffect')
+}
+/*
+ * Remove data from items
+ * @param {Array|Element} items
+ */
+var _removeItemData = function (items) {
+  _removeAttr(items, 'aria-grabbed')
+  _removeAttr(items, 'draggable')
+  _removeAttr(items, 'role')
+}
+/*
+ * Check if two lists are connected
+ * @param {Element} curList
+ * @param {Element} destList
+ */
+var _listsConnected = function (curList, destList) {
+  if (curList === destList) {
+    return true
+  }
+  if (_data(curList, 'connectWith') !== undefined) {
+    return _data(curList, 'connectWith') === _data(destList, 'connectWith')
+  }
+  return false
+}
+var _getHandles = function (items, handle) {
+  var result = []
+  var handles
+  if (!handle) {
+    return items
+  }
+  for (var i = 0; i < items.length; ++i) {
+    handles = items[i].querySelectorAll(handle)
+    result = result.concat(Array.prototype.slice.call(handles))
+  }
+  return result
+}
+/*
+ * Destroy the sortable
+ * @param {Element} sortableElement a single sortable
+ */
+var _destroySortable = function (sortableElement) {
+  var opts = _data(sortableElement, 'opts') || {}
+  var items = _filter(_getChildren(sortableElement), opts.items)
+  var handles = _getHandles(items, opts.handle)
+  // remove event handlers & data from sortable
+  _removeSortableEvents(sortableElement)
+  _removeSortableData(sortableElement)
+  // remove event handlers & data from items
+  _off(handles, 'mousedown')
+  _removeItemEvents(items)
+  _removeItemData(items)
+}
+/*
+ * Enable the sortable
+ * @param {Element} sortableElement a single sortable
+ */
+var _enableSortable = function (sortableElement) {
+  var opts = _data(sortableElement, 'opts')
+  var items = _filter(_getChildren(sortableElement), opts.items)
+  var handles = _getHandles(items, opts.handle)
+  _attr(sortableElement, 'aria-dropeffect', 'move')
+  _attr(handles, 'draggable', 'true')
+  // IE FIX for ghost
+  // can be disabled as it has the side effect that other events
+  // (e.g. click) will be ignored
+  var spanEl = (document || window.document).createElement('span')
+  if (typeof spanEl.dragDrop === 'function' && !opts.disableIEFix) {
+    _on(handles, 'mousedown', function () {
+      if (items.indexOf(this) !== -1) {
+        this.dragDrop()
+      } else {
+        var parent = this.parentElement
+        while (items.indexOf(parent) === -1) {
+          parent = parent.parentElement
+        }
+        parent.dragDrop()
+      }
+    })
+  }
+}
+/*
+ * Disable the sortable
+ * @param {Element} sortableElement a single sortable
+ */
+var _disableSortable = function (sortableElement) {
+  var opts = _data(sortableElement, 'opts')
+  var items = _filter(_getChildren(sortableElement), opts.items)
+  var handles = _getHandles(items, opts.handle)
+  _attr(sortableElement, 'aria-dropeffect', 'none')
+  _attr(handles, 'draggable', 'false')
+  _off(handles, 'mousedown')
+}
+/*
+ * Reload the sortable
+ * @param {Element} sortableElement a single sortable
+ * @description events need to be removed to not be double bound
+ */
+var _reloadSortable = function (sortableElement) {
+  var opts = _data(sortableElement, 'opts')
+  var items = _filter(_getChildren(sortableElement), opts.items)
+  var handles = _getHandles(items, opts.handle)
+  // remove event handlers from items
+  _removeItemEvents(items)
+  _off(handles, 'mousedown')
+  // remove event handlers from sortable
+  _removeSortableEvents(sortableElement)
+}
+/**
+ * Get position of the element relatively to its sibling elements
+ * @param {Element} element
+ * @returns {number}
+ */
+var _index = function (element) {
+  if (!element.parentElement) {
+    return 0
+  }
+  return Array.prototype.indexOf.call(element.parentElement.children, element)
+}
+/**
+ * Whether element is in DOM
+ * @param {Element} element
+ * @returns {boolean}
+ */
+var _attached = function (element) {
+  return !!element.parentNode
+}
+/**
+ * Convert HTML string into DOM element.
+ * @param {Element|string} html
+ * @param {string} tagname
+ * @returns {Element}
+ */
+var _html2element = function (html, tagName) {
+  if (typeof html !== 'string') {
+    return html
+  }
+  var parentElement = document.createElement(tagName)
+  parentElement.innerHTML = html
+  return parentElement.firstChild
+}
+/**
+ * Insert before target
+ * @param {Element} target
+ * @param {Element} element
+ */
+var _before = function (target, element) {
+  target.parentElement.insertBefore(
+    element,
+    target
+  )
+}
+/**
+ * Insert after target
+ * @param {Element} target
+ * @param {Element} element
+ */
+var _after = function (target, element) {
+  target.parentElement.insertBefore(
+    element,
+    target.nextElementSibling
+  )
+}
+/**
+ * Detach element from DOM
+ * @param {Element} element
+ */
+var _detach = function (element) {
+  if (element.parentNode) {
+    element.parentNode.removeChild(element)
+  }
+}
+/**
+ * Make native event that can be dispatched afterwards
+ * @param {string} name
+ * @param {object} detail
+ * @returns {CustomEvent}
+ */
+var _makeEvent = function (name, detail) {
+  var e = document.createEvent('Event')
+  if (detail) {
+    e.detail = detail
+  }
+  e.initEvent(name, false, true)
+  return e
+}
+/**
+ * @param {Element} sortableElement
+ * @param {CustomEvent} event
+ */
+var _dispatchEventOnConnected = function (sortableElement, event) {
+  sortables.forEach(function (target) {
+    if (_listsConnected(sortableElement, target)) {
+      target.dispatchEvent(event)
+    }
+  })
+}
+
+/**
+ * Creates and returns a new debounced version of the passed function which will postpone its execution until after wait milliseconds have elapsed
+ * @param {fn} Function to debounce
+ * @param {delay} time to wait before calling function with latest arguments, 0 - no debounce
+ * @param {context} time to wait before calling function with latest arguments, 0 - no debounce
+ * @returns {function} - debounced function
+ */
+function _debounce (fn, delay, context) {
+  var timer = null
+
+  if (delay === 0) {
+    return fn
+  }
+  return function () {
+    var eContext = context || this
+    var args = arguments
+    clearTimeout(timer)
+    timer = setTimeout(function () {
+      fn.apply(eContext, args)
+    }, delay)
+  }
+}
+
+var _getChildren = function (element) {
+  return element.children
+}
+
+/*
+ * Public sortable object
+ * @param {Array|NodeList} sortableElements
+ * @param {object|string} options|method
+ */
+var sortable = function (sortableElements, options) {
+  var method = String(options)
+
+  options = (function (options) {
+    var result = {
+      connectWith: false,
+      placeholder: null,
+      // dragImage can be null or a Element
+      dragImage: null,
+      disableIEFix: false,
+      placeholderClass: 'sortable-placeholder',
+      draggingClass: 'sortable-dragging',
+      hoverClass: false,
+      debounce: 0
+    }
+    for (var option in options) {
+      result[option] = options[option]
+    }
+    return result
+  })(options)
+
+  if (options && typeof options.getChildren === 'function') {
+    _getChildren = options.getChildren
+  }
+
+  if (typeof sortableElements === 'string') {
+    sortableElements = document.querySelectorAll(sortableElements)
+  }
+
+  if (sortableElements instanceof window.Element) {
+    sortableElements = [sortableElements]
+  }
+
+  sortableElements = Array.prototype.slice.call(sortableElements)
+
+  /* TODO: maxstatements should be 25, fix and remove line below */
+  /* jshint maxstatements:false */
+  sortableElements.forEach(function (sortableElement) {
+    if (/enable|disable|destroy/.test(method)) {
+      sortable[method](sortableElement)
+      return
+    }
+
+    // get options & set options on sortable
+    options = _data(sortableElement, 'opts') || options
+    _data(sortableElement, 'opts', options)
+    // reset sortable
+    _reloadSortable(sortableElement)
+    // initialize
+    var items = _filter(_getChildren(sortableElement), options.items)
+    var index
+    var startParent
+    var placeholder = options.placeholder
+    if (!placeholder) {
+      placeholder = document.createElement(
+        /^ul|ol$/i.test(sortableElement.tagName) ? 'li' : 'div'
+      )
+    }
+    placeholder = _html2element(placeholder, sortableElement.tagName)
+    placeholder.classList.add.apply(
+      placeholder.classList,
+      options.placeholderClass.split(' ')
+    )
+
+    // setup sortable ids
+    if (!sortableElement.getAttribute('data-sortable-id')) {
+      var id = sortables.length
+      sortables[id] = sortableElement
+      _attr(sortableElement, 'data-sortable-id', id)
+      _attr(items, 'data-item-sortable-id', id)
+    }
+
+    _data(sortableElement, 'items', options.items)
+    placeholders.push(placeholder)
+    if (options.connectWith) {
+      _data(sortableElement, 'connectWith', options.connectWith)
+    }
+
+    _enableSortable(sortableElement)
+    _attr(items, 'role', 'option')
+    _attr(items, 'aria-grabbed', 'false')
+
+    // Mouse over class
+    if (options.hoverClass) {
+      var hoverClass = 'sortable-over'
+      if (typeof options.hoverClass === 'string') {
+        hoverClass = options.hoverClass
+      }
+
+      _on(items, 'mouseenter', function () {
+        this.classList.add(hoverClass)
+      })
+      _on(items, 'mouseleave', function () {
+        this.classList.remove(hoverClass)
+      })
+    }
+
+    // Handle drag events on draggable items
+    _on(items, 'dragstart', function (e) {
+      e.stopImmediatePropagation()
+      if (options.handle && !_matches(e.target, options.handle)) {
+        return
+      }
+
+      if (options.dragImage) {
+        _attachGhost(e, {
+          draggedItem: options.dragImage,
+          x: 0,
+          y: 0
+        })
+        console.log('WARNING: dragImage option is deprecated' +
+        ' and will be removed in the future!')
+      } else {
+        // add transparent clone or other ghost to cursor
+        _getGhost(e, this)
+      }
+      // cache selsection & add attr for dragging
+      this.classList.add(options.draggingClass)
+      dragging = this
+      _attr(dragging, 'aria-grabbed', 'true')
+      // grab values
+      index = _index(dragging)
+      draggingHeight = parseInt(window.getComputedStyle(dragging).height)
+      startParent = this.parentElement
+      // dispatch sortstart event on each element in group
+      _dispatchEventOnConnected(sortableElement, _makeEvent('sortstart', {
+        item: dragging,
+        placeholder: placeholder,
+        startparent: startParent
+      }))
+    })
+    // Handle drag events on draggable items
+    _on(items, 'dragend', function () {
+      var newParent
+      if (!dragging) {
+        return
+      }
+      // remove dragging attributes and show item
+      dragging.classList.remove(options.draggingClass)
+      _attr(dragging, 'aria-grabbed', 'false')
+      dragging.style.display = dragging.oldDisplay
+      delete dragging.oldDisplay
+
+      placeholders.forEach(_detach)
+      newParent = this.parentElement
+      _dispatchEventOnConnected(sortableElement, _makeEvent('sortstop', {
+        item: dragging,
+        startparent: startParent
+      }))
+      if (index !== _index(dragging) || startParent !== newParent) {
+        _dispatchEventOnConnected(sortableElement, _makeEvent('sortupdate', {
+          item: dragging,
+          index: _filter(_getChildren(newParent), _data(newParent, 'items'))
+              .indexOf(dragging),
+          oldindex: items.indexOf(dragging),
+          elementIndex: _index(dragging),
+          oldElementIndex: index,
+          startparent: startParent,
+          endparent: newParent
+        }))
+      }
+      dragging = null
+      draggingHeight = null
+    })
+    // Handle drop event on sortable & placeholder
+    // TODO: REMOVE placeholder?????
+    _on([sortableElement, placeholder], 'drop', function (e) {
+      var visiblePlaceholder
+      if (!_listsConnected(sortableElement, dragging.parentElement)) {
+        return
+      }
+
+      e.preventDefault()
+      e.stopPropagation()
+      visiblePlaceholder = placeholders.filter(_attached)[0]
+      _after(visiblePlaceholder, dragging)
+      dragging.dispatchEvent(_makeEvent('dragend'))
+    })
+
+    var debouncedDragOverEnter = _debounce(function (element, pageY) {
+      if (!dragging) {
+        return
+      }
+
+      if (items.indexOf(element) !== -1) {
+        var thisHeight = parseInt(window.getComputedStyle(element).height)
+        var placeholderIndex = _index(placeholder)
+        var thisIndex = _index(element)
+        if (options.forcePlaceholderSize) {
+          placeholder.style.height = draggingHeight + 'px'
+        }
+
+        // Check if `element` is bigger than the draggable. If it is, we have to define a dead zone to prevent flickering
+        if (thisHeight > draggingHeight) {
+          // Dead zone?
+          var deadZone = thisHeight - draggingHeight
+          var offsetTop = _offset(element).top
+          if (placeholderIndex < thisIndex &&
+              pageY < offsetTop + deadZone) {
+            return
+          }
+          if (placeholderIndex > thisIndex &&
+              pageY > offsetTop + thisHeight - deadZone) {
+            return
+          }
+        }
+
+        if (dragging.oldDisplay === undefined) {
+          dragging.oldDisplay = dragging.style.display
+        }
+        dragging.style.display = 'none'
+        if (placeholderIndex < thisIndex) {
+          _after(element, placeholder)
+        } else {
+          _before(element, placeholder)
+        }
+        // Intentionally violated chaining, it is more complex otherwise
+        placeholders
+          .filter(function (element) { return element !== placeholder })
+          .forEach(_detach)
+      } else {
+        if (placeholders.indexOf(element) === -1 &&
+            !_filter(_getChildren(element), options.items).length) {
+          placeholders.forEach(_detach)
+          element.appendChild(placeholder)
+        }
+      }
+    }, options.debounce)
+
+    // Handle dragover and dragenter events on draggable items
+    var onDragOverEnter = function (e) {
+      if (!_listsConnected(sortableElement, dragging.parentElement)) {
+        return
+      }
+
+      e.preventDefault()
+      e.stopPropagation()
+      e.dataTransfer.dropEffect = 'move'
+      debouncedDragOverEnter(this, e.pageY)
+    }
+
+    _on(items.concat(sortableElement), 'dragover', onDragOverEnter)
+    _on(items.concat(sortableElement), 'dragenter', onDragOverEnter)
+  })
+
+  return sortableElements
+}
+
+sortable.destroy = function (sortableElement) {
+  _destroySortable(sortableElement)
+}
+
+sortable.enable = function (sortableElement) {
+  _enableSortable(sortableElement)
+}
+
+sortable.disable = function (sortableElement) {
+  _disableSortable(sortableElement)
+}
+
+
+return sortable;
+}));
