@@ -25,7 +25,8 @@ var ignored_files = '!' + hidden_files;
 var paths = {
     app: '../app/',
     markup: 'jade/',
-    styles: 'less/',
+    //styles: 'less/',
+    styles: 'sass/',
     scripts: 'js/'
 }
 
@@ -184,7 +185,8 @@ gulp.task('styles:app', function() {
     log('Building application styles..');
     return gulp.src(source.styles.app)
         .pipe($.if(useSourceMaps, $.sourcemaps.init()))
-        .pipe(useSass ? $.sass() : $.less())
+        //.pipe(useSass ? $.sass() : $.less())
+        .pipe($.sass())
         .on("error", handleError)
         .pipe($.if(isProduction, $.cssnano(cssnanoOpts)))
         .pipe($.if(useSourceMaps, $.sourcemaps.write()))
@@ -199,7 +201,8 @@ gulp.task('styles:app:rtl', function() {
     log('Building application RTL styles..');
     return gulp.src(source.styles.app)
         .pipe($.if(useSourceMaps, $.sourcemaps.init()))
-        .pipe(useSass ? $.sass() : $.less())
+        //.pipe(useSass ? $.sass() : $.less())
+        .pipe($.sass())
         .on("error", handleError)
         .pipe($.rtlcss())
         .pipe($.if(isProduction, $.cssnano(cssnanoOpts)))
@@ -218,7 +221,8 @@ gulp.task('styles:app:rtl', function() {
 gulp.task('styles:themes', function() {
     log('Building application theme styles..');
     return gulp.src(source.styles.themes)
-        .pipe(useSass ? $.sass() : $.less())
+        //.pipe(useSass ? $.sass() : $.less())
+        .pipe($.sass())
         .on("error", handleError)
         .pipe(gulp.dest(build.styles))
         .pipe(reload({
