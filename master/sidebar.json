@@ -6,13 +6,13 @@
     },
     {
       "text": "Dashboard",
-      "href": "#",
+      "href": "./dashboard.html",
       "icon": "icon-speedometer",
       "label": "label label-info"
     },
     {
       "text": "Monitoreo",
-      "href": "#",
+      "href": "./monitor.html",
       "icon": "icon-graph",
       "label": "label label-info"
     },

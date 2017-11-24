@@ -1,0 +1,149 @@
+extends ../_layout
+
+block active
+  - sidebar_active = 'dashboard.html'
+
+block content
+  .content-heading
+    block content
+      h3 Monitoreo
+
+      .container-fluid
+        // START row
+        .row
+          .col-lg-12
+            .panel.panel-default
+              .panel-heading
+                | Monitoreo
+              .panel-body
+                .table-responsive
+                  table.table.table-striped
+                    thead
+                      tr
+                        th Hotspot
+                        th Ubicación
+                        th Sector
+                        th Modo
+                        th Estado
+                        th Último contacto
+                        th Usuarios Activo
+                    tbody
+                      tr
+                        td
+                          a(href='#').monitor-detail
+                            i.icon-speedometer
+                          | Dandy
+                        td Acassuso
+                        td Todo
+                        td Circuito
+                        td OK
+                        td 4 Mins
+                        td 2
+                      tr
+                        td
+                          a(href='#').monitor-detail
+                            i.icon-speedometer
+                          | Dandy
+                        td Acassuso
+                        td Todo
+                        td Circuito
+                        td OK
+                        td 4 Mins
+                        td 4
+                      tr
+                        td
+                          a(href='#').monitor-detail
+                            i.icon-speedometer
+                          | Dandy
+                        td Acassuso
+                        td Todo
+                        td Circuito
+                        td OK
+                        td 4 Mins
+                        td 2
+                      tr
+                        td
+                          a(href='#').monitor-detail
+                            i.icon-speedometer
+                          | Dandy
+                        td Acassuso
+                        td Todo
+                        td Circuito
+                        td OK
+                        td 4 Mins
+                        td 4
+                      tr
+                        td
+                          a(href='#').monitor-detail
+                            i.icon-speedometer
+                          | Dandy Grill
+                        td Acassuso
+                        td Todo
+                        td Circuito
+                        td OK
+                        td 4 Mins
+                        td 3
+                      tr
+                        td
+                          a(href='#').monitor-detail
+                            i.icon-speedometer
+                          | Dandy Grill
+                        td Acassuso
+                        td Todo
+                        td Circuito
+                        td OK
+                        td 4 Mins
+                        td 6
+                      tr
+                        td
+                          a(href='#').monitor-detail
+                            i.icon-speedometer
+                          | Kentucky
+                        td Acassuso
+                        td Todo
+                        td Circuito
+                        td OK
+                        td 4 Mins
+                        td 4
+                      tr
+                        td
+                          a(href='#').monitor-detail
+                            i.icon-speedometer
+                          | Kentucky
+                        td Acassuso
+                        td Todo
+                        td Circuito
+                        td OK
+                        td 4 Mins
+                        td 0
+                      tr
+                        td
+                          a(href='#').monitor-detail
+                            i.icon-speedometer
+                          | Kentucky
+                        td Acassuso
+                        td Todo
+                        td Circuito
+                        td OK
+                        td 4 Mins
+                        td 0
+                      tr
+                        td
+                          a(href='#').monitor-detail
+                            i.icon-speedometer
+                          | Kentucky
+                        td Acassuso
+                        td Todo
+                        td Circuito
+                        td OK
+                        td 4 Mins
+                        td 1
+              .panel-footer
+                .row
+                  .col-lg-2.text-left
+                    ul.pagination.pagination-sm
+                      li.active: a(href='#') 1
+                      li: a(href='#') 2
+                      li: a(href='#') 3
+                      li: a(href='#') »
+      // END row
