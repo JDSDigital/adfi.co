@@ -24,7 +24,7 @@
     },
     {
       "text": "Reportes",
-      "href": "#",
+      "href": "./dashboard.html",
       "icon": "icon-chart",
       "label": "label label-info"
     }

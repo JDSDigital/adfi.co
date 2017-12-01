@@ -8,5 +8,3819 @@
  * License: https://wrapbootstrap.com/help/licenses
  *
  */
-!function(e,t,o,a){if(void 0===o)throw new Error("This application's JavaScript requires jQuery");o(function(){var e=o("body");(new StateToggler).restoreState(e),o("#chk-fixed").prop("checked",e.hasClass("layout-fixed")),o("#chk-collapsed").prop("checked",e.hasClass("aside-collapsed")),o("#chk-collapsed-text").prop("checked",e.hasClass("aside-collapsed-text")),o("#chk-boxed").prop("checked",e.hasClass("layout-boxed")),o("#chk-float").prop("checked",e.hasClass("aside-float")),o("#chk-hover").prop("checked",e.hasClass("aside-hover")),o(".offsidebar.hide").removeClass("hide"),o.ajaxPrefilter(function(e,t,o){e.async=!0})})}(window,document,window.jQuery),function(e,t,o,a){o(function(){o('[data-toggle="popover"]').popover(),o('[data-toggle="tooltip"]').tooltip({container:"body"}),o(".dropdown input").on("click focus",function(e){e.stopPropagation()})})}(window,document,window.jQuery),function(e,t,o,a){function n(e,t){var a=o("#remove-after-drop");e.fullCalendar({header:{left:"prev,next today",center:"title",right:"month,agendaWeek,agendaDay"},buttonIcons:{prev:" fa fa-caret-left",next:" fa fa-caret-right"},buttonText:{today:"today",month:"month",week:"week",day:"day"},editable:!0,droppable:!0,drop:function(t,n){var r=o(this),i=r.data("calendarEventObject");if(i){var s=o.extend({},i);s.start=t,s.allDay=n,s.backgroundColor=r.css("background-color"),s.borderColor=r.css("border-color"),e.fullCalendar("renderEvent",s,!0),a.is(":checked")&&r.remove()}},eventDragStart:function(e,t,o){s=e},events:t})}function r(e){var t=o(".external-events");new l(t.children("div"));var a="#f6504d",n=o(".external-event-add-btn"),r=o(".external-event-name"),i=o(".external-event-color-selector .circle");o(".external-events-trash").droppable({accept:".fc-event",activeClass:"active",hoverClass:"hovered",tolerance:"touch",drop:function(t,o){if(s){var a=s.id||s._id;e.fullCalendar("removeEvents",a),o.draggable.remove(),s=null}}}),i.click(function(e){e.preventDefault();var t=o(this);a=t.css("background-color"),i.removeClass("selected"),t.addClass("selected")}),n.click(function(e){e.preventDefault();var n=r.val();if(""!==o.trim(n)){var i=o("<div/>").css({"background-color":a,"border-color":a,color:"#fff"}).html(n);t.prepend(i),new l(i),r.val("")}})}function i(){var e=new Date,t=e.getDate(),o=e.getMonth(),a=e.getFullYear();return[{title:"All Day Event",start:new Date(a,o,1),backgroundColor:"#f56954",borderColor:"#f56954"},{title:"Long Event",start:new Date(a,o,t-5),end:new Date(a,o,t-2),backgroundColor:"#f39c12",borderColor:"#f39c12"},{title:"Meeting",start:new Date(a,o,t,10,30),allDay:!1,backgroundColor:"#0073b7",borderColor:"#0073b7"},{title:"Lunch",start:new Date(a,o,t,12,0),end:new Date(a,o,t,14,0),allDay:!1,backgroundColor:"#00c0ef",borderColor:"#00c0ef"},{title:"Birthday Party",start:new Date(a,o,t+1,19,0),end:new Date(a,o,t+1,22,30),allDay:!1,backgroundColor:"#00a65a",borderColor:"#00a65a"},{title:"Open Google",start:new Date(a,o,28),end:new Date(a,o,29),url:"//google.com/",backgroundColor:"#3c8dbc",borderColor:"#3c8dbc"}]}if(o.fn.fullCalendar){o(function(){var e=o("#calendar"),t=i();r(e),n(e,t)});var s=null,l=function(e){e&&e.each(function(){var e=o(this),t={title:o.trim(e.text())};e.data("calendarEventObject",t),e.draggable({zIndex:1070,revert:!0,revertDuration:0})})}}}(window,document,window.jQuery),function(e,t,o,a){o(function(){if(o.fn.easyPieChart){var e={animate:{duration:800,enabled:!0},barColor:APP_COLORS.success,trackColor:!1,scaleColor:!1,lineWidth:10,lineCap:"circle"};o("#easypie1").easyPieChart(e);var t={animate:{duration:800,enabled:!0},barColor:APP_COLORS.warning,trackColor:!1,scaleColor:!1,lineWidth:4,lineCap:"circle"};o("#easypie2").easyPieChart(t);var a={animate:{duration:800,enabled:!0},barColor:APP_COLORS.danger,trackColor:!1,scaleColor:APP_COLORS.gray,lineWidth:15,lineCap:"circle"};o("#easypie3").easyPieChart(a);var n={animate:{duration:800,enabled:!0},barColor:APP_COLORS.danger,trackColor:APP_COLORS.yellow,scaleColor:APP_COLORS["gray-dark"],lineWidth:15,lineCap:"circle"};o("#easypie4").easyPieChart(n)}})}(window,document,window.jQuery),function(e,t,o,a){o(function(){if(o.fn.knob){var e={width:"50%",displayInput:!0,fgColor:APP_COLORS.info};o("#knob-chart1").knob(e);var t={width:"50%",displayInput:!0,fgColor:APP_COLORS.purple,readOnly:!0};o("#knob-chart2").knob(t);var a={width:"50%",displayInput:!0,fgColor:APP_COLORS.info,bgColor:APP_COLORS.gray,angleOffset:-125,angleArc:250};o("#knob-chart3").knob(a);var n={width:"50%",displayInput:!0,fgColor:APP_COLORS.pink,displayPrevious:!0,thickness:.1,lineCap:"round"};o("#knob-chart4").knob(n)}})}(window,document,window.jQuery),function(e,t,o,a){o(function(){if("undefined"!=typeof Chart){var e=function(){return Math.round(100*Math.random())},o={labels:["January","February","March","April","May","June","July"],datasets:[{label:"My First dataset",backgroundColor:"rgba(114,102,186,0.2)",borderColor:"rgba(114,102,186,1)",pointBorderColor:"#fff",data:[e(),e(),e(),e(),e(),e(),e()]},{label:"My Second dataset",backgroundColor:"rgba(35,183,229,0.2)",borderColor:"rgba(35,183,229,1)",pointBorderColor:"#fff",data:[e(),e(),e(),e(),e(),e(),e()]}]},a={legend:{display:!1}},n=t.getElementById("chartjs-linechart").getContext("2d"),r=(new Chart(n,{data:o,type:"line",options:a}),{labels:["January","February","March","April","May","June","July"],datasets:[{backgroundColor:"#23b7e5",borderColor:"#23b7e5",data:[e(),e(),e(),e(),e(),e(),e()]},{backgroundColor:"#5d9cec",borderColor:"#5d9cec",data:[e(),e(),e(),e(),e(),e(),e()]}]}),i={legend:{display:!1}},s=t.getElementById("chartjs-barchart").getContext("2d"),l=(new Chart(s,{data:r,type:"bar",options:i}),{labels:["Purple","Yellow","Blue"],datasets:[{data:[300,50,100],backgroundColor:["#7266ba","#fad732","#23b7e5"],hoverBackgroundColor:["#7266ba","#fad732","#23b7e5"]}]}),c={legend:{display:!1}},d=t.getElementById("chartjs-doughnutchart").getContext("2d"),u=(new Chart(d,{data:l,type:"doughnut",options:c}),{labels:["Purple","Yellow","Blue"],datasets:[{data:[300,50,100],backgroundColor:["#7266ba","#fad732","#23b7e5"],hoverBackgroundColor:["#7266ba","#fad732","#23b7e5"]}]}),f={legend:{display:!1}},p=t.getElementById("chartjs-piechart").getContext("2d"),h=(new Chart(p,{data:u,type:"pie",options:f}),{datasets:[{data:[11,16,7,3],backgroundColor:["#f532e5","#7266ba","#f532e5","#7266ba"],label:"My dataset"}],labels:["Label 1","Label 2","Label 3","Label 4"]}),g={legend:{display:!1}},m=t.getElementById("chartjs-polarchart").getContext("2d"),y=(new Chart(m,{data:h,type:"polarArea",options:g}),{labels:["Eating","Drinking","Sleeping","Designing","Coding","Cycling","Running"],datasets:[{label:"My First dataset",backgroundColor:"rgba(114,102,186,0.2)",borderColor:"rgba(114,102,186,1)",data:[65,59,90,81,56,55,40]},{label:"My Second dataset",backgroundColor:"rgba(151,187,205,0.2)",borderColor:"rgba(151,187,205,1)",data:[28,48,40,19,96,27,100]}]}),v={legend:{display:!1}},w=t.getElementById("chartjs-radarchart").getContext("2d");new Chart(w,{data:y,type:"radar",options:v})}})}(window,document,window.jQuery),function(e,t,o,a){o(function(){if("undefined"!=typeof Chartist){var t={labels:["W1","W2","W3","W4","W5","W6","W7","W8","W9","W10"],series:[[1,2,4,8,6,-2,-1,-4,-6,-2]]},o={high:10,low:-10,height:280,axisX:{labelInterpolationFnc:function(e,t){return t%2==0?e:null}}};new Chartist.Bar("#ct-bar1",t,o),new Chartist.Bar("#ct-bar2",{labels:["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],series:[[5,4,3,7,5,10,3],[3,2,9,5,4,6,4]]},{seriesBarDistance:10,reverseData:!0,horizontalBars:!0,height:280,axisY:{offset:70}}),new Chartist.Line("#ct-line1",{labels:["Monday","Tuesday","Wednesday","Thursday","Friday"],series:[[12,9,7,8,5],[2,1,3.5,7,3],[1,3,4,5,6]]},{fullWidth:!0,height:280,chartPadding:{right:40}});new Chartist.Line("#ct-line3",{labels:["Mon","Tue","Wed","Thu","Fri","Sat"],series:[[1,5,2,5,4,3],[2,3,4,8,1,2],[5,4,3,2,1,.5]]},{low:0,showArea:!0,showPoint:!1,fullWidth:!0,height:300}).on("draw",function(e){"line"!==e.type&&"area"!==e.type||e.element.animate({d:{begin:2e3*e.index,dur:2e3,from:e.path.clone().scale(1,0).translate(0,e.chartRect.height()).stringify(),to:e.path.clone().stringify(),easing:Chartist.Svg.Easing.easeOutQuint}})});var a=new Chartist.Line("#ct-line2",{labels:["1","2","3","4","5","6","7","8","9","10","11","12"],series:[[12,9,7,8,5,4,6,2,3,3,4,6],[4,5,3,7,3,5,5,3,4,4,5,5],[5,3,4,5,6,3,3,4,5,6,3,4],[3,4,5,6,7,6,4,5,6,7,6,3]]},{low:0,height:300}),n=0;a.on("created",function(){n=0}),a.on("draw",function(e){if(n++,"line"===e.type)e.element.animate({opacity:{begin:80*n+1e3,dur:500,from:0,to:1}});else if("label"===e.type&&"x"===e.axis)e.element.animate({y:{begin:80*n,dur:500,from:e.y+100,to:e.y,easing:"easeOutQuart"}});else if("label"===e.type&&"y"===e.axis)e.element.animate({x:{begin:80*n,dur:500,from:e.x-100,to:e.x,easing:"easeOutQuart"}});else if("point"===e.type)e.element.animate({x1:{begin:80*n,dur:500,from:e.x-10,to:e.x,easing:"easeOutQuart"},x2:{begin:80*n,dur:500,from:e.x-10,to:e.x,easing:"easeOutQuart"},opacity:{begin:80*n,dur:500,from:0,to:1,easing:"easeOutQuart"}});else if("grid"===e.type){var t={begin:80*n,dur:500,from:e[e.axis.units.pos+"1"]-30,to:e[e.axis.units.pos+"1"],easing:"easeOutQuart"},o={begin:80*n,dur:500,from:e[e.axis.units.pos+"2"]-100,to:e[e.axis.units.pos+"2"],easing:"easeOutQuart"},a={};a[e.axis.units.pos+"1"]=t,a[e.axis.units.pos+"2"]=o,a.opacity={begin:80*n,dur:500,from:0,to:1,easing:"easeOutQuart"},e.element.animate(a)}}),a.on("created",function(){e.__exampleAnimateTimeout&&(clearTimeout(e.__exampleAnimateTimeout),e.__exampleAnimateTimeout=null),e.__exampleAnimateTimeout=setTimeout(a.update.bind(a),12e3)})}})}(window,document,window.jQuery),function(e,t,o){"use strict";e(o).on("click","[data-reset-key]",function(o){o.preventDefault();var a=e(this).data("resetKey");a?(e.localStorage.remove(a),t.location.reload()):e.error("No storage key specified for reset.")})}(jQuery,window,document),function(e,t,o,a){o(function(){o.fn.colorpicker&&(o(".demo-colorpicker").colorpicker(),o("#demo_selectors").colorpicker({colorSelectors:{default:"#777777",primary:APP_COLORS.primary,success:APP_COLORS.success,info:APP_COLORS.info,warning:APP_COLORS.warning,danger:APP_COLORS.danger}}))})}(window,document,window.jQuery),function(e,t,o,a){e.APP_COLORS={primary:"#5d9cec",success:"#27c24c",info:"#23b7e5",warning:"#ff902b",danger:"#f05050",inverse:"#131e26",green:"#37bc9b",pink:"#f532e5",purple:"#7266ba",dark:"#3a3f51",yellow:"#fad732","gray-darker":"#232735","gray-dark":"#3a3f51",gray:"#dde6e9","gray-light":"#e4eaec","gray-lighter":"#edf1f2"},e.APP_MEDIAQUERY={desktopLG:1200,desktop:992,tablet:768,mobile:480}}(window,document,window.jQuery),function(e,t,o,a){o(function(){o.fn.easyPieChart&&o("[data-easypiechart]").each(function(){var e=o(this),t=e.data();e.easyPieChart(t||{})})})}(window,document,window.jQuery),function(e,t,o,a){o(function(){o(".flatdoc").each(function(){Flatdoc.run({fetcher:Flatdoc.file("documentation/readme.md"),root:".flatdoc",menu:".flatdoc-menu",title:".flatdoc-title",content:".flatdoc-content"})})})}(window,document,window.jQuery),function(e,t,o,a){"undefined"!=typeof screenfull&&o(function(){function a(e){screenfull.isFullscreen?e.children("em").removeClass("fa-expand").addClass("fa-compress"):e.children("em").removeClass("fa-compress").addClass("fa-expand")}var n=o(t),r=o("[data-toggle-fullscreen]"),i=e.navigator.userAgent;(i.indexOf("MSIE ")>0||i.match(/Trident.*rv\:11\./))&&r.addClass("hide"),r.is(":visible")&&(r.on("click",function(e){e.preventDefault(),screenfull.enabled?(screenfull.toggle(),a(r)):console.log("Fullscreen not enabled")}),screenfull.raw&&screenfull.raw.fullscreenchange&&n.on(screenfull.raw.fullscreenchange,function(){a(r)}))})}(window,document,window.jQuery),function(e,t,o){"use strict";var a=[{featureType:"water",stylers:[{visibility:"on"},{color:"#bdd1f9"}]},{featureType:"all",elementType:"labels.text.fill",stylers:[{color:"#334165"}]},{featureType:"landscape",stylers:[{color:"#e9ebf1"}]},{featureType:"road.highway",elementType:"geometry",stylers:[{color:"#c5c6c6"}]},{featureType:"road.arterial",elementType:"geometry",stylers:[{color:"#fff"}]},{featureType:"road.local",elementType:"geometry",stylers:[{color:"#fff"}]},{featureType:"transit",elementType:"geometry",stylers:[{color:"#d8dbe0"}]},{featureType:"poi",elementType:"geometry",stylers:[{color:"#cfd5e0"}]},{featureType:"administrative",stylers:[{visibility:"on"},{lightness:33}]},{featureType:"poi.park",elementType:"labels",stylers:[{visibility:"on"},{lightness:20}]},{featureType:"road",stylers:[{color:"#d8dbe0",lightness:20}]}];if(e.fn.gMap){var n=[];e("[data-gmap]").each(function(){var t=e(this),o=t.data("address")&&t.data("address").split(";"),r=t.data("title")&&t.data("title").split(";"),i=t.data("zoom")||14,s=t.data("maptype")||"ROADMAP",l=[];if(o){for(var c in o)"string"==typeof o[c]&&l.push({address:o[c],html:r&&r[c]||"",popup:!0});var d={controls:{panControl:!0,zoomControl:!0,mapTypeControl:!0,scaleControl:!0,streetViewControl:!0,overviewMapControl:!0},scrollwheel:!1,maptype:s,markers:l,zoom:i},u=t.gMap(d),f=u.data("gMap.reference");n.push(f),void 0!==t.data("styled")&&f.setOptions({styles:a})}})}}(jQuery,window,document),function(e,t,o,a){o(function(){if(o.fn.cropper){var a=o(".img-container > img"),n=o("#dataX"),r=o("#dataY"),i=o("#dataHeight"),s=o("#dataWidth"),l=o("#dataRotate"),c={aspectRatio:16/9,preview:".img-preview",crop:function(e){n.val(Math.round(e.x)),r.val(Math.round(e.y)),i.val(Math.round(e.height)),s.val(Math.round(e.width)),l.val(Math.round(e.rotate))}};a.on({"build.cropper":function(e){console.log(e.type)},"built.cropper":function(e){console.log(e.type)},"dragstart.cropper":function(e){console.log(e.type,e.dragType)},"dragmove.cropper":function(e){console.log(e.type,e.dragType)},"dragend.cropper":function(e){console.log(e.type,e.dragType)},"zoomin.cropper":function(e){console.log(e.type)},"zoomout.cropper":function(e){console.log(e.type)},"change.cropper":function(e){console.log(e.type)}}).cropper(c),o(t.body).on("click","[data-method]",function(){var e,t,n=o(this).data();if(a.data("cropper")&&n.method){if(n=o.extend({},n),void 0!==n.target&&(e=o(n.target),void 0===n.option))try{n.option=JSON.parse(e.val())}catch(e){console.log(e.message)}if(t=a.cropper(n.method,n.option),"getCroppedCanvas"===n.method&&o("#getCroppedCanvasModal").modal().find(".modal-body").html(t),o.isPlainObject(t)&&e)try{e.val(JSON.stringify(t))}catch(e){console.log(e.message)}}}).on("keydown",function(e){if(a.data("cropper"))switch(e.which){case 37:e.preventDefault(),a.cropper("move",-1,0);break;case 38:e.preventDefault(),a.cropper("move",0,-1);break;case 39:e.preventDefault(),a.cropper("move",1,0);break;case 40:e.preventDefault(),a.cropper("move",0,1)}});var d,u=o("#inputImage"),f=e.URL||e.webkitURL;f?u.change(function(){var e,t=this.files;a.data("cropper")&&t&&t.length&&(e=t[0],/^image\/\w+$/.test(e.type)?(d=f.createObjectURL(e),a.one("built.cropper",function(){f.revokeObjectURL(d)}).cropper("reset").cropper("replace",d),u.val("")):alert("Please choose an image file."))}):u.parent().remove(),o(".docs-options :checkbox").on("change",function(){var e=o(this);a.data("cropper")&&(c[e.val()]=e.prop("checked"),a.cropper("destroy").cropper(c))}),o('[data-toggle="tooltip"]').tooltip()}})}(window,document,window.jQuery),function(e,t,o,a){function n(e){var t="autoloaded-stylesheet",a=o("#"+t).attr("id",t+"-old");return o("head").append(o("<link/>").attr({id:t,rel:"stylesheet",href:e})),a.length&&a.remove(),o("#"+t)}o(function(){o("[data-load-css]").on("click",function(e){var t=o(this);t.is("a")&&e.preventDefault();var a=t.data("loadCss");a?n(a)||o.error("Error creating stylesheet link element."):o.error("No stylesheet location defined.")})})}(window,document,window.jQuery),function(e,t,o,a){o(function(){function e(e){o("[data-localize]").localize("site",e)}function t(e){var t=e.parents(".dropdown-menu");t.length&&t.prev("button, a").text(e.text())}if(o.fn.localize){var a=o.localStorage.get("jq-appLang")||"en",n={language:a,pathPrefix:"i18n",callback:function(e,t){o.localStorage.set("jq-appLang",a),t(e)}};e(n),o("[data-set-lang]").on("click",function(){(a=o(this).data("setLang"))&&(n.language=a,e(n),t(o(this)))})}})}(window,document,window.jQuery),function(e,t,o,a){e.defaultColors={markerColor:"#23b7e5",bgColor:"transparent",scaleColors:["#878c9a"],regionFill:"#bbbec6"},e.VectorMap=function(e,t,o){if(e&&e.length){var a=e.data(),n=a.height||"300",r={markerColor:a.markerColor||defaultColors.markerColor,bgColor:a.bgColor||defaultColors.bgColor,scale:a.scale||1,scaleColors:a.scaleColors||defaultColors.scaleColors,regionFill:a.regionFill||defaultColors.regionFill,mapName:a.mapName||"world_mill_en"};e.css("height",n),function(e,t,o,a){e.vectorMap({map:t.mapName,backgroundColor:t.bgColor,zoomMin:1,zoomMax:8,zoomOnScroll:!1,regionStyle:{initial:{fill:t.regionFill,"fill-opacity":1,stroke:"none","stroke-width":1.5,"stroke-opacity":1},hover:{"fill-opacity":.8},selected:{fill:"blue"},selectedHover:{}},focusOn:{x:.4,y:.6,scale:t.scale},markerStyle:{initial:{fill:t.markerColor,stroke:t.markerColor}},onRegionLabelShow:function(e,t,a){o&&o[a]&&t.html(t.html()+": "+o[a]+" visitors")},markers:a,series:{regions:[{values:o,scale:t.scaleColors,normalizeFunction:"polynomial"}]}})}(e,r,t,o)}}}(window,document,window.jQuery),function(e,t,o,a){o(function(){if("undefined"!=typeof Morris){var e=[{y:"2006",a:100,b:90},{y:"2007",a:75,b:65},{y:"2008",a:50,b:40},{y:"2009",a:75,b:65},{y:"2010",a:50,b:40},{y:"2011",a:75,b:65},{y:"2012",a:100,b:90}],t=[{label:"Download Sales",value:12},{label:"In-Store Sales",value:30},{label:"Mail-Order Sales",value:20}];new Morris.Line({element:"morris-line",data:e,xkey:"y",ykeys:["a","b"],labels:["Serie A","Serie B"],lineColors:["#31C0BE","#7a92a3"],resize:!0}),new Morris.Donut({element:"morris-donut",data:t,colors:["#f05050","#fad732","#ff902b"],resize:!0}),new Morris.Bar({element:"morris-bar",data:e,xkey:"y",ykeys:["a","b"],labels:["Series A","Series B"],xLabelMargin:2,barColors:["#23b7e5","#f05050"],resize:!0}),new Morris.Area({element:"morris-area",data:e,xkey:"y",ykeys:["a","b"],labels:["Serie A","Serie B"],lineColors:["#7266ba","#23b7e5"],resize:!0})}})}(window,document,window.jQuery),function(e,t,o,a){o(function(){var e=new n;o("[data-search-open]").on("click",function(e){e.stopPropagation()}).on("click",e.toggle);var a=o("[data-search-dismiss]");o('.navbar-form input[type="text"]').on("click",function(e){e.stopPropagation()}).on("keyup",function(t){27==t.keyCode&&e.dismiss()}),o(t).on("click",e.dismiss),a.on("click",function(e){e.stopPropagation()}).on("click",e.dismiss)});var n=function(){return{toggle:function(){var e=o("form.navbar-form");e.toggleClass("open");var t=e.hasClass("open");e.find("input")[t?"focus":"blur"]()},dismiss:function(){o("form.navbar-form").removeClass("open").find('input[type="text"]').blur()}}}}(window,document,window.jQuery),function(e,t,o){"use strict";function a(t){var o=t.data("message"),a=t.data("options");o||e.error("Notify: No message specified"),e.notify(o,a||{})}e(o);e(function(){e("[data-notify]").each(function(){var t=e(this);void 0!==t.data("onload")&&setTimeout(function(){a(t)},800),t.on("click",function(e){e.preventDefault(),a(t)})})})}(jQuery,window,document),function(e,t,o){var a={},n={},r=function(t){return"string"==e.type(t)&&(t={message:t}),arguments[1]&&(t=e.extend(t,"string"==e.type(arguments[1])?{status:arguments[1]}:arguments[1])),new s(t).show()},i=function(e,t){if(e)for(var o in n)e===n[o].group&&n[o].close(t);else for(var o in n)n[o].close(t)},s=function(t){this.options=e.extend({},s.defaults,t),this.uuid="ID"+(new Date).getTime()+"RAND"+Math.ceil(1e5*Math.random()),this.element=e(['<div class="uk-notify-message alert-dismissable">','<a class="close">&times;</a>',"<div>"+this.options.message+"</div>","</div>"].join("")).data("notifyMessage",this),this.options.status&&(this.element.addClass("alert alert-"+this.options.status),this.currentstatus=this.options.status),this.group=this.options.group,n[this.uuid]=this,a[this.options.pos]||(a[this.options.pos]=e('<div class="uk-notify uk-notify-'+this.options.pos+'"></div>').appendTo("body").on("click",".uk-notify-message",function(){e(this).data("notifyMessage").close()}))};e.extend(s.prototype,{uuid:!1,element:!1,timout:!1,currentstatus:"",group:!1,show:function(){if(!this.element.is(":visible")){var e=this;a[this.options.pos].show().prepend(this.element);var t=parseInt(this.element.css("margin-bottom"),10);return this.element.css({opacity:0,"margin-top":-1*this.element.outerHeight(),"margin-bottom":0}).animate({opacity:1,"margin-top":0,"margin-bottom":t},function(){if(e.options.timeout){var t=function(){e.close()};e.timeout=setTimeout(t,e.options.timeout),e.element.hover(function(){clearTimeout(e.timeout)},function(){e.timeout=setTimeout(t,e.options.timeout)})}}),this}},close:function(e){var t=this,o=function(){t.element.remove(),a[t.options.pos].children().length||a[t.options.pos].hide(),delete n[t.uuid]};this.timeout&&clearTimeout(this.timeout),e?o():this.element.animate({opacity:0,"margin-top":-1*this.element.outerHeight(),"margin-bottom":0},function(){o()})},content:function(e){var t=this.element.find(">div");return e?(t.html(e),this):t.html()},status:function(e){return e?(this.element.removeClass("alert alert-"+this.currentstatus).addClass("alert alert-"+e),this.currentstatus=e,this):this.currentstatus}}),s.defaults={message:"",status:"normal",timeout:5e3,group:null,pos:"top-center"},e.notify=r,e.notify.message=s,e.notify.closeAll=i}(jQuery,window,document),function(e,t,o,a){o(function(){o("[data-now]").each(function(){function e(){var e=moment(new Date).format(a);t.text(e)}var t=o(this),a=t.data("format");e(),setInterval(e,1e3)})})}(window,document,window.jQuery),function(e,t,o){"use strict";var a="panel.removed";e(o).on("click",'[data-tool="panel-dismiss"]',function(){function t(){e.support.animation?n.animo({animation:"bounceOut"},o):o()}function o(){var t=n.parent();e.when(n.trigger(a,[n])).done(function(){n.remove(),t.trigger(a).filter(function(){var t=e(this);return t.is('[class*="col-"]:not(.sortable)')&&0===t.children("*").length}).remove()})}var n=e(this).closest(".panel"),r=new e.Deferred;n.trigger("panel.remove",[n,r]),r.done(t)})}(jQuery,window,document),function(e,t,o){"use strict";function a(e){e.removeClass("fa-plus").addClass("fa-minus")}function n(e){e.removeClass("fa-minus").addClass("fa-plus")}function r(t,o){var a=e.localStorage.get(s);a||(a={}),a[t]=o,e.localStorage.set(s,a)}function i(t){var o=e.localStorage.get(s);if(o)return o[t]||!1}var s="jq-panelState";e('[data-tool="panel-collapse"]').each(function(){var t=e(this),o=t.closest(".panel"),s=o.find(".panel-wrapper"),l={toggle:!1},c=t.children("em"),d=o.attr("id");s.length||(s=o.children(".panel-heading").nextAll().wrapAll("<div/>").parent().addClass("panel-wrapper"),l={}),s.collapse(l).on("hide.bs.collapse",function(){n(c),r(d,"hide"),s.prev(".panel-heading").addClass("panel-heading-collapsed")}).on("show.bs.collapse",function(){a(c),r(d,"show"),s.prev(".panel-heading").removeClass("panel-heading-collapsed")});var u=i(d);u&&(setTimeout(function(){s.collapse(u)},50),r(d,u))}),e(o).on("click",'[data-tool="panel-collapse"]',function(){e(this).closest(".panel").find(".panel-wrapper").collapse("toggle")})}(jQuery,window,document),function(e,t,o){"use strict";function a(){this.removeClass(n)}var n="whirl";e(o).on("click",'[data-tool="panel-refresh"]',function(){var t=e(this),o=t.parents(".panel").eq(0),r=t.data("spinner")||"standard";o.addClass(n+" "+r),o.removeSpinner=a,t.trigger("panel.refresh",[o])})}(jQuery,window,document),function(e,t,o){"use strict";e(function(){var a=e(t).add("body, .wrapper");e("[data-animate]").each(function(){function t(t){!t.hasClass("anim-running")&&e.Utils.isInView(t,{topoffset:n})&&(t.addClass("anim-running"),setTimeout(function(){t.addClass("anim-done").animo({animation:i,duration:.7})},r))}var o=e(this),n=o.data("offset"),r=o.data("delay")||100,i=o.data("play")||"bounce";void 0!==n&&(t(o),a.scroll(function(){t(o)}))}),e(o).on("click","[data-animate]",function(){var t=e(this),o=t.data("target"),a=t.data("play")||"bounce",n=e(o);n&&n.length&&n.animo({animation:a})})})}(jQuery,window,document),function(e,t,o){"use strict";function a(t,o){var a=e.localStorage.get(r);a||(a={}),a[this.id]=e(this).sortable("toArray"),a&&e.localStorage.set(r,a)}function n(){var t=e.localStorage.get(r);if(t){var o=this.id,a=t[o];if(a){var n=e("#"+o);e.each(a,function(t,o){e("#"+o).appendTo(n)})}}}if(e.fn.sortable){var r="jq-portletState";e(function(){e('[data-toggle="portlet"]').sortable({connectWith:'[data-toggle="portlet"]',items:"div.panel",handle:".portlet-handler",opacity:.7,placeholder:"portlet box-placeholder",cancel:".portlet-cancel",forcePlaceholderSize:!0,iframeFix:!1,tolerance:"pointer",helper:"original",revert:200,forceHelperSize:!0,update:a,create:n})})}}(jQuery,window,document),function(e,t,o,a){o(function(){if("undefined"!=typeof Rickshaw){for(var e=[[],[],[]],o=new Rickshaw.Fixtures.RandomData(150),a=0;a<150;a++)o.addData(e);var n=[{color:"#c05020",data:e[0],name:"New York"},{color:"#30c020",data:e[1],name:"London"},{color:"#6060c0",data:e[2],name:"Tokyo"}];new Rickshaw.Graph({element:t.querySelector("#rickshaw1"),series:n,renderer:"area"}).render();new Rickshaw.Graph({element:t.querySelector("#rickshaw2"),renderer:"area",stroke:!0,series:[{data:[{x:0,y:40},{x:1,y:49},{x:2,y:38},{x:3,y:30},{x:4,y:32}],color:"#f05050"},{data:[{x:0,y:40},{x:1,y:49},{x:2,y:38},{x:3,y:30},{x:4,y:32}],color:"#fad732"}]}).render();new Rickshaw.Graph({element:t.querySelector("#rickshaw3"),renderer:"line",series:[{data:[{x:0,y:40},{x:1,y:49},{x:2,y:38},{x:3,y:30},{x:4,y:32}],color:"#7266ba"},{data:[{x:0,y:20},{x:1,y:24},{x:2,y:19},{x:3,y:15},{x:4,y:16}],color:"#23b7e5"}]}).render();new Rickshaw.Graph({element:t.querySelector("#rickshaw4"),renderer:"bar",series:[{data:[{x:0,y:40},{x:1,y:49},{x:2,y:38},{x:3,y:30},{x:4,y:32}],color:"#fad732"},{data:[{x:0,y:20},{x:1,y:24},{x:2,y:19},{x:3,y:15},{x:4,y:16}],color:"#ff902b"}]}).render()}})}(window,document,window.jQuery),function(e,t,o,a){o(function(){o.fn.select2&&(o("#select2-1").select2({theme:"bootstrap"}),o("#select2-2").select2({theme:"bootstrap"}),o("#select2-3").select2({theme:"bootstrap"}),o("#select2-4").select2({placeholder:"Select a state",allowClear:!0,theme:"bootstrap"}))})}(window,document,window.jQuery),function(e,t,o,a){function n(){o("<div/>",{class:"dropdown-backdrop"}).insertAfter(".aside").on("click mouseenter",function(){s()})}function r(e){e.siblings("li").removeClass("open").end().toggleClass("open")}function i(e){s();var t=e.children("ul");if(!t.length)return o();if(e.hasClass("open"))return r(e),o();var a=o(".aside"),n=o(".aside-inner"),i=parseInt(n.css("padding-top"),0)+parseInt(a.css("padding-top"),0),l=t.clone().appendTo(a);r(e);var c=e.position().top+i-g.scrollTop(),u=f.height();return l.addClass("nav-floating").css({position:d()?"fixed":"absolute",top:c,bottom:l.outerHeight(!0)+c>u?0:"auto"}),l.on("mouseleave",function(){r(e),l.remove()}),l}function s(){o(".sidebar-subnav.nav-floating").remove(),o(".dropdown-backdrop").remove(),o(".sidebar li.open").removeClass("open")}function l(){return p.hasClass("touch")}function c(){return h.hasClass("aside-collapsed")||h.hasClass("aside-collapsed-text")}function d(){return h.hasClass("layout-fixed")}function u(){return h.hasClass("aside-hover")}var f,p,h,g,m;o(function(){f=o(e),p=o("html"),h=o("body"),g=o(".sidebar"),m=APP_MEDIAQUERY;var t=g.find(".collapse");t.on("show.bs.collapse",function(e){e.stopPropagation(),0===o(this).parents(".collapse").length&&t.filter(".in").collapse("hide")});var a=o(".sidebar .active").parents("li");u()||a.addClass("active").children(".collapse").collapse("show"),g.find("li > a + ul").on("show.bs.collapse",function(e){u()&&e.preventDefault()});var r=l()?"click":"mouseenter",s=o();g.on(r,".nav > li",function(){(c()||u())&&(s.trigger("mouseleave"),s=i(o(this)),n())}),void 0!==g.data("sidebarAnyclickClose")&&o(".wrapper").on("click.sidebar",function(e){if(h.hasClass("aside-toggled")){var t=o(e.target);t.parents(".aside").length||t.is("#user-block-toggle")||t.parent().is("#user-block-toggle")||h.removeClass("aside-toggled")}})})}(window,document,window.jQuery),function(e,t,o,a){o(function(){o("[data-skycon]").each(function(){var e=o(this),t=new Skycons({color:e.data("color")||"white"});e.html('<canvas width="'+e.data("width")+'" height="'+e.data("height")+'"></canvas>'),t.add(e.children()[0],e.data("skycon")),t.play()})})}(window,document,window.jQuery),function(e,t,o,a){o(function(){o("[data-scrollable]").each(function(){var e=o(this);e.slimScroll({height:e.data("height")||250})})})}(window,document,window.jQuery),function(e,t,o,a){o(function(){function t(){var t=o(this),a=t.data(),n=a.values&&a.values.split(",");a.type=a.type||"bar",a.disableHiddenCheck=!0,t.sparkline(n,a),a.resize&&o(e).resize(function(){t.sparkline(n,a)})}o("[data-sparkline]").each(t)})}(window,document,window.jQuery),function(e,t,o,a){o(function(){o("#swal-demo1").on("click",function(e){e.preventDefault(),swal("Here's a message!")}),o("#swal-demo2").on("click",function(e){e.preventDefault(),swal("Here's a message!","It's pretty, isn't it?")}),o("#swal-demo3").on("click",function(e){e.preventDefault(),swal("Good job!","You clicked the button!","success")}),o("#swal-demo4").on("click",function(e){e.preventDefault(),swal({title:"Are you sure?",text:"You will not be able to recover this imaginary file!",type:"warning",showCancelButton:!0,confirmButtonColor:"#DD6B55",confirmButtonText:"Yes, delete it!",closeOnConfirm:!1},function(){swal("Deleted!","Your imaginary file has been deleted.","success")})}),o("#swal-demo5").on("click",function(e){e.preventDefault(),swal({title:"Are you sure?",text:"You will not be able to recover this imaginary file!",type:"warning",showCancelButton:!0,confirmButtonColor:"#DD6B55",confirmButtonText:"Yes, delete it!",cancelButtonText:"No, cancel plx!",closeOnConfirm:!1,closeOnCancel:!1},function(e){e?swal("Deleted!","Your imaginary file has been deleted.","success"):swal("Cancelled","Your imaginary file is safe :)","error")})})})}(window,document,window.jQuery),function(e,t,o,a){o(function(){o("[data-check-all]").on("change",function(){var e=o(this),t=e.index()+1,a=e.find('input[type="checkbox"]');e.parents("table").find("tbody > tr > td:nth-child("+t+') input[type="checkbox"]').prop("checked",a[0].checked)})})}(window,document,window.jQuery),function(e,t,o,a){o(function(){var t=o("body");toggle=new StateToggler,o("[data-toggle-state]").on("click",function(a){a.stopPropagation();var n=o(this),r=n.data("toggleState"),i=n.data("target"),s=void 0!==n.attr("data-no-persist"),l=i?o(i):t;r&&(l.hasClass(r)?(l.removeClass(r),s||toggle.removeState(r)):(l.addClass(r),s||toggle.addState(r))),o(e).resize()})}),e.StateToggler=function(){var e={hasWord:function(e,t){return new RegExp("(^|\\s)"+t+"(\\s|$)").test(e)},addWord:function(e,t){if(!this.hasWord(e,t))return e+(e?" ":"")+t},removeWord:function(e,t){if(this.hasWord(e,t))return e.replace(new RegExp("(^|\\s)*"+t+"(\\s|$)*","g"),"")}};return{addState:function(t){var a=o.localStorage.get("jq-toggleState");a=a?e.addWord(a,t):t,o.localStorage.set("jq-toggleState",a)},removeState:function(t){var a=o.localStorage.get("jq-toggleState");a&&(a=e.removeWord(a,t),o.localStorage.set("jq-toggleState",a))},restoreState:function(e){var t=o.localStorage.get("jq-toggleState");t&&e.addClass(t)}}}}(window,document,window.jQuery),function(e,t,o,a){o(function(){var e=[];if(o(".tour-step").each(function(){var t=o(this).data();t.element="#"+this.id,e.push(t)}),e.length){var t=new Tour({backdrop:!0,onShown:function(e){o(".wrapper > section").css({position:"static"})},onHide:function(e){o(".wrapper > section").css({position:""})},steps:e});t.init(),o("#start-tour").on("click",function(){t.restart()
-})}})}(window,document,window.jQuery),function(e,t,o,a){o(function(){var a=o("[data-trigger-resize]"),n=a.data("triggerResize");a.on("click",function(){setTimeout(function(){var o=t.createEvent("UIEvents");o.initUIEvent("resize",!0,!1,e,0),e.dispatchEvent(o)},n||300)})})}(window,document,window.jQuery),function(e,t,o){"use strict";var a=e("html"),n=e(t);e.support.transition=function(){var e=function(){var e,t=o.body||o.documentElement,a={WebkitTransition:"webkitTransitionEnd",MozTransition:"transitionend",OTransition:"oTransitionEnd otransitionend",transition:"transitionend"};for(e in a)if(void 0!==t.style[e])return a[e]}();return e&&{end:e}}(),e.support.animation=function(){var e=function(){var e,t=o.body||o.documentElement,a={WebkitAnimation:"webkitAnimationEnd",MozAnimation:"animationend",OAnimation:"oAnimationEnd oanimationend",animation:"animationend"};for(e in a)if(void 0!==t.style[e])return a[e]}();return e&&{end:e}}(),e.support.requestAnimationFrame=t.requestAnimationFrame||t.webkitRequestAnimationFrame||t.mozRequestAnimationFrame||t.msRequestAnimationFrame||t.oRequestAnimationFrame||function(e){t.setTimeout(e,1e3/60)},e.support.touch="ontouchstart"in t&&navigator.userAgent.toLowerCase().match(/mobile|tablet/)||t.DocumentTouch&&document instanceof t.DocumentTouch||t.navigator.msPointerEnabled&&t.navigator.msMaxTouchPoints>0||t.navigator.pointerEnabled&&t.navigator.maxTouchPoints>0||!1,e.support.mutationobserver=t.MutationObserver||t.WebKitMutationObserver||t.MozMutationObserver||null,e.Utils={},e.Utils.debounce=function(e,t,o){var a;return function(){var n=this,r=arguments,i=function(){a=null,o||e.apply(n,r)},s=o&&!a;clearTimeout(a),a=setTimeout(i,t),s&&e.apply(n,r)}},e.Utils.removeCssRules=function(e){var t,o,a,n,r,i,s,l,c,d;e&&setTimeout(function(){try{for(d=document.styleSheets,n=0,s=d.length;n<s;n++){for(a=d[n],o=[],a.cssRules=a.cssRules,t=r=0,l=a.cssRules.length;r<l;t=++r)a.cssRules[t].type===CSSRule.STYLE_RULE&&e.test(a.cssRules[t].selectorText)&&o.unshift(t);for(i=0,c=o.length;i<c;i++)a.deleteRule(o[i])}}catch(e){}},0)},e.Utils.isInView=function(t,o){var a=e(t);if(!a.is(":visible"))return!1;var r=n.scrollLeft(),i=n.scrollTop(),s=a.offset(),l=s.left,c=s.top;return o=e.extend({topoffset:0,leftoffset:0},o),c+a.height()>=i&&c-o.topoffset<=i+n.height()&&l+a.width()>=r&&l-o.leftoffset<=r+n.width()},e.Utils.options=function(t){if(e.isPlainObject(t))return t;var o=t?t.indexOf("{"):-1,a={};if(-1!=o)try{a=new Function("","var json = "+t.substr(o)+"; return JSON.parse(JSON.stringify(json));")()}catch(e){}return a},e.Utils.events={},e.Utils.events.click=e.support.touch?"tap":"click",e.langdirection="rtl"==a.attr("dir")?"right":"left",e(function(){if(e.support.mutationobserver){new e.support.mutationobserver(e.Utils.debounce(function(t){e(o).trigger("domready")},300)).observe(document.body,{childList:!0,subtree:!0})}}),a.addClass(e.support.touch?"touch":"no-touch")}(jQuery,window,document),function(e,t,o,a){o(function(){})}(window,document,window.jQuery);
+
+
+(function(window, document, $, undefined) {
+
+    if (typeof $ === 'undefined') {
+        throw new Error('This application\'s JavaScript requires jQuery');
+    }
+
+    $(function() {
+
+        // Restore body classes
+        // -----------------------------------
+        var $body = $('body');
+        new StateToggler().restoreState($body);
+
+        // enable settings toggle after restore
+        $('#chk-fixed').prop('checked', $body.hasClass('layout-fixed'));
+        $('#chk-collapsed').prop('checked', $body.hasClass('aside-collapsed'));
+        $('#chk-collapsed-text').prop('checked', $body.hasClass('aside-collapsed-text'));
+        $('#chk-boxed').prop('checked', $body.hasClass('layout-boxed'));
+        $('#chk-float').prop('checked', $body.hasClass('aside-float'));
+        $('#chk-hover').prop('checked', $body.hasClass('aside-hover'));
+
+        // When ready display the offsidebar
+        $('.offsidebar.hide').removeClass('hide');
+
+        // Disable warning "Synchronous XMLHttpRequest on the main thread is deprecated.."
+        $.ajaxPrefilter(function(options, originalOptions, jqXHR) {
+            options.async = true;
+        });
+
+    }); // doc ready
+
+})(window, document, window.jQuery);
+
+// Start Bootstrap JS
+// ----------------------------------- 
+
+(function(window, document, $, undefined){
+
+  $(function(){
+
+    // POPOVER
+    // ----------------------------------- 
+
+    $('[data-toggle="popover"]').popover();
+
+    // TOOLTIP
+    // ----------------------------------- 
+
+    $('[data-toggle="tooltip"]').tooltip({
+      container: 'body'
+    });
+
+    // DROPDOWN INPUTS
+    // ----------------------------------- 
+    $('.dropdown input').on('click focus', function(event){
+      event.stopPropagation();
+    });
+
+  });
+
+})(window, document, window.jQuery);
+
+// Custom jQuery
+// ----------------------------------- 
+
+
+(function(window, document, $, undefined){
+
+  if(!$.fn.fullCalendar) return;
+
+  // When dom ready, init calendar and events
+  $(function() {
+
+      // The element that will display the calendar
+      var calendar = $('#calendar');
+
+      var demoEvents = createDemoEvents();
+
+      initExternalEvents(calendar);
+
+      initCalendar(calendar, demoEvents);
+
+  });
+
+
+  // global shared var to know what we are dragging
+  var draggingEvent = null;
+
+  /**
+   * ExternalEvent object
+   * @param jQuery Object elements Set of element as jQuery objects
+   */
+  var ExternalEvent = function (elements) {
+      
+      if (!elements) return;
+      
+      elements.each(function() {
+          var $this = $(this);
+          // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
+          // it doesn't need to have a start or end
+          var calendarEventObject = {
+              title: $.trim($this.text()) // use the element's text as the event title
+          };
+
+          // store the Event Object in the DOM element so we can get to it later
+          $this.data('calendarEventObject', calendarEventObject);
+
+          // make the event draggable using jQuery UI
+          $this.draggable({
+              zIndex: 1070,
+              revert: true, // will cause the event to go back to its
+              revertDuration: 0  //  original position after the drag
+          });
+
+      });
+  };
+
+  /**
+   * Invoke full calendar plugin and attach behavior
+   * @param  jQuery [calElement] The calendar dom element wrapped into jQuery
+   * @param  EventObject [events] An object with the event list to load when the calendar displays
+   */
+  function initCalendar(calElement, events) {
+
+      // check to remove elements from the list
+      var removeAfterDrop = $('#remove-after-drop');
+
+      calElement.fullCalendar({
+          // isRTL: true,
+          header: {
+              left:   'prev,next today',
+              center: 'title',
+              right:  'month,agendaWeek,agendaDay'
+          },
+          buttonIcons: { // note the space at the beginning
+              prev:    ' fa fa-caret-left',
+              next:    ' fa fa-caret-right'
+          },
+          buttonText: {
+              today: 'today',
+              month: 'month',
+              week:  'week',
+              day:   'day'
+          },
+          editable: true,
+          droppable: true, // this allows things to be dropped onto the calendar 
+          drop: function(date, allDay) { // this function is called when something is dropped
+              
+              var $this = $(this),
+                  // retrieve the dropped element's stored Event Object
+                  originalEventObject = $this.data('calendarEventObject');
+
+              // if something went wrong, abort
+              if(!originalEventObject) return;
+
+              // clone the object to avoid multiple events with reference to the same object
+              var clonedEventObject = $.extend({}, originalEventObject);
+
+              // assign the reported date
+              clonedEventObject.start = date;
+              clonedEventObject.allDay = allDay;
+              clonedEventObject.backgroundColor = $this.css('background-color');
+              clonedEventObject.borderColor = $this.css('border-color');
+
+              // render the event on the calendar
+              // the last `true` argument determines if the event "sticks" 
+              // (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
+              calElement.fullCalendar('renderEvent', clonedEventObject, true);
+              
+              // if necessary remove the element from the list
+              if(removeAfterDrop.is(':checked')) {
+                $this.remove();
+              }
+          },
+          eventDragStart: function (event, js, ui) {
+            draggingEvent = event;
+          },
+          // This array is the events sources
+          events: events
+      });
+  }
+
+  /**
+   * Inits the external events panel
+   * @param  jQuery [calElement] The calendar dom element wrapped into jQuery
+   */
+  function initExternalEvents(calElement){
+    // Panel with the external events list
+    var externalEvents = $('.external-events');
+
+    // init the external events in the panel
+    new ExternalEvent(externalEvents.children('div'));
+
+    // External event color is danger-red by default
+    var currColor = '#f6504d';
+    // Color selector button
+    var eventAddBtn = $('.external-event-add-btn');
+    // New external event name input
+    var eventNameInput = $('.external-event-name');
+    // Color switchers
+    var eventColorSelector = $('.external-event-color-selector .circle');
+
+    // Trash events Droparea 
+    $('.external-events-trash').droppable({
+      accept:       '.fc-event',
+      activeClass:  'active',
+      hoverClass:   'hovered',
+      tolerance:    'touch',
+      drop: function(event, ui) {
+        
+        // You can use this function to send an ajax request
+        // to remove the event from the repository
+        
+        if(draggingEvent) {
+          var eid = draggingEvent.id || draggingEvent._id;
+          // Remove the event
+          calElement.fullCalendar('removeEvents', eid);
+          // Remove the dom element
+          ui.draggable.remove();
+          // clear
+          draggingEvent = null;
+        }
+      }
+    });
+
+    eventColorSelector.click(function(e) {
+        e.preventDefault();
+        var $this = $(this);
+
+        // Save color
+        currColor = $this.css('background-color');
+        // De-select all and select the current one
+        eventColorSelector.removeClass('selected');
+        $this.addClass('selected');
+    });
+
+    eventAddBtn.click(function(e) {
+        e.preventDefault();
+        
+        // Get event name from input
+        var val = eventNameInput.val();
+        // Dont allow empty values
+        if ($.trim(val) === '') return;
+        
+        // Create new event element
+        var newEvent = $('<div/>').css({
+                            'background-color': currColor,
+                            'border-color':     currColor,
+                            'color':            '#fff'
+                        })
+                        .html(val);
+
+        // Prepends to the external events list
+        externalEvents.prepend(newEvent);
+        // Initialize the new event element
+        new ExternalEvent(newEvent);
+        // Clear input
+        eventNameInput.val('');
+    });
+  }
+
+  /**
+   * Creates an array of events to display in the first load of the calendar
+   * Wrap into this function a request to a source to get via ajax the stored events
+   * @return Array The array with the events
+   */
+  function createDemoEvents() {
+    // Date for the calendar events (dummy data)
+    var date = new Date();
+    var d = date.getDate(),
+        m = date.getMonth(),
+        y = date.getFullYear();
+
+    return  [
+              {
+                  title: 'All Day Event',
+                  start: new Date(y, m, 1),
+                  backgroundColor: '#f56954', //red 
+                  borderColor: '#f56954' //red
+              },
+              {
+                  title: 'Long Event',
+                  start: new Date(y, m, d - 5),
+                  end: new Date(y, m, d - 2),
+                  backgroundColor: '#f39c12', //yellow
+                  borderColor: '#f39c12' //yellow
+              },
+              {
+                  title: 'Meeting',
+                  start: new Date(y, m, d, 10, 30),
+                  allDay: false,
+                  backgroundColor: '#0073b7', //Blue
+                  borderColor: '#0073b7' //Blue
+              },
+              {
+                  title: 'Lunch',
+                  start: new Date(y, m, d, 12, 0),
+                  end: new Date(y, m, d, 14, 0),
+                  allDay: false,
+                  backgroundColor: '#00c0ef', //Info (aqua)
+                  borderColor: '#00c0ef' //Info (aqua)
+              },
+              {
+                  title: 'Birthday Party',
+                  start: new Date(y, m, d + 1, 19, 0),
+                  end: new Date(y, m, d + 1, 22, 30),
+                  allDay: false,
+                  backgroundColor: '#00a65a', //Success (green)
+                  borderColor: '#00a65a' //Success (green)
+              },
+              {
+                  title: 'Open Google',
+                  start: new Date(y, m, 28),
+                  end: new Date(y, m, 29),
+                  url: '//google.com/',
+                  backgroundColor: '#3c8dbc', //Primary (light-blue)
+                  borderColor: '#3c8dbc' //Primary (light-blue)
+              }
+          ];
+  }
+
+})(window, document, window.jQuery);
+
+
+
+// Easypie chart
+// -----------------------------------
+
+(function(window, document, $, undefined) {
+
+    $(function() {
+
+        if(! $.fn.easyPieChart ) return;
+
+        var pieOptions1 = {
+            animate: {
+                duration: 800,
+                enabled: true
+            },
+            barColor: APP_COLORS['success'],
+            trackColor: false,
+            scaleColor: false,
+            lineWidth: 10,
+            lineCap: 'circle'
+        };
+        $('#easypie1').easyPieChart(pieOptions1);
+
+        var pieOptions2 = {
+            animate: {
+                duration: 800,
+                enabled: true
+            },
+            barColor: APP_COLORS['warning'],
+            trackColor: false,
+            scaleColor: false,
+            lineWidth: 4,
+            lineCap: 'circle'
+        };
+        $('#easypie2').easyPieChart(pieOptions2);
+
+        var pieOptions3 = {
+            animate: {
+                duration: 800,
+                enabled: true
+            },
+            barColor: APP_COLORS['danger'],
+            trackColor: false,
+            scaleColor: APP_COLORS['gray'],
+            lineWidth: 15,
+            lineCap: 'circle'
+        };
+        $('#easypie3').easyPieChart(pieOptions3);
+
+        var pieOptions4 = {
+            animate: {
+                duration: 800,
+                enabled: true
+            },
+            barColor: APP_COLORS['danger'],
+            trackColor: APP_COLORS['yellow'],
+            scaleColor: APP_COLORS['gray-dark'],
+            lineWidth: 15,
+            lineCap: 'circle'
+        };
+        $('#easypie4').easyPieChart(pieOptions4);
+
+    });
+
+})(window, document, window.jQuery);
+// Knob chart
+// -----------------------------------
+
+(function(window, document, $, undefined){
+
+  $(function(){
+
+        if(! $.fn.knob ) return;
+
+        var knobLoaderOptions1 = {
+            width: '50%', // responsive
+            displayInput: true,
+            fgColor: APP_COLORS['info']
+        };
+        $('#knob-chart1').knob(knobLoaderOptions1);
+
+        var knobLoaderOptions2 = {
+            width: '50%', // responsive
+            displayInput: true,
+            fgColor: APP_COLORS['purple'],
+            readOnly: true
+        };
+        $('#knob-chart2').knob(knobLoaderOptions2);
+
+        var knobLoaderOptions3 = {
+            width: '50%', // responsive
+            displayInput: true,
+            fgColor: APP_COLORS['info'],
+            bgColor: APP_COLORS['gray'],
+            angleOffset: -125,
+            angleArc: 250
+        };
+        $('#knob-chart3').knob(knobLoaderOptions3);
+
+        var knobLoaderOptions4 = {
+            width: '50%', // responsive
+            displayInput: true,
+            fgColor: APP_COLORS['pink'],
+            displayPrevious: true,
+            thickness: 0.1,
+            lineCap: 'round'
+        };
+        $('#knob-chart4').knob(knobLoaderOptions4);
+
+  });
+
+})(window, document, window.jQuery);
+
+// Start Bootstrap JS
+// -----------------------------------
+
+(function(window, document, $, undefined) {
+
+    $(function() {
+
+        if (typeof Chart === 'undefined') return;
+
+        // random values for demo
+        var rFactor = function() {
+            return Math.round(Math.random() * 100);
+        };
+
+        // Line chart
+        // -----------------------------------
+
+        var lineData = {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+            datasets: [{
+                label: 'My First dataset',
+                backgroundColor: 'rgba(114,102,186,0.2)',
+                borderColor: 'rgba(114,102,186,1)',
+                pointBorderColor: '#fff',
+                data: [rFactor(), rFactor(), rFactor(), rFactor(), rFactor(), rFactor(), rFactor()]
+            }, {
+                label: 'My Second dataset',
+                backgroundColor: 'rgba(35,183,229,0.2)',
+                borderColor: 'rgba(35,183,229,1)',
+                pointBorderColor: '#fff',
+                data: [rFactor(), rFactor(), rFactor(), rFactor(), rFactor(), rFactor(), rFactor()]
+            }]
+        };
+
+        var lineOptions = {
+            legend: {
+                display: false
+            }
+        };
+        var linectx = document.getElementById('chartjs-linechart').getContext('2d');
+        var lineChart = new Chart(linectx, {
+            data: lineData,
+            type: 'line',
+            options: lineOptions
+        });
+
+        // Bar chart
+        // -----------------------------------
+
+        var barData = {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+            datasets: [{
+                backgroundColor: '#23b7e5',
+                borderColor: '#23b7e5',
+                data: [rFactor(), rFactor(), rFactor(), rFactor(), rFactor(), rFactor(), rFactor()]
+            }, {
+                backgroundColor: '#5d9cec',
+                borderColor: '#5d9cec',
+                data: [rFactor(), rFactor(), rFactor(), rFactor(), rFactor(), rFactor(), rFactor()]
+            }]
+        };
+
+        var barOptions = {
+            legend: {
+                display: false
+            }
+        };
+        var barctx = document.getElementById('chartjs-barchart').getContext('2d');
+        var barChart = new Chart(barctx, {
+            data: barData,
+            type: 'bar',
+            options: barOptions
+        });
+
+        //  Doughnut chart
+        // -----------------------------------
+
+        var doughnutData = {
+            labels: [
+                'Purple',
+                'Yellow',
+                'Blue'
+            ],
+            datasets: [{
+                data: [300, 50, 100],
+                backgroundColor: [
+                    '#7266ba',
+                    '#fad732',
+                    '#23b7e5'
+                ],
+                hoverBackgroundColor: [
+                    '#7266ba',
+                    '#fad732',
+                    '#23b7e5'
+                ]
+            }]
+        };
+
+        var doughnutOptions = {
+            legend: {
+                display: false
+            }
+        };
+        var doughnutctx = document.getElementById('chartjs-doughnutchart').getContext('2d');
+        var doughnutChart = new Chart(doughnutctx, {
+            data: doughnutData,
+            type: 'doughnut',
+            options: doughnutOptions
+        });
+
+        // Pie chart
+        // -----------------------------------
+
+        var pieData = {
+            labels: [
+                'Purple',
+                'Yellow',
+                'Blue'
+            ],
+            datasets: [{
+                data: [300, 50, 100],
+                backgroundColor: [
+                    '#7266ba',
+                    '#fad732',
+                    '#23b7e5'
+                ],
+                hoverBackgroundColor: [
+                    '#7266ba',
+                    '#fad732',
+                    '#23b7e5'
+                ]
+            }]
+        };
+
+        var pieOptions = {
+            legend: {
+                display: false
+            }
+        };
+        var piectx = document.getElementById('chartjs-piechart').getContext('2d');
+        var pieChart = new Chart(piectx, {
+            data: pieData,
+            type: 'pie',
+            options: pieOptions
+        });
+
+        // Polar chart
+        // -----------------------------------
+
+        var polarData = {
+            datasets: [{
+                data: [
+                    11,
+                    16,
+                    7,
+                    3
+                ],
+                backgroundColor: [
+                    '#f532e5',
+                    '#7266ba',
+                    '#f532e5',
+                    '#7266ba'
+                ],
+                label: 'My dataset' // for legend
+            }],
+            labels: [
+                'Label 1',
+                'Label 2',
+                'Label 3',
+                'Label 4'
+            ]
+        };
+
+        var polarOptions = {
+            legend: {
+                display: false
+            }
+        };
+        var polarctx = document.getElementById('chartjs-polarchart').getContext('2d');
+        var polarChart = new Chart(polarctx, {
+            data: polarData,
+            type: 'polarArea',
+            options: polarOptions
+        });
+
+        // Radar chart
+        // -----------------------------------
+
+        var radarData = {
+            labels: ['Eating', 'Drinking', 'Sleeping', 'Designing', 'Coding', 'Cycling', 'Running'],
+            datasets: [{
+                label: 'My First dataset',
+                backgroundColor: 'rgba(114,102,186,0.2)',
+                borderColor: 'rgba(114,102,186,1)',
+                data: [65, 59, 90, 81, 56, 55, 40]
+            }, {
+                label: 'My Second dataset',
+                backgroundColor: 'rgba(151,187,205,0.2)',
+                borderColor: 'rgba(151,187,205,1)',
+                data: [28, 48, 40, 19, 96, 27, 100]
+            }]
+        };
+
+        var radarOptions = {
+            legend: {
+                display: false
+            }
+        };
+        var radarctx = document.getElementById('chartjs-radarchart').getContext('2d');
+        var radarChart = new Chart(radarctx, {
+            data: radarData,
+            type: 'radar',
+            options: radarOptions
+        });
+
+    });
+
+})(window, document, window.jQuery);
+// Chartist
+// ----------------------------------- 
+
+(function(window, document, $, undefined){
+
+  $(function(){
+
+    if ( typeof Chartist === 'undefined' ) return;
+
+    // Bar bipolar
+    // ----------------------------------- 
+    var data1 = {
+      labels: ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8', 'W9', 'W10'],
+      series: [
+        [1, 2, 4, 8, 6, -2, -1, -4, -6, -2]
+      ]
+    };
+
+    var options1 = {
+      high: 10,
+      low: -10,
+      height: 280,
+      axisX: {
+        labelInterpolationFnc: function(value, index) {
+          return index % 2 === 0 ? value : null;
+        }
+      }
+    };
+
+    new Chartist.Bar('#ct-bar1', data1, options1);
+
+    // Bar Horizontal
+    // ----------------------------------- 
+    new Chartist.Bar('#ct-bar2', {
+      labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+      series: [
+        [5, 4, 3, 7, 5, 10, 3],
+        [3, 2, 9, 5, 4, 6, 4]
+      ]
+    }, {
+      seriesBarDistance: 10,
+      reverseData: true,
+      horizontalBars: true,
+      height: 280,
+      axisY: {
+        offset: 70
+      }
+    });
+
+    // Line
+    // ----------------------------------- 
+    new Chartist.Line('#ct-line1', {
+      labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+      series: [
+        [12, 9, 7, 8, 5],
+        [2, 1, 3.5, 7, 3],
+        [1, 3, 4, 5, 6]
+      ]
+    }, {
+      fullWidth: true,
+      height: 280,
+      chartPadding: {
+        right: 40
+      }
+    });
+
+
+    // SVG Animation
+    // ----------------------------------- 
+
+    var chart1 = new Chartist.Line('#ct-line3', {
+      labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+      series: [
+        [1, 5, 2, 5, 4, 3],
+        [2, 3, 4, 8, 1, 2],
+        [5, 4, 3, 2, 1, 0.5]
+      ]
+    }, {
+      low: 0,
+      showArea: true,
+      showPoint: false,
+      fullWidth: true,
+      height: 300
+    });
+
+    chart1.on('draw', function(data) {
+      if(data.type === 'line' || data.type === 'area') {
+        data.element.animate({
+          d: {
+            begin: 2000 * data.index,
+            dur: 2000,
+            from: data.path.clone().scale(1, 0).translate(0, data.chartRect.height()).stringify(),
+            to: data.path.clone().stringify(),
+            easing: Chartist.Svg.Easing.easeOutQuint
+          }
+        });
+      }
+    });
+
+
+    // Slim animation
+    // ----------------------------------- 
+
+
+    var chart = new Chartist.Line('#ct-line2', {
+      labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+      series: [
+        [12, 9, 7, 8, 5, 4, 6, 2, 3, 3, 4, 6],
+        [4,  5, 3, 7, 3, 5, 5, 3, 4, 4, 5, 5],
+        [5,  3, 4, 5, 6, 3, 3, 4, 5, 6, 3, 4],
+        [3,  4, 5, 6, 7, 6, 4, 5, 6, 7, 6, 3]
+      ]
+    }, {
+      low: 0,
+      height: 300
+    });
+
+    // Let's put a sequence number aside so we can use it in the event callbacks
+    var seq = 0,
+      delays = 80,
+      durations = 500;
+
+    // Once the chart is fully created we reset the sequence
+    chart.on('created', function() {
+      seq = 0;
+    });
+
+    // On each drawn element by Chartist we use the Chartist.Svg API to trigger SMIL animations
+    chart.on('draw', function(data) {
+      seq++;
+
+      if(data.type === 'line') {
+        // If the drawn element is a line we do a simple opacity fade in. This could also be achieved using CSS3 animations.
+        data.element.animate({
+          opacity: {
+            // The delay when we like to start the animation
+            begin: seq * delays + 1000,
+            // Duration of the animation
+            dur: durations,
+            // The value where the animation should start
+            from: 0,
+            // The value where it should end
+            to: 1
+          }
+        });
+      } else if(data.type === 'label' && data.axis === 'x') {
+        data.element.animate({
+          y: {
+            begin: seq * delays,
+            dur: durations,
+            from: data.y + 100,
+            to: data.y,
+            // We can specify an easing function from Chartist.Svg.Easing
+            easing: 'easeOutQuart'
+          }
+        });
+      } else if(data.type === 'label' && data.axis === 'y') {
+        data.element.animate({
+          x: {
+            begin: seq * delays,
+            dur: durations,
+            from: data.x - 100,
+            to: data.x,
+            easing: 'easeOutQuart'
+          }
+        });
+      } else if(data.type === 'point') {
+        data.element.animate({
+          x1: {
+            begin: seq * delays,
+            dur: durations,
+            from: data.x - 10,
+            to: data.x,
+            easing: 'easeOutQuart'
+          },
+          x2: {
+            begin: seq * delays,
+            dur: durations,
+            from: data.x - 10,
+            to: data.x,
+            easing: 'easeOutQuart'
+          },
+          opacity: {
+            begin: seq * delays,
+            dur: durations,
+            from: 0,
+            to: 1,
+            easing: 'easeOutQuart'
+          }
+        });
+      } else if(data.type === 'grid') {
+        // Using data.axis we get x or y which we can use to construct our animation definition objects
+        var pos1Animation = {
+          begin: seq * delays,
+          dur: durations,
+          from: data[data.axis.units.pos + '1'] - 30,
+          to: data[data.axis.units.pos + '1'],
+          easing: 'easeOutQuart'
+        };
+
+        var pos2Animation = {
+          begin: seq * delays,
+          dur: durations,
+          from: data[data.axis.units.pos + '2'] - 100,
+          to: data[data.axis.units.pos + '2'],
+          easing: 'easeOutQuart'
+        };
+
+        var animations = {};
+        animations[data.axis.units.pos + '1'] = pos1Animation;
+        animations[data.axis.units.pos + '2'] = pos2Animation;
+        animations['opacity'] = {
+          begin: seq * delays,
+          dur: durations,
+          from: 0,
+          to: 1,
+          easing: 'easeOutQuart'
+        };
+
+        data.element.animate(animations);
+      }
+    });
+
+    // For the sake of the example we update the chart every time it's created with a delay of 10 seconds
+    chart.on('created', function() {
+      if(window.__exampleAnimateTimeout) {
+        clearTimeout(window.__exampleAnimateTimeout);
+        window.__exampleAnimateTimeout = null;
+      }
+      window.__exampleAnimateTimeout = setTimeout(chart.update.bind(chart), 12000);
+    });
+
+
+  });
+
+})(window, document, window.jQuery);
+
+/**=========================================================
+ * Module: clear-storage.js
+ * Removes a key from the browser storage via element click
+ =========================================================*/
+
+(function($, window, document){
+  'use strict';
+
+  var Selector = '[data-reset-key]';
+
+  $(document).on('click', Selector, function (e) {
+      e.preventDefault();
+      var key = $(this).data('resetKey');
+      
+      if(key) {
+        $.localStorage.remove(key);
+        // reload the page
+        window.location.reload();
+      }
+      else {
+        $.error('No storage key specified for reset.');
+      }
+  });
+
+}(jQuery, window, document));
+
+// Color picker
+// -----------------------------------
+
+(function(window, document, $, undefined){
+
+  $(function(){
+
+    if(!$.fn.colorpicker) return;
+
+    $('.demo-colorpicker').colorpicker();
+
+    $('#demo_selectors').colorpicker({
+      colorSelectors: {
+        'default': '#777777',
+        'primary': APP_COLORS['primary'],
+        'success': APP_COLORS['success'],
+        'info':    APP_COLORS['info'],
+        'warning': APP_COLORS['warning'],
+        'danger':  APP_COLORS['danger']
+      }
+    });
+
+  });
+
+})(window, document, window.jQuery);
+
+// GLOBAL CONSTANTS
+// ----------------------------------- 
+
+
+(function(window, document, $, undefined){
+
+  window.APP_COLORS = {
+    'primary':                '#5d9cec',
+    'success':                '#27c24c',
+    'info':                   '#23b7e5',
+    'warning':                '#ff902b',
+    'danger':                 '#f05050',
+    'inverse':                '#131e26',
+    'green':                  '#37bc9b',
+    'pink':                   '#f532e5',
+    'purple':                 '#7266ba',
+    'dark':                   '#3a3f51',
+    'yellow':                 '#fad732',
+    'gray-darker':            '#232735',
+    'gray-dark':              '#3a3f51',
+    'gray':                   '#dde6e9',
+    'gray-light':             '#e4eaec',
+    'gray-lighter':           '#edf1f2'
+  };
+  
+  window.APP_MEDIAQUERY = {
+    'desktopLG':             1200,
+    'desktop':                992,
+    'tablet':                 768,
+    'mobile':                 480
+  };
+
+})(window, document, window.jQuery);
+
+
+// Easypie chart Loader
+// -----------------------------------
+
+/**
+ * Usage
+ * <div class="easypie-chart" data-easypiechart data-percent="X" data-optionName="value"></div>
+ */
+(function(window, document, $, undefined) {
+
+    $(function() {
+
+        if (!$.fn.easyPieChart) return;
+
+        $('[data-easypiechart]').each(function() {
+            var $elem = $(this);
+            var options = $elem.data();
+            $elem.easyPieChart(options || {});
+        });
+    });
+
+})(window, document, window.jQuery);
+
+// MARKDOWN DOCS
+// ----------------------------------- 
+
+
+(function(window, document, $, undefined){
+
+  $(function(){
+
+    $('.flatdoc').each(function(){
+
+      Flatdoc.run({
+        
+        fetcher: Flatdoc.file('documentation/readme.md'),
+
+        // Setup custom element selectors (markup validates)
+        root:    '.flatdoc',
+        menu:    '.flatdoc-menu',
+        title:   '.flatdoc-title',
+        content: '.flatdoc-content'
+
+      });
+
+    });
+
+
+  });
+
+})(window, document, window.jQuery);
+
+// FULLSCREEN
+// ----------------------------------- 
+
+(function(window, document, $, undefined){
+
+  if ( typeof screenfull === 'undefined' ) return;
+
+  $(function(){
+
+    var $doc = $(document);
+    var $fsToggler = $('[data-toggle-fullscreen]');
+
+    // Not supported under IE
+    var ua = window.navigator.userAgent;
+    if( ua.indexOf("MSIE ") > 0 || !!ua.match(/Trident.*rv\:11\./) ) {
+      $fsToggler.addClass('hide');
+    }
+
+    if ( ! $fsToggler.is(':visible') ) // hidden on mobiles or IE
+      return;
+
+    $fsToggler.on('click', function (e) {
+        e.preventDefault();
+
+        if (screenfull.enabled) {
+          
+          screenfull.toggle();
+          
+          // Switch icon indicator
+          toggleFSIcon( $fsToggler );
+
+        } else {
+          console.log('Fullscreen not enabled');
+        }
+    });
+
+    if ( screenfull.raw && screenfull.raw.fullscreenchange)
+      $doc.on(screenfull.raw.fullscreenchange, function () {
+          toggleFSIcon($fsToggler);
+      });
+
+    function toggleFSIcon($element) {
+      if(screenfull.isFullscreen)
+        $element.children('em').removeClass('fa-expand').addClass('fa-compress');
+      else
+        $element.children('em').removeClass('fa-compress').addClass('fa-expand');
+    }
+
+  });
+
+})(window, document, window.jQuery);
+
+/**=========================================================
+ * Module: gmap.js
+ * Init Google Map plugin
+ =========================================================*/
+
+(function($, window, document){
+  'use strict';
+
+  // -------------------------
+  // Map Style definition
+  // -------------------------
+
+  // Custom core styles
+  // Get more styles from http://snazzymaps.com/style/29/light-monochrome
+  // - Just replace and assign to 'MapStyles' the new style array
+  var MapStyles = [{featureType:'water',stylers:[{visibility:'on'},{color:'#bdd1f9'}]},{featureType:'all',elementType:'labels.text.fill',stylers:[{color:'#334165'}]},{featureType:'landscape',stylers:[{color:'#e9ebf1'}]},{featureType:'road.highway',elementType:'geometry',stylers:[{color:'#c5c6c6'}]},{featureType:'road.arterial',elementType:'geometry',stylers:[{color:'#fff'}]},{featureType:'road.local',elementType:'geometry',stylers:[{color:'#fff'}]},{featureType:'transit',elementType:'geometry',stylers:[{color:'#d8dbe0'}]},{featureType:'poi',elementType:'geometry',stylers:[{color:'#cfd5e0'}]},{featureType:'administrative',stylers:[{visibility:'on'},{lightness:33}]},{featureType:'poi.park',elementType:'labels',stylers:[{visibility:'on'},{lightness:20}]},{featureType:'road',stylers:[{color:'#d8dbe0',lightness:20}]}];
+
+
+  // -------------------------
+  // Custom Script
+  // -------------------------
+
+  var mapSelector = '[data-gmap]';
+
+  if($.fn.gMap) {
+      var gMapRefs = [];
+      
+      $(mapSelector).each(function(){
+          
+          var $this   = $(this),
+              addresses = $this.data('address') && $this.data('address').split(';'),
+              titles    = $this.data('title') && $this.data('title').split(';'),
+              zoom      = $this.data('zoom') || 14,
+              maptype   = $this.data('maptype') || 'ROADMAP', // or 'TERRAIN'
+              markers   = [];
+
+          if(addresses) {
+            for(var a in addresses)  {
+                if(typeof addresses[a] == 'string') {
+                    markers.push({
+                        address:  addresses[a],
+                        html:     (titles && titles[a]) || '',
+                        popup:    true   /* Always popup */
+                      });
+                }
+            }
+
+            var options = {
+                controls: {
+                       panControl:         true,
+                       zoomControl:        true,
+                       mapTypeControl:     true,
+                       scaleControl:       true,
+                       streetViewControl:  true,
+                       overviewMapControl: true
+                   },
+                scrollwheel: false,
+                maptype: maptype,
+                markers: markers,
+                zoom: zoom
+                // More options https://github.com/marioestrada/jQuery-gMap
+            };
+
+            var gMap = $this.gMap(options);
+
+            var ref = gMap.data('gMap.reference');
+            // save in the map references list
+            gMapRefs.push(ref);
+
+            // set the styles
+            if($this.data('styled') !== undefined) {
+              
+              ref.setOptions({
+                styles: MapStyles
+              });
+
+            }
+          }
+
+      }); //each
+  }
+
+}(jQuery, window, document));
+
+/**=========================================================
+ * Module: Image Cropper
+ =========================================================*/
+
+(function(window, document, $, undefined) {
+
+    $(function() {
+
+        if(! $.fn.cropper ) return;
+
+        var $image = $('.img-container > img'),
+            $dataX = $('#dataX'),
+            $dataY = $('#dataY'),
+            $dataHeight = $('#dataHeight'),
+            $dataWidth = $('#dataWidth'),
+            $dataRotate = $('#dataRotate'),
+            options = {
+                // data: {
+                //   x: 420,
+                //   y: 60,
+                //   width: 640,
+                //   height: 360
+                // },
+                // strict: false,
+                // responsive: false,
+                // checkImageOrigin: false
+
+                // modal: false,
+                // guides: false,
+                // highlight: false,
+                // background: false,
+
+                // autoCrop: false,
+                // autoCropArea: 0.5,
+                // dragCrop: false,
+                // movable: false,
+                // rotatable: false,
+                // zoomable: false,
+                // touchDragZoom: false,
+                // mouseWheelZoom: false,
+                // cropBoxMovable: false,
+                // cropBoxResizable: false,
+                // doubleClickToggle: false,
+
+                // minCanvasWidth: 320,
+                // minCanvasHeight: 180,
+                // minCropBoxWidth: 160,
+                // minCropBoxHeight: 90,
+                // minContainerWidth: 320,
+                // minContainerHeight: 180,
+
+                // build: null,
+                // built: null,
+                // dragstart: null,
+                // dragmove: null,
+                // dragend: null,
+                // zoomin: null,
+                // zoomout: null,
+
+                aspectRatio: 16 / 9,
+                preview: '.img-preview',
+                crop: function(data) {
+                    $dataX.val(Math.round(data.x));
+                    $dataY.val(Math.round(data.y));
+                    $dataHeight.val(Math.round(data.height));
+                    $dataWidth.val(Math.round(data.width));
+                    $dataRotate.val(Math.round(data.rotate));
+                }
+            };
+
+        $image.on({
+            'build.cropper': function(e) {
+                console.log(e.type);
+            },
+            'built.cropper': function(e) {
+                console.log(e.type);
+            },
+            'dragstart.cropper': function(e) {
+                console.log(e.type, e.dragType);
+            },
+            'dragmove.cropper': function(e) {
+                console.log(e.type, e.dragType);
+            },
+            'dragend.cropper': function(e) {
+                console.log(e.type, e.dragType);
+            },
+            'zoomin.cropper': function(e) {
+                console.log(e.type);
+            },
+            'zoomout.cropper': function(e) {
+                console.log(e.type);
+            },
+            'change.cropper': function(e) {
+                console.log(e.type);
+            }
+        }).cropper(options);
+
+
+        // Methods
+        $(document.body).on('click', '[data-method]', function() {
+            var data = $(this).data(),
+                $target,
+                result;
+
+            if (!$image.data('cropper')) {
+                return;
+            }
+
+            if (data.method) {
+                data = $.extend({}, data); // Clone a new one
+
+                if (typeof data.target !== 'undefined') {
+                    $target = $(data.target);
+
+                    if (typeof data.option === 'undefined') {
+                        try {
+                            data.option = JSON.parse($target.val());
+                        } catch (e) {
+                            console.log(e.message);
+                        }
+                    }
+                }
+
+                result = $image.cropper(data.method, data.option);
+
+                if (data.method === 'getCroppedCanvas') {
+                    $('#getCroppedCanvasModal').modal().find('.modal-body').html(result);
+                }
+
+                if ($.isPlainObject(result) && $target) {
+                    try {
+                        $target.val(JSON.stringify(result));
+                    } catch (e) {
+                        console.log(e.message);
+                    }
+                }
+
+            }
+        }).on('keydown', function(e) {
+
+            if (!$image.data('cropper')) {
+                return;
+            }
+
+            switch (e.which) {
+                case 37:
+                    e.preventDefault();
+                    $image.cropper('move', -1, 0);
+                    break;
+
+                case 38:
+                    e.preventDefault();
+                    $image.cropper('move', 0, -1);
+                    break;
+
+                case 39:
+                    e.preventDefault();
+                    $image.cropper('move', 1, 0);
+                    break;
+
+                case 40:
+                    e.preventDefault();
+                    $image.cropper('move', 0, 1);
+                    break;
+            }
+
+        });
+
+
+        // Import image
+        var $inputImage = $('#inputImage'),
+            URL = window.URL || window.webkitURL,
+            blobURL;
+
+        if (URL) {
+            $inputImage.change(function() {
+                var files = this.files,
+                    file;
+
+                if (!$image.data('cropper')) {
+                    return;
+                }
+
+                if (files && files.length) {
+                    file = files[0];
+
+                    if (/^image\/\w+$/.test(file.type)) {
+                        blobURL = URL.createObjectURL(file);
+                        $image.one('built.cropper', function() {
+                            URL.revokeObjectURL(blobURL); // Revoke when load complete
+                        }).cropper('reset').cropper('replace', blobURL);
+                        $inputImage.val('');
+                    } else {
+                        alert('Please choose an image file.');
+                    }
+                }
+            });
+        } else {
+            $inputImage.parent().remove();
+        }
+
+
+        // Options
+        $('.docs-options :checkbox').on('change', function() {
+            var $this = $(this);
+
+            if (!$image.data('cropper')) {
+                return;
+            }
+
+            options[$this.val()] = $this.prop('checked');
+            $image.cropper('destroy').cropper(options);
+        });
+
+
+        // Tooltips
+        $('[data-toggle="tooltip"]').tooltip();
+
+    });
+
+})(window, document, window.jQuery);
+// LOAD CUSTOM CSS
+// ----------------------------------- 
+
+(function(window, document, $, undefined){
+
+  $(function(){
+
+    $('[data-load-css]').on('click', function (e) {
+        
+      var element = $(this);
+
+      if(element.is('a'))
+        e.preventDefault();
+      
+      var uri = element.data('loadCss'),
+          link;
+
+      if(uri) {
+        link = createLink(uri);
+        if ( !link ) {
+          $.error('Error creating stylesheet link element.');
+        }
+      }
+      else {
+        $.error('No stylesheet location defined.');
+      }
+
+    });
+  });
+
+  function createLink(uri) {
+    var linkId = 'autoloaded-stylesheet',
+        oldLink = $('#'+linkId).attr('id', linkId + '-old');
+
+    $('head').append($('<link/>').attr({
+      'id':   linkId,
+      'rel':  'stylesheet',
+      'href': uri
+    }));
+
+    if( oldLink.length ) {
+      oldLink.remove();
+    }
+
+    return $('#'+linkId);
+  }
+
+
+})(window, document, window.jQuery);
+
+// TRANSLATION
+// ----------------------------------- 
+
+(function(window, document, $, undefined){
+
+  var preferredLang = 'en';
+  var pathPrefix    = 'i18n'; // folder of json files
+  var packName      = 'site';
+  var storageKey    = 'jq-appLang';
+
+  $(function(){
+
+    if ( ! $.fn.localize ) return;
+
+    // detect saved language or use default
+    var currLang = $.localStorage.get(storageKey) || preferredLang;
+    // set initial options
+    var opts = {
+        language: currLang,
+        pathPrefix: pathPrefix,
+        callback: function(data, defaultCallback){
+          $.localStorage.set(storageKey, currLang); // save the language
+          defaultCallback(data);
+        }
+      };
+
+    // Set initial language
+    setLanguage(opts);
+
+    // Listen for changes
+    $('[data-set-lang]').on('click', function(){
+
+      currLang = $(this).data('setLang');
+
+      if ( currLang ) {
+        
+        opts.language = currLang;
+
+        setLanguage(opts);
+
+        activateDropdown($(this));
+      }
+
+    });
+    
+
+    function setLanguage(options) {
+      $("[data-localize]").localize(packName, options);
+    }
+
+    // Set the current clicked text as the active dropdown text
+    function activateDropdown(elem) {
+      var menu = elem.parents('.dropdown-menu');
+      if ( menu.length ) {
+        var toggle = menu.prev('button, a');
+        toggle.text ( elem.text() );
+      }
+    }
+
+  });
+
+})(window, document, window.jQuery);
+
+// JVECTOR MAP 
+// ----------------------------------- 
+
+(function(window, document, $, undefined){
+
+  window.defaultColors = {
+      markerColor:  '#23b7e5',      // the marker points
+      bgColor:      'transparent',      // the background
+      scaleColors:  ['#878c9a'],    // the color of the region in the serie
+      regionFill:   '#bbbec6'       // the base region color
+  };
+
+  window.VectorMap = function(element, seriesData, markersData) {
+    
+    if ( ! element || !element.length) return;
+
+    var attrs       = element.data(),
+        mapHeight   = attrs.height || '300',
+        options     = {
+          markerColor:  attrs.markerColor  || defaultColors.markerColor,
+          bgColor:      attrs.bgColor      || defaultColors.bgColor,
+          scale:        attrs.scale        || 1,
+          scaleColors:  attrs.scaleColors  || defaultColors.scaleColors,
+          regionFill:   attrs.regionFill   || defaultColors.regionFill,
+          mapName:      attrs.mapName      || 'world_mill_en'
+        };
+    
+    element.css('height', mapHeight);
+    
+    init( element , options, seriesData, markersData);
+    
+    function init($element, opts, series, markers) {
+        
+        $element.vectorMap({
+          map:             opts.mapName,
+          backgroundColor: opts.bgColor,
+          zoomMin:         1,
+          zoomMax:         8,
+          zoomOnScroll:    false,
+          regionStyle: {
+            initial: {
+              'fill':           opts.regionFill,
+              'fill-opacity':   1,
+              'stroke':         'none',
+              'stroke-width':   1.5,
+              'stroke-opacity': 1
+            },
+            hover: {
+              'fill-opacity': 0.8
+            },
+            selected: {
+              fill: 'blue'
+            },
+            selectedHover: {
+            }
+          },
+          focusOn:{ x:0.4, y:0.6, scale: opts.scale},
+          markerStyle: {
+            initial: {
+              fill: opts.markerColor,
+              stroke: opts.markerColor
+            }
+          },
+          onRegionLabelShow: function(e, el, code) {
+            if ( series && series[code] )
+              el.html(el.html() + ': ' + series[code] + ' visitors');
+          },
+          markers: markers,
+          series: {
+              regions: [{
+                  values: series,
+                  scale: opts.scaleColors,
+                  normalizeFunction: 'polynomial'
+              }]
+          },
+        });
+
+      }// end init
+  };
+
+})(window, document, window.jQuery);
+
+// Morris
+// ----------------------------------- 
+
+(function(window, document, $, undefined){
+
+  $(function(){
+
+    if ( typeof Morris === 'undefined' ) return;
+
+    var chartdata = [
+        { y: "2006", a: 100, b: 90 },
+        { y: "2007", a: 75,  b: 65 },
+        { y: "2008", a: 50,  b: 40 },
+        { y: "2009", a: 75,  b: 65 },
+        { y: "2010", a: 50,  b: 40 },
+        { y: "2011", a: 75,  b: 65 },
+        { y: "2012", a: 100, b: 90 }
+    ];
+
+    var donutdata = [
+      {label: "Download Sales", value: 12},
+      {label: "In-Store Sales",value: 30},
+      {label: "Mail-Order Sales", value: 20}
+    ];
+
+    // Line Chart
+    // ----------------------------------- 
+
+    new Morris.Line({
+      element: 'morris-line',
+      data: chartdata,
+      xkey: 'y',
+      ykeys: ["a", "b"],
+      labels: ["Serie A", "Serie B"],
+      lineColors: ["#31C0BE", "#7a92a3"],
+      resize: true
+    });
+
+    // Donut Chart
+    // ----------------------------------- 
+    new Morris.Donut({
+      element: 'morris-donut',
+      data: donutdata,
+      colors: [ '#f05050', '#fad732', '#ff902b' ],
+      resize: true
+    });
+
+    // Bar Chart
+    // ----------------------------------- 
+    new Morris.Bar({
+      element: 'morris-bar',
+      data: chartdata,
+      xkey: 'y',
+      ykeys: ["a", "b"],
+      labels: ["Series A", "Series B"],
+      xLabelMargin: 2,
+      barColors: [ '#23b7e5', '#f05050' ],
+      resize: true
+    });
+
+    // Area Chart
+    // ----------------------------------- 
+    new Morris.Area({
+      element: 'morris-area',
+      data: chartdata,
+      xkey: 'y',
+      ykeys: ["a", "b"],
+      labels: ["Serie A", "Serie B"],
+      lineColors: [ '#7266ba', '#23b7e5' ],
+      resize: true
+    });
+
+  });
+
+})(window, document, window.jQuery);
+
+// NAVBAR SEARCH
+// -----------------------------------
+
+
+(function(window, document, $, undefined){
+
+  $(function(){
+
+    var navSearch = new navbarSearchInput();
+
+    // Open search input
+    var $searchOpen = $('[data-search-open]');
+
+    $searchOpen
+      .on('click', function (e) { e.stopPropagation(); })
+      .on('click', navSearch.toggle);
+
+    // Close search input
+    var $searchDismiss = $('[data-search-dismiss]');
+    var inputSelector = '.navbar-form input[type="text"]';
+
+    $(inputSelector)
+      .on('click', function (e) { e.stopPropagation(); })
+      .on('keyup', function(e) {
+        if (e.keyCode == 27) // ESC
+          navSearch.dismiss();
+      });
+
+    // click anywhere closes the search
+    $(document).on('click', navSearch.dismiss);
+    // dismissable options
+    $searchDismiss
+      .on('click', function (e) { e.stopPropagation(); })
+      .on('click', navSearch.dismiss);
+
+  });
+
+  var navbarSearchInput = function() {
+    var navbarFormSelector = 'form.navbar-form';
+    return {
+      toggle: function() {
+
+        var navbarForm = $(navbarFormSelector);
+
+        navbarForm.toggleClass('open');
+
+        var isOpen = navbarForm.hasClass('open');
+
+        navbarForm.find('input')[isOpen ? 'focus' : 'blur']();
+
+      },
+
+      dismiss: function() {
+        $(navbarFormSelector)
+          .removeClass('open')      // Close control
+          .find('input[type="text"]').blur() // remove focus
+          // .val('')                    // Empty input
+          ;
+      }
+    };
+
+  }
+
+})(window, document, window.jQuery);
+/**=========================================================
+ * Module: notify.js
+ * Create toggleable notifications that fade out automatically.
+ * Based on Notify addon from UIKit (http://getuikit.com/docs/addons_notify.html)
+ * [data-toggle="notify"]
+ * [data-options="options in json format" ]
+ =========================================================*/
+
+(function($, window, document){
+  'use strict';
+
+  var Selector = '[data-notify]',
+      autoloadSelector = '[data-onload]',
+      doc = $(document);
+
+
+  $(function() {
+
+    $(Selector).each(function(){
+
+      var $this  = $(this),
+          onload = $this.data('onload');
+
+      if(onload !== undefined) {
+        setTimeout(function(){
+          notifyNow($this);
+        }, 800);
+      }
+
+      $this.on('click', function (e) {
+        e.preventDefault();
+        notifyNow($this);
+      });
+
+    });
+
+  });
+
+  function notifyNow($element) {
+      var message = $element.data('message'),
+          options = $element.data('options');
+
+      if(!message)
+        $.error('Notify: No message specified');
+     
+      $.notify(message, options || {});
+  }
+
+
+}(jQuery, window, document));
+
+
+/**
+ * Notify Addon definition as jQuery plugin
+ * Adapted version to work with Bootstrap classes
+ * More information http://getuikit.com/docs/addons_notify.html
+ */
+
+(function($, window, document){
+
+    var containers = {},
+        messages   = {},
+
+        notify     =  function(options){
+
+            if ($.type(options) == 'string') {
+                options = { message: options };
+            }
+
+            if (arguments[1]) {
+                options = $.extend(options, $.type(arguments[1]) == 'string' ? {status:arguments[1]} : arguments[1]);
+            }
+
+            return (new Message(options)).show();
+        },
+        closeAll  = function(group, instantly){
+            if(group) {
+                for(var id in messages) { if(group===messages[id].group) messages[id].close(instantly); }
+            } else {
+                for(var id in messages) { messages[id].close(instantly); }
+            }
+        };
+
+    var Message = function(options){
+
+        var $this = this;
+
+        this.options = $.extend({}, Message.defaults, options);
+
+        this.uuid    = "ID"+(new Date().getTime())+"RAND"+(Math.ceil(Math.random() * 100000));
+        this.element = $([
+            // alert-dismissable enables bs close icon
+            '<div class="uk-notify-message alert-dismissable">',
+                '<a class="close">&times;</a>',
+                '<div>'+this.options.message+'</div>',
+            '</div>'
+
+        ].join('')).data("notifyMessage", this);
+
+        // status
+        if (this.options.status) {
+            this.element.addClass('alert alert-'+this.options.status);
+            this.currentstatus = this.options.status;
+        }
+
+        this.group = this.options.group;
+
+        messages[this.uuid] = this;
+
+        if(!containers[this.options.pos]) {
+            containers[this.options.pos] = $('<div class="uk-notify uk-notify-'+this.options.pos+'"></div>').appendTo('body').on("click", ".uk-notify-message", function(){
+                $(this).data("notifyMessage").close();
+            });
+        }
+    };
+
+
+    $.extend(Message.prototype, {
+
+        uuid: false,
+        element: false,
+        timout: false,
+        currentstatus: "",
+        group: false,
+
+        show: function() {
+
+            if (this.element.is(":visible")) return;
+
+            var $this = this;
+
+            containers[this.options.pos].show().prepend(this.element);
+
+            var marginbottom = parseInt(this.element.css("margin-bottom"), 10);
+
+            this.element.css({"opacity":0, "margin-top": -1*this.element.outerHeight(), "margin-bottom":0}).animate({"opacity":1, "margin-top": 0, "margin-bottom":marginbottom}, function(){
+
+                if ($this.options.timeout) {
+
+                    var closefn = function(){ $this.close(); };
+
+                    $this.timeout = setTimeout(closefn, $this.options.timeout);
+
+                    $this.element.hover(
+                        function() { clearTimeout($this.timeout); },
+                        function() { $this.timeout = setTimeout(closefn, $this.options.timeout);  }
+                    );
+                }
+
+            });
+
+            return this;
+        },
+
+        close: function(instantly) {
+
+            var $this    = this,
+                finalize = function(){
+                    $this.element.remove();
+
+                    if(!containers[$this.options.pos].children().length) {
+                        containers[$this.options.pos].hide();
+                    }
+
+                    delete messages[$this.uuid];
+                };
+
+            if(this.timeout) clearTimeout(this.timeout);
+
+            if(instantly) {
+                finalize();
+            } else {
+                this.element.animate({"opacity":0, "margin-top": -1* this.element.outerHeight(), "margin-bottom":0}, function(){
+                    finalize();
+                });
+            }
+        },
+
+        content: function(html){
+
+            var container = this.element.find(">div");
+
+            if(!html) {
+                return container.html();
+            }
+
+            container.html(html);
+
+            return this;
+        },
+
+        status: function(status) {
+
+            if(!status) {
+                return this.currentstatus;
+            }
+
+            this.element.removeClass('alert alert-'+this.currentstatus).addClass('alert alert-'+status);
+
+            this.currentstatus = status;
+
+            return this;
+        }
+    });
+
+    Message.defaults = {
+        message: "",
+        status: "normal",
+        timeout: 5000,
+        group: null,
+        pos: 'top-center'
+    };
+
+
+    $["notify"]          = notify;
+    $["notify"].message  = Message;
+    $["notify"].closeAll = closeAll;
+
+    return notify;
+
+}(jQuery, window, document));
+
+// NOW TIMER
+// ----------------------------------- 
+
+(function(window, document, $, undefined){
+
+  $(function(){
+
+    $('[data-now]').each(function(){
+      var element = $(this),
+          format = element.data('format');
+
+      function updateTime() {
+        var dt = moment( new Date() ).format(format);
+        element.text(dt);
+      }
+
+      updateTime();
+      setInterval(updateTime, 1000);
+    
+    });
+  });
+
+})(window, document, window.jQuery);
+
+/**=========================================================
+ * Module: panel-tools.js
+ * Dismiss panels
+ * [data-tool="panel-dismiss"]
+ *
+ * Requires animo.js
+ =========================================================*/
+(function($, window, document){
+  'use strict';
+  
+  var panelSelector = '[data-tool="panel-dismiss"]',
+      removeEvent   = 'panel.remove',
+      removedEvent  = 'panel.removed';
+
+  $(document).on('click', panelSelector, function () {
+    
+    // find the first parent panel
+    var parent = $(this).closest('.panel');
+    var deferred = new $.Deferred();
+
+    // Trigger the event and finally remove the element
+    parent.trigger(removeEvent, [parent, deferred]);
+    // needs resolve() to be called
+    deferred.done(removeElement);
+
+    function removeElement() {
+      if($.support.animation) {
+        parent.animo({animation: 'bounceOut'}, destroyPanel);
+      }
+      else destroyPanel();
+    }
+
+    function destroyPanel() {
+      var col = parent.parent();
+      
+      $.when(parent.trigger(removedEvent, [parent]))
+       .done(function(){
+          parent.remove();
+          // remove the parent if it is a row and is empty and not a sortable (portlet)
+          col
+            .trigger(removedEvent) // An event to catch when the panel has been removed from DOM
+            .filter(function() {
+            var el = $(this);
+            return (el.is('[class*="col-"]:not(.sortable)') && el.children('*').length === 0);
+          }).remove();
+       });
+
+      
+
+    }
+
+  });
+
+}(jQuery, window, document));
+
+
+/**
+ * Collapse panels
+ * [data-tool="panel-collapse"]
+ *
+ * Also uses browser storage to keep track
+ * of panels collapsed state
+ */
+(function($, window, document) {
+  'use strict';
+  var panelSelector = '[data-tool="panel-collapse"]',
+      storageKeyName = 'jq-panelState';
+
+  // Prepare the panel to be collapsable and its events
+  $(panelSelector).each(function() {
+    // find the first parent panel
+    var $this        = $(this),
+        parent       = $this.closest('.panel'),
+        wrapper      = parent.find('.panel-wrapper'),
+        collapseOpts = {toggle: false},
+        iconElement  = $this.children('em'),
+        panelId      = parent.attr('id');
+    
+    // if wrapper not added, add it
+    // we need a wrapper to avoid jumping due to the paddings
+    if( ! wrapper.length) {
+      wrapper =
+        parent.children('.panel-heading').nextAll() //find('.panel-body, .panel-footer')
+          .wrapAll('<div/>')
+          .parent()
+          .addClass('panel-wrapper');
+      collapseOpts = {};
+    }
+
+    // Init collapse and bind events to switch icons
+    wrapper
+      .collapse(collapseOpts)
+      .on('hide.bs.collapse', function() {
+        setIconHide( iconElement );
+        savePanelState( panelId, 'hide' );
+        wrapper.prev('.panel-heading').addClass('panel-heading-collapsed');
+      })
+      .on('show.bs.collapse', function() {
+        setIconShow( iconElement );
+        savePanelState( panelId, 'show' );
+        wrapper.prev('.panel-heading').removeClass('panel-heading-collapsed');
+      });
+
+    // Load the saved state if exists
+    var currentState = loadPanelState( panelId );
+    if(currentState) {
+      setTimeout(function() { wrapper.collapse( currentState ); }, 50);
+      savePanelState( panelId, currentState );
+    }
+
+  });
+
+  // finally catch clicks to toggle panel collapse
+  $(document).on('click', panelSelector, function () {
+    
+    var parent = $(this).closest('.panel');
+    var wrapper = parent.find('.panel-wrapper');
+
+    wrapper.collapse('toggle');
+
+  });
+
+  /////////////////////////////////////////////
+  // Common use functions for panel collapse //
+  /////////////////////////////////////////////
+  function setIconShow(iconEl) {
+    iconEl.removeClass('fa-plus').addClass('fa-minus');
+  }
+
+  function setIconHide(iconEl) {
+    iconEl.removeClass('fa-minus').addClass('fa-plus');
+  }
+
+  function savePanelState(id, state) {
+    var data = $.localStorage.get(storageKeyName);
+    if(!data) { data = {}; }
+    data[id] = state;
+    $.localStorage.set(storageKeyName, data);
+  }
+
+  function loadPanelState(id) {
+    var data = $.localStorage.get(storageKeyName);
+    if(data) {
+      return data[id] || false;
+    }
+  }
+
+
+}(jQuery, window, document));
+
+
+/**
+ * Refresh panels
+ * [data-tool="panel-refresh"]
+ * [data-spinner="standard"]
+ */
+(function($, window, document){
+  'use strict';
+  var panelSelector  = '[data-tool="panel-refresh"]',
+      refreshEvent   = 'panel.refresh',
+      whirlClass     = 'whirl',
+      defaultSpinner = 'standard';
+
+  // method to clear the spinner when done
+  function removeSpinner(){
+    this.removeClass(whirlClass);
+  }
+
+  // catch clicks to toggle panel refresh
+  $(document).on('click', panelSelector, function () {
+      var $this   = $(this),
+          panel   = $this.parents('.panel').eq(0),
+          spinner = $this.data('spinner') || defaultSpinner
+          ;
+
+      // start showing the spinner
+      panel.addClass(whirlClass + ' ' + spinner);
+
+      // attach as public method
+      panel.removeSpinner = removeSpinner;
+
+      // Trigger the event and send the panel object
+      $this.trigger(refreshEvent, [panel]);
+
+  });
+
+
+}(jQuery, window, document));
+
+/**=========================================================
+ * Module: play-animation.js
+ * Provides a simple way to run animation with a trigger
+ * Targeted elements must have 
+ *   [data-animate"]
+ *   [data-target="Target element affected by the animation"] 
+ *   [data-play="Animation name (http://daneden.github.io/animate.css/)"]
+ *
+ * Requires animo.js
+ =========================================================*/
+ 
+(function($, window, document){
+  'use strict';
+
+  var Selector = '[data-animate]';
+
+  $(function() {
+    
+    var $scroller = $(window).add('body, .wrapper');
+
+    // Parse animations params and attach trigger to scroll
+    $(Selector).each(function() {
+      var $this     = $(this),
+          offset    = $this.data('offset'),
+          delay     = $this.data('delay')     || 100, // milliseconds
+          animation = $this.data('play')      || 'bounce';
+      
+      if(typeof offset !== 'undefined') {
+        
+        // test if the element starts visible
+        testAnimation($this);
+        // test on scroll
+        $scroller.scroll(function(){
+          testAnimation($this);
+        });
+
+      }
+
+      // Test an element visibilty and trigger the given animation
+      function testAnimation(element) {
+          if ( !element.hasClass('anim-running') &&
+              $.Utils.isInView(element, {topoffset: offset})) {
+          element
+            .addClass('anim-running');
+
+          setTimeout(function() {
+            element
+              .addClass('anim-done')
+              .animo( { animation: animation, duration: 0.7} );
+          }, delay);
+
+        }
+      }
+
+    });
+
+    // Run click triggered animations
+    $(document).on('click', Selector, function() {
+
+      var $this     = $(this),
+          targetSel = $this.data('target'),
+          animation = $this.data('play') || 'bounce',
+          target    = $(targetSel);
+
+      if(target && target.length) {
+        target.animo( { animation: animation } );
+      }
+      
+    });
+
+  });
+
+}(jQuery, window, document));
+
+/**=========================================================
+ * Module: portlet.js
+ * Drag and drop any panel to change its position
+ * The Selector should could be applied to any object that contains
+ * panel, so .col-* element are ideal.
+ =========================================================*/
+
+(function($, window, document){
+  'use strict';
+
+  // Component is optional
+  if(!$.fn.sortable) return;
+
+  var Selector = '[data-toggle="portlet"]',
+      storageKeyName = 'jq-portletState';
+
+  $(function(){
+
+    $( Selector ).sortable({
+      connectWith:          Selector,
+      items:                'div.panel',
+      handle:               '.portlet-handler',
+      opacity:              0.7,
+      placeholder:          'portlet box-placeholder',
+      cancel:               '.portlet-cancel',
+      forcePlaceholderSize: true,
+      iframeFix:            false,
+      tolerance:            'pointer',
+      helper:               'original',
+      revert:               200,
+      forceHelperSize:      true,
+      update:               savePortletOrder,
+      create:               loadPortletOrder
+    })
+    // optionally disables mouse selection
+    //.disableSelection()
+    ;
+
+  });
+
+  function savePortletOrder(event, ui) {
+    
+    var data = $.localStorage.get(storageKeyName);
+    
+    if(!data) { data = {}; }
+
+    data[this.id] = $(this).sortable('toArray');
+
+    if(data) {
+      $.localStorage.set(storageKeyName, data);
+    }
+    
+  }
+
+  function loadPortletOrder() {
+    
+    var data = $.localStorage.get(storageKeyName);
+
+    if(data) {
+      
+      var porletId = this.id,
+          panels   = data[porletId];
+
+      if(panels) {
+        var portlet = $('#'+porletId);
+        
+        $.each(panels, function(index, value) {
+           $('#'+value).appendTo(portlet);
+        });
+      }
+
+    }
+
+  }
+
+}(jQuery, window, document));
+
+
+// Rickshaw
+// ----------------------------------- 
+
+(function(window, document, $, undefined){
+
+  $(function(){
+    
+    if ( typeof Rickshaw === 'undefined' ) return;
+
+    var seriesData = [ [], [], [] ];
+    var random = new Rickshaw.Fixtures.RandomData(150);
+
+    for (var i = 0; i < 150; i++) {
+      random.addData(seriesData);
+    }
+
+    var series1 = [
+      {
+        color: "#c05020",
+        data: seriesData[0],
+        name: 'New York'
+      }, {
+        color: "#30c020",
+        data: seriesData[1],
+        name: 'London'
+      }, {
+        color: "#6060c0",
+        data: seriesData[2],
+        name: 'Tokyo'
+      }
+    ];
+
+    var graph1 = new Rickshaw.Graph( {
+        element: document.querySelector("#rickshaw1"), 
+        series:series1,
+        renderer: 'area'
+    });
+     
+    graph1.render();
+
+
+    // Graph 2
+    // ----------------------------------- 
+
+    var graph2 = new Rickshaw.Graph( {
+      element: document.querySelector("#rickshaw2"),
+      renderer: 'area',
+      stroke: true,
+      series: [ {
+        data: [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 38 }, { x: 3, y: 30 }, { x: 4, y: 32 } ],
+        color: '#f05050'
+      }, {
+        data: [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 38 }, { x: 3, y: 30 }, { x: 4, y: 32 } ],
+        color: '#fad732'
+      } ]
+    } );
+
+    graph2.render();
+
+    // Graph 3
+    // ----------------------------------- 
+
+
+    var graph3 = new Rickshaw.Graph({
+      element: document.querySelector("#rickshaw3"),
+      renderer: 'line',
+      series: [{
+        data: [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 38 }, { x: 3, y: 30 }, { x: 4, y: 32 } ],
+        color: '#7266ba'
+      }, {
+        data: [ { x: 0, y: 20 }, { x: 1, y: 24 }, { x: 2, y: 19 }, { x: 3, y: 15 }, { x: 4, y: 16 } ],
+        color: '#23b7e5'
+      }]
+    });
+    graph3.render();
+
+
+    // Graph 4
+    // ----------------------------------- 
+
+
+    var graph4 = new Rickshaw.Graph( {
+      element: document.querySelector("#rickshaw4"),
+      renderer: 'bar',
+      series: [ 
+        {
+          data: [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 38 }, { x: 3, y: 30 }, { x: 4, y: 32 } ],
+          color: '#fad732'
+        }, {
+          data: [ { x: 0, y: 20 }, { x: 1, y: 24 }, { x: 2, y: 19 }, { x: 3, y: 15 }, { x: 4, y: 16 } ],
+          color: '#ff902b'
+
+      } ]
+    } );
+    graph4.render();
+
+
+  });
+
+})(window, document, window.jQuery);
+
+// Select2
+// -----------------------------------
+
+(function(window, document, $, undefined){
+
+  $(function(){
+
+    if ( !$.fn.select2 ) return;
+
+    // Select 2
+
+    $('#select2-1').select2({
+        theme: 'bootstrap'
+    });
+    $('#select2-2').select2({
+        theme: 'bootstrap'
+    });
+    $('#select2-3').select2({
+        theme: 'bootstrap'
+    });
+    $('#select2-4').select2({
+        placeholder: 'Select a state',
+        allowClear: true,
+        theme: 'bootstrap'
+    });
+
+  });
+
+})(window, document, window.jQuery);
+
+
+// SIDEBAR
+// -----------------------------------
+
+
+(function(window, document, $, undefined){
+
+  var $win;
+  var $html;
+  var $body;
+  var $sidebar;
+  var mq;
+
+  $(function(){
+
+    $win     = $(window);
+    $html    = $('html');
+    $body    = $('body');
+    $sidebar = $('.sidebar');
+    mq       = APP_MEDIAQUERY;
+
+    // AUTOCOLLAPSE ITEMS
+    // -----------------------------------
+
+    var sidebarCollapse = $sidebar.find('.collapse');
+    sidebarCollapse.on('show.bs.collapse', function(event){
+
+      event.stopPropagation();
+      if ( $(this).parents('.collapse').length === 0 )
+        sidebarCollapse.filter('.in').collapse('hide');
+
+    });
+
+    // SIDEBAR ACTIVE STATE
+    // -----------------------------------
+
+    // Find current active item
+    var currentItem = $('.sidebar .active').parents('li');
+
+    // hover mode don't try to expand active collapse
+    if ( ! useAsideHover() )
+      currentItem
+        .addClass('active')     // activate the parent
+        .children('.collapse')  // find the collapse
+        .collapse('show');      // and show it
+
+    // remove this if you use only collapsible sidebar items
+    $sidebar.find('li > a + ul').on('show.bs.collapse', function (e) {
+      if( useAsideHover() ) e.preventDefault();
+    });
+
+    // SIDEBAR COLLAPSED ITEM HANDLER
+    // -----------------------------------
+
+
+    var eventName = isTouch() ? 'click' : 'mouseenter' ;
+    var subNav = $();
+    $sidebar.on( eventName, '.nav > li', function() {
+
+      if( isSidebarCollapsed() || useAsideHover() ) {
+
+        subNav.trigger('mouseleave');
+        subNav = toggleMenuItem( $(this) );
+
+        // Used to detect click and touch events outside the sidebar
+        sidebarAddBackdrop();
+      }
+
+    });
+
+    var sidebarAnyclickClose = $sidebar.data('sidebarAnyclickClose');
+
+    // Allows to close
+    if ( typeof sidebarAnyclickClose !== 'undefined' ) {
+
+      $('.wrapper').on('click.sidebar', function(e){
+        // don't check if sidebar not visible
+        if( ! $body.hasClass('aside-toggled')) return;
+
+        var $target = $(e.target);
+        if( ! $target.parents('.aside').length && // if not child of sidebar
+            ! $target.is('#user-block-toggle') && // user block toggle anchor
+            ! $target.parent().is('#user-block-toggle') // user block toggle icon
+          ) {
+                $body.removeClass('aside-toggled');
+        }
+
+      });
+    }
+
+  });
+
+  function sidebarAddBackdrop() {
+    var $backdrop = $('<div/>', { 'class': 'dropdown-backdrop'} );
+    $backdrop.insertAfter('.aside').on("click mouseenter", function () {
+      removeFloatingNav();
+    });
+  }
+
+  // Open the collapse sidebar submenu items when on touch devices
+  // - desktop only opens on hover
+  function toggleTouchItem($element){
+    $element
+      .siblings('li')
+      .removeClass('open')
+      .end()
+      .toggleClass('open');
+  }
+
+  // Handles hover to open items under collapsed menu
+  // -----------------------------------
+  function toggleMenuItem($listItem) {
+
+    removeFloatingNav();
+
+    var ul = $listItem.children('ul');
+
+    if( !ul.length ) return $();
+    if( $listItem.hasClass('open') ) {
+      toggleTouchItem($listItem);
+      return $();
+    }
+
+    var $aside = $('.aside');
+    var $asideInner = $('.aside-inner'); // for top offset calculation
+    // float aside uses extra padding on aside
+    var mar = parseInt( $asideInner.css('padding-top'), 0) + parseInt( $aside.css('padding-top'), 0);
+
+    var subNav = ul.clone().appendTo( $aside );
+
+    toggleTouchItem($listItem);
+
+    var itemTop = ($listItem.position().top + mar) - $sidebar.scrollTop();
+    var vwHeight = $win.height();
+
+    subNav
+      .addClass('nav-floating')
+      .css({
+        position: isFixed() ? 'fixed' : 'absolute',
+        top:      itemTop,
+        bottom:   (subNav.outerHeight(true) + itemTop > vwHeight) ? 0 : 'auto'
+      });
+
+    subNav.on('mouseleave', function() {
+      toggleTouchItem($listItem);
+      subNav.remove();
+    });
+
+    return subNav;
+  }
+
+  function removeFloatingNav() {
+    $('.sidebar-subnav.nav-floating').remove();
+    $('.dropdown-backdrop').remove();
+    $('.sidebar li.open').removeClass('open');
+  }
+
+  function isTouch() {
+    return $html.hasClass('touch');
+  }
+  function isSidebarCollapsed() {
+    return $body.hasClass('aside-collapsed') || $body.hasClass('aside-collapsed-text');
+  }
+  function isSidebarToggled() {
+    return $body.hasClass('aside-toggled');
+  }
+  function isMobile() {
+    return $win.width() < mq.tablet;
+  }
+  function isFixed(){
+    return $body.hasClass('layout-fixed');
+  }
+  function useAsideHover() {
+    return $body.hasClass('aside-hover');
+  }
+
+})(window, document, window.jQuery);
+// SKYCONS
+// ----------------------------------- 
+
+(function(window, document, $, undefined){
+
+  $(function(){
+
+    $('[data-skycon]').each(function(){
+      var element = $(this),
+          skycons = new Skycons({'color': (element.data('color') || 'white')});
+      
+      element.html('<canvas width="' + element.data('width') + '" height="' + element.data('height') + '"></canvas>');
+
+      skycons.add(element.children()[0], element.data('skycon'));
+
+      skycons.play();
+    });
+
+  });
+
+})(window, document, window.jQuery);
+// SLIMSCROLL
+// ----------------------------------- 
+
+(function(window, document, $, undefined){
+
+  $(function(){
+
+    $('[data-scrollable]').each(function(){
+
+      var element = $(this),
+          defaultHeight = 250;
+      
+      element.slimScroll({
+          height: (element.data('height') || defaultHeight)
+      });
+      
+    });
+  });
+
+})(window, document, window.jQuery);
+
+// SPARKLINE
+// ----------------------------------- 
+
+(function(window, document, $, undefined){
+
+  $(function(){
+
+    $('[data-sparkline]').each(initSparkLine);
+
+    function initSparkLine() {
+      var $element = $(this),
+          options = $element.data(),
+          values  = options.values && options.values.split(',');
+
+      options.type = options.type || 'bar'; // default chart is bar
+      options.disableHiddenCheck = true;
+
+      $element.sparkline(values, options);
+
+      if(options.resize) {
+        $(window).resize(function(){
+          $element.sparkline(values, options);
+        });
+      }
+    }
+  });
+
+})(window, document, window.jQuery);
+
+// Sweet Alert
+// ----------------------------------- 
+
+(function(window, document, $, undefined){
+
+  $(function(){
+
+    $('#swal-demo1').on('click', function(e){
+      e.preventDefault();
+      swal("Here's a message!")
+    });
+
+
+    $('#swal-demo2').on('click', function(e){
+      e.preventDefault();
+      swal("Here's a message!", "It's pretty, isn't it?")
+    });
+
+    $('#swal-demo3').on('click', function(e){
+      e.preventDefault();
+      swal("Good job!", "You clicked the button!", "success")
+    });
+
+    $('#swal-demo4').on('click', function(e){
+      e.preventDefault();
+      swal({
+        title : "Are you sure?",
+        text : "You will not be able to recover this imaginary file!",
+        type : "warning",
+        showCancelButton : true,
+        confirmButtonColor : "#DD6B55",
+        confirmButtonText : "Yes, delete it!",
+        closeOnConfirm : false
+      },
+        function () {
+        swal("Deleted!", "Your imaginary file has been deleted.", "success");
+      });
+
+    });
+
+    $('#swal-demo5').on('click', function(e){
+      e.preventDefault();
+      swal({
+        title : "Are you sure?",
+        text : "You will not be able to recover this imaginary file!",
+        type : "warning",
+        showCancelButton : true,
+        confirmButtonColor : "#DD6B55",
+        confirmButtonText : "Yes, delete it!",
+        cancelButtonText : "No, cancel plx!",
+        closeOnConfirm : false,
+        closeOnCancel : false
+      }, function (isConfirm) {
+        if (isConfirm) {
+          swal("Deleted!", "Your imaginary file has been deleted.", "success");
+        } else {
+          swal("Cancelled", "Your imaginary file is safe :)", "error");
+        }
+      });
+
+    });
+
+  });
+
+})(window, document, window.jQuery);
+
+// Custom jQuery
+// ----------------------------------- 
+
+
+(function(window, document, $, undefined){
+
+  $(function(){
+
+    $('[data-check-all]').on('change', function() {
+      var $this = $(this),
+          index= $this.index() + 1,
+          checkbox = $this.find('input[type="checkbox"]'),
+          table = $this.parents('table');
+      // Make sure to affect only the correct checkbox column
+      table.find('tbody > tr > td:nth-child('+index+') input[type="checkbox"]')
+        .prop('checked', checkbox[0].checked);
+
+    });
+
+  });
+
+})(window, document, window.jQuery);
+
+
+// TOGGLE STATE
+// -----------------------------------
+
+(function(window, document, $, undefined){
+
+  $(function(){
+
+    var $body = $('body');
+        toggle = new StateToggler();
+
+    $('[data-toggle-state]')
+      .on('click', function (e) {
+        // e.preventDefault();
+        e.stopPropagation();
+        var element = $(this),
+            classname = element.data('toggleState'),
+            target = element.data('target'),
+            noPersist = (element.attr('data-no-persist') !== undefined);
+
+        // Specify a target selector to toggle classname
+        // use body by default
+        var $target = target ? $(target) : $body;
+
+        if(classname) {
+          if( $target.hasClass(classname) ) {
+            $target.removeClass(classname);
+            if( ! noPersist)
+              toggle.removeState(classname);
+          }
+          else {
+            $target.addClass(classname);
+            if( ! noPersist)
+              toggle.addState(classname);
+          }
+
+        }
+        // some elements may need this when toggled class change the content size
+        // e.g. sidebar collapsed mode and jqGrid
+        $(window).resize();
+
+    });
+
+  });
+
+  // Handle states to/from localstorage
+  window.StateToggler = function() {
+
+    var storageKeyName  = 'jq-toggleState';
+
+    // Helper object to check for words in a phrase //
+    var WordChecker = {
+      hasWord: function (phrase, word) {
+        return new RegExp('(^|\\s)' + word + '(\\s|$)').test(phrase);
+      },
+      addWord: function (phrase, word) {
+        if (!this.hasWord(phrase, word)) {
+          return (phrase + (phrase ? ' ' : '') + word);
+        }
+      },
+      removeWord: function (phrase, word) {
+        if (this.hasWord(phrase, word)) {
+          return phrase.replace(new RegExp('(^|\\s)*' + word + '(\\s|$)*', 'g'), '');
+        }
+      }
+    };
+
+    // Return service public methods
+    return {
+      // Add a state to the browser storage to be restored later
+      addState: function(classname){
+        var data = $.localStorage.get(storageKeyName);
+
+        if(!data)  {
+          data = classname;
+        }
+        else {
+          data = WordChecker.addWord(data, classname);
+        }
+
+        $.localStorage.set(storageKeyName, data);
+      },
+
+      // Remove a state from the browser storage
+      removeState: function(classname){
+        var data = $.localStorage.get(storageKeyName);
+        // nothing to remove
+        if(!data) return;
+
+        data = WordChecker.removeWord(data, classname);
+
+        $.localStorage.set(storageKeyName, data);
+      },
+
+      // Load the state string and restore the classlist
+      restoreState: function($elem) {
+        var data = $.localStorage.get(storageKeyName);
+
+        // nothing to restore
+        if(!data) return;
+        $elem.addClass(data);
+      }
+
+    };
+  };
+
+})(window, document, window.jQuery);
+
+// Bootstrap Tour
+// ----------------------------------- 
+
+(function(window, document, $, undefined){
+
+  $(function(){
+
+    // Prepare steps
+    var tourSteps = [];
+    $('.tour-step').each(function(){
+      var stepsOptions = $(this).data();
+      stepsOptions.element = '#'+this.id;
+      tourSteps.push( stepsOptions );
+    });
+
+    if ( tourSteps.length ) {
+      // Instance the tour
+      var tour = new Tour({
+          backdrop: true,
+          onShown: function(tour) {
+            // BootstrapTour is not compatible with z-index based layout
+            // so adding position:static for this case makes the browser
+            // to ignore the property
+            $('.wrapper > section').css({'position': 'static'});
+          },
+          onHide: function (tour) {
+            // finally restore on destroy and reuse the value declared in stylesheet
+            $('.wrapper > section').css({'position': ''});
+          },
+          steps: tourSteps
+        });
+
+      // Initialize the tour
+      tour.init();
+
+      
+      $('#start-tour').on('click', function(){
+        // Start the tour
+        tour.restart();
+      });
+    }
+
+  });
+
+})(window, document, window.jQuery);
+
+/**=========================================================
+ * Module: trigger-resize.js
+ * Triggers a window resize event from any element
+ =========================================================*/
+
+(function(window, document, $, undefined) {
+
+    $(function() {
+        var element = $('[data-trigger-resize]');
+        var value = element.data('triggerResize')
+        element.on('click', function() {
+            setTimeout(function() {
+                // all IE friendly dispatchEvent
+                var evt = document.createEvent('UIEvents');
+                evt.initUIEvent('resize', true, false, window, 0);
+                window.dispatchEvent(evt);
+                // modern dispatchEvent way
+                // window.dispatchEvent(new Event('resize'));
+            }, value || 300);
+        });
+    });
+
+})(window, document, window.jQuery);
+/**=========================================================
+ * Module: utils.js
+ * jQuery Utility functions library 
+ * adapted from the core of UIKit
+ =========================================================*/
+
+(function($, window, doc){
+    'use strict';
+    
+    var $html = $("html"), $win = $(window);
+
+    $.support.transition = (function() {
+
+        var transitionEnd = (function() {
+
+            var element = doc.body || doc.documentElement,
+                transEndEventNames = {
+                    WebkitTransition: 'webkitTransitionEnd',
+                    MozTransition: 'transitionend',
+                    OTransition: 'oTransitionEnd otransitionend',
+                    transition: 'transitionend'
+                }, name;
+
+            for (name in transEndEventNames) {
+                if (element.style[name] !== undefined) return transEndEventNames[name];
+            }
+        }());
+
+        return transitionEnd && { end: transitionEnd };
+    })();
+
+    $.support.animation = (function() {
+
+        var animationEnd = (function() {
+
+            var element = doc.body || doc.documentElement,
+                animEndEventNames = {
+                    WebkitAnimation: 'webkitAnimationEnd',
+                    MozAnimation: 'animationend',
+                    OAnimation: 'oAnimationEnd oanimationend',
+                    animation: 'animationend'
+                }, name;
+
+            for (name in animEndEventNames) {
+                if (element.style[name] !== undefined) return animEndEventNames[name];
+            }
+        }());
+
+        return animationEnd && { end: animationEnd };
+    })();
+
+    $.support.requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.msRequestAnimationFrame || window.oRequestAnimationFrame || function(callback){ window.setTimeout(callback, 1000/60); };
+    $.support.touch                 = (
+        ('ontouchstart' in window && navigator.userAgent.toLowerCase().match(/mobile|tablet/)) ||
+        (window.DocumentTouch && document instanceof window.DocumentTouch)  ||
+        (window.navigator['msPointerEnabled'] && window.navigator['msMaxTouchPoints'] > 0) || //IE 10
+        (window.navigator['pointerEnabled'] && window.navigator['maxTouchPoints'] > 0) || //IE >=11
+        false
+    );
+    $.support.mutationobserver      = (window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver || null);
+
+    $.Utils = {};
+
+    $.Utils.debounce = function(func, wait, immediate) {
+        var timeout;
+        return function() {
+            var context = this, args = arguments;
+            var later = function() {
+                timeout = null;
+                if (!immediate) func.apply(context, args);
+            };
+            var callNow = immediate && !timeout;
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+            if (callNow) func.apply(context, args);
+        };
+    };
+
+    $.Utils.removeCssRules = function(selectorRegEx) {
+        var idx, idxs, stylesheet, _i, _j, _k, _len, _len1, _len2, _ref;
+
+        if(!selectorRegEx) return;
+
+        setTimeout(function(){
+            try {
+              _ref = document.styleSheets;
+              for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                stylesheet = _ref[_i];
+                idxs = [];
+                stylesheet.cssRules = stylesheet.cssRules;
+                for (idx = _j = 0, _len1 = stylesheet.cssRules.length; _j < _len1; idx = ++_j) {
+                  if (stylesheet.cssRules[idx].type === CSSRule.STYLE_RULE && selectorRegEx.test(stylesheet.cssRules[idx].selectorText)) {
+                    idxs.unshift(idx);
+                  }
+                }
+                for (_k = 0, _len2 = idxs.length; _k < _len2; _k++) {
+                  stylesheet.deleteRule(idxs[_k]);
+                }
+              }
+            } catch (_error) {}
+        }, 0);
+    };
+
+    $.Utils.isInView = function(element, options) {
+
+        var $element = $(element);
+
+        if (!$element.is(':visible')) {
+            return false;
+        }
+
+        var window_left = $win.scrollLeft(),
+            window_top  = $win.scrollTop(),
+            offset      = $element.offset(),
+            left        = offset.left,
+            top         = offset.top;
+
+        options = $.extend({topoffset:0, leftoffset:0}, options);
+
+        if (top + $element.height() >= window_top && top - options.topoffset <= window_top + $win.height() &&
+            left + $element.width() >= window_left && left - options.leftoffset <= window_left + $win.width()) {
+          return true;
+        } else {
+          return false;
+        }
+    };
+
+    $.Utils.options = function(string) {
+
+        if ($.isPlainObject(string)) return string;
+
+        var start = (string ? string.indexOf("{") : -1), options = {};
+
+        if (start != -1) {
+            try {
+                options = (new Function("", "var json = " + string.substr(start) + "; return JSON.parse(JSON.stringify(json));"))();
+            } catch (e) {}
+        }
+
+        return options;
+    };
+
+    $.Utils.events       = {};
+    $.Utils.events.click = $.support.touch ? 'tap' : 'click';
+
+    $.langdirection = $html.attr("dir") == "rtl" ? "right" : "left";
+
+    $(function(){
+
+        // Check for dom modifications
+        if(!$.support.mutationobserver) return;
+
+        // Install an observer for custom needs of dom changes
+        var observer = new $.support.mutationobserver($.Utils.debounce(function(mutations) {
+            $(doc).trigger("domready");
+        }, 300));
+
+        // pass in the target node, as well as the observer options
+        observer.observe(document.body, { childList: true, subtree: true });
+
+    });
+
+    // add touch identifier class
+    $html.addClass($.support.touch ? "touch" : "no-touch");
+
+}(jQuery, window, document));
+// Custom jQuery
+// ----------------------------------- 
+
+
+(function(window, document, $, undefined){
+
+  $(function(){
+
+    // document ready
+
+  });
+
+})(window, document, window.jQuery);
+var DateFunc = function () {
+	return {
+		getDate: function (date) {
+			var day = date.getDate();
+			var month = date.getMonth() + 1;
+			var year = date.getFullYear();
+			var hour = date.getHours();
+			var minute = date.getMinutes();
+			var second = date.getSeconds();
+
+			// After this construct a string with the above results as below
+			return year + "-" + month + "-" + day + " " + hour + ':' + minute + ':' + second;
+		}
+	};
+}();
+
+var Select = function () {
+	return {
+		//main function to initiate the module
+		init: function () {
+			// Set the "bootstrap" theme as the default theme for all Select2
+			// widgets.
+			//
+			// @see https://github.com/select2/select2/issues/2927
+			$.fn.select2.defaults.set("theme", "bootstrap");
+
+			var placeholder = "Seleccionar";
+
+			$(".select2, .select2-multiple").select2({
+				placeholder: placeholder,
+				width: null
+			});
+
+			$(".select2-allow-clear").select2({
+				allowClear: true,
+				placeholder: placeholder,
+				width: null
+			});
+
+			// @see https://select2.github.io/examples.html#data-ajax
+			function formatRepo(repo) {
+				if (repo.loading) return repo.text;
+
+				var markup = "<div class='select2-result-repository clearfix'>" +
+                    "<div class='select2-result-repository__avatar'><img src='" + repo.owner.avatar_url + "' /></div>" +
+                    "<div class='select2-result-repository__meta'>" +
+                    "<div class='select2-result-repository__title'>" + repo.full_name + "</div>";
+
+				if (repo.description) {
+					markup += "<div class='select2-result-repository__description'>" + repo.description + "</div>";
+				}
+
+				markup += "<div class='select2-result-repository__statistics'>" +
+                    "<div class='select2-result-repository__forks'><span class='glyphicon glyphicon-flash'></span> " + repo.forks_count + " Forks</div>" +
+                    "<div class='select2-result-repository__stargazers'><span class='glyphicon glyphicon-star'></span> " + repo.stargazers_count + " Stars</div>" +
+                    "<div class='select2-result-repository__watchers'><span class='glyphicon glyphicon-eye-open'></span> " + repo.watchers_count + " Watchers</div>" +
+                    "</div>" +
+                    "</div></div>";
+
+				return markup;
+			}
+
+			function formatRepoSelection(repo) {
+				return repo.full_name || repo.text;
+			}
+
+			$("button[data-select2-open]").click(function () {
+				$("#" + $(this).data("select2-open")).select2("open");
+			});
+
+			// copy Bootstrap validation states to Select2 dropdown
+			//
+			// add .has-waring, .has-error, .has-succes to the Select2 dropdown
+			// (was #select2-drop in Select2 v3.x, in Select2 v4 can be selected via
+			// body > .select2-container) if _any_ of the opened Select2's parents
+			// has one of these forementioned classes (YUCK! ;-))
+			$(".select2, .select2-multiple, .select2-allow-clear, .js-data-example-ajax").on("select2:open", function () {
+				if ($(this).parents("[class*='has-']").length) {
+					var classNames = $(this).parents("[class*='has-']")[0].className.split(/\s+/);
+
+					for (var i = 0; i < classNames.length; ++i) {
+						if (classNames[i].match("has-")) {
+							$("body > .select2-container").addClass(classNames[i]);
+						}
+					}
+				}
+			});
+
+			$(".js-btn-set-scaling-classes").on("click", function () {
+				$("#select2-multiple-input-sm, #select2-single-input-sm").next(".select2-container--bootstrap").addClass("input-sm");
+				$("#select2-multiple-input-lg, #select2-single-input-lg").next(".select2-container--bootstrap").addClass("input-lg");
+				$(this).removeClass("btn-primary btn-outline").prop("disabled", true);
+			});
+		}
+	};
+}();
+
+jQuery(document).ready(function () {
+
+	Select.init();
+	ComponentsDateTimePickers.init();
+
+	function GenerateReport(target) {
+	    $("#pnlMessage").hide();
+	    var routerIds = [];
+	    var downloadName = $("#ddlDownload :selected").text();
+	    var whiteLabelId = $('#ddlWhiteLabel :selected').val();
+	    var fromDate = $("#rtpDownload").data('daterangepicker').startDate._d;
+	    var toDate = $("#rtpDownload").data('daterangepicker').endDate._d;
+	    var form = $("#downloadsForm");
+
+	    if (downloadName.length == 0) {
+	        $("#pnlMessage").append("<strong>Formulario incompleto!</strong> Por favor selecciona un reporte.");
+	        $("#pnlMessage").show();
+
+	        return;
+	    }
+
+	    var routerIds = $("#routerList li input:checked:not([disabled])").map(function () { return this.value; }).get();
+
+	    if (routerIds.length == 0) {
+	        $("#pnlMessage").append("<strong>Formulario incompleto!</strong> Por favor selecciona un hotspot.");
+	        $("#pnlMessage").show();
+
+	        return;
+	    }
+
+	    $("#downloadName").val(downloadName);
+	    $("#whiteLabelId").val(whiteLabelId);
+	    $("#routerIds").val(routerIds.join(", "));
+	    $("#fromDate").val(DateFunc.getDate(fromDate));
+	    $("#toDate").val(DateFunc.getDate(toDate));
+	    $("#btnDownload").hide();
+	    $("#btnViewPdf").hide();
+        $("#spnDownload").show();
+	    
+
+	    $.ajax({
+	        type: "Post",
+	        cache: false,
+	        url: '/Downloads/GenerateReport',
+	        data: $("#downloadsForm").serialize(),
+	    }).done(function (data) {
+	        var response = data;
+	        switch (response.ContentLength) {
+	            case -1:
+	                $("#pnlMessage").text('Error al generar el reporte seleccionado. Contacte al administrador');
+	                $("#pnlMessage").show();
+	                break;
+	            case 0:
+	                $("#pnlMessage").text('No hay datos de el/los hotspots seleccionados');
+	                $("#pnlMessage").show();
+	                break;
+	            default:
+	                if (target == "download") {
+                        window.open('/Downloads/Download?fileGuid=' + response.FileGuid
+                                + '&fileName=' + response.FileName
+                                + '&contentType=' + response.ContentType, '_blank');
+	                } else {
+	                     document.getElementById('iFrameDocs').src = '/Downloads/ViewPDF?fileGuid=' + response.FileGuid
+                                + '&fileName=' + response.FileName
+                                + '&contentType=' + response.ContentType;
+	                    $("#iFrameDiv").show();
+	                }
+	        }
+
+	        $("#btnDownload").show();
+	        $("#btnViewPdf").show();
+	        $("#spnDownload").hide();
+	    }).fail(function (jqXHR, textStatus, errorThrown) {
+	        $("#pnlMessage").show();
+	    });
+
+	}
+
+	$("#btnDownload").click(function () {
+	    GenerateReport("download");
+	});
+
+	$("#btnViewPdf").click(function () {
+	    GenerateReport("view");
+	});
+
+	$("#btnSubscribe").click(function () {
+		$("#pnlMessage").hide();
+		var routerIds = [];
+		var downloadName;
+		var period;
+		var frecuency = 7;
+		var form = $("#subscriptionForm");
+		var email = $("#Email").val();
+		
+		downloadName = $("#ddlDownloadNameSubscribe :selected").text();
+		frecuency = $("#ddlFrecuencySubscribe :selected").text();
+		period = $("#ddlPeriodSubscribe :selected").text();
+
+		if (downloadName.length == 0) {
+			$("#pnlMessage").append("<strong>Formulario incompleto!</strong> Por favor selecciona un reporte.");
+			$("#pnlMessage").show();
+
+			return;
+		}
+
+		$("#ddlHotspotSubscribe :selected").each(function (i, selected) {
+			routerIds.push($(selected).val());
+		});
+
+		if (routerIds.length == 0) {
+			$("#pnlMessage").append("<strong>Formulario incompleto!</strong> Por favor selecciona un hotspot.");
+			$("#pnlMessage").show();
+
+			return;
+		}
+
+		$("#downloadNameSubscription").val(downloadName);
+		$("#routerIdsSubscription").val(routerIds.join(", "));
+		$("#period").val(period);
+		$("#frecuency").val(frecuency);
+		$("#email").val(email);
+		$("#btnSubscribe").hide();
+		$("#spnSubscribe").show();
+
+		$.ajax({
+			type: "Post",
+			cache: false,
+            //url: '/Subscriptions/Subscribe',
+            url: '/Subscriptions/Create',
+			data: form.serialize(),
+		}).done(function (data) {
+			var response = data;
+			if (response.Success) {
+				$("#pnlMessage").addClass("alert-success");
+				$("#pnlMessage").append(data.Message);
+				$("#pnlMessage").show();
+			} else {
+				$("#pnlMessage").addClass("alert-danger");
+				$("#pnlMessage").append(data.Message);
+				$("#pnlMessage").show();
+			}
+			$("#btnSubscribe").show();
+			$("#spnSubscribe").hide();
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+			$("#pnlMessage").show();
+		});
+    });
+
+    $('#ddlDownload').change(function () {
+        if ($('#ddlDownload :selected').text() === 'White Label') {
+            $('#whiteLabelsList').removeClass('hidden');
+        } else {
+            $('#whiteLabelsList').addClass('hidden');
+        }
+    });
+
+    function searchRouters() {
+        var hotspot = $("#searchRouter").val().toLowerCase();
+
+        if (hotspot.length < 3) {
+            $("#routerList li").each(function () {
+                $(this).show();
+            });
+
+        } else {
+
+            $("#routerList li").each(function () {
+                if ($("input:checkbox", this).attr("name").toLowerCase().indexOf(hotspot) > -1) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        }
+    }
+
+    $("#searchRouter").change(function () {
+        searchRouters();
+        if ($("#btnSelectChecked").data("checked")) {
+            selectCheckedRouters(true);
+        }
+    });
+
+    function searchReports() {
+        var report = $("#searchReports").val().toLowerCase();
+
+        if (report.length < 3) {
+            $("#reportList li").each(function () {
+                $(this).show();
+            });
+            return;
+        }
+
+        $("#reportList li").each(function () {
+            if ($("input:checkbox", this).attr("name").toLowerCase().indexOf(report) > -1) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
+
+    $("#searchReports").change(function () {
+        searchReports();
+    });
+
+    $("#btnSelectAllRouters").click(function () {
+        var allSelected = JSON.parse($(this).attr("all"));
+        if (allSelected) {
+            $(this).attr("all", false);
+            $(this).text("Todos");
+            $("#routerList li span input[type='checkbox']:visible:not([disabled])").parent().removeClass("checked");
+            $("#routerList li span input[type='checkbox']:visible:not([disabled])").prop('checked', false);;
+        } else {
+            $(this).attr("all", true);
+            $(this).text("Ninguno");
+            $("#routerList li span input[type='checkbox']:visible:not([disabled])").parent().addClass("checked");
+            $("#routerList li span input[type='checkbox']:visible:not([disabled])").prop('checked', true);;
+        }
+    });
+
+    $("#btnSelectAllReports").click(function () {
+        var allSelected = JSON.parse($(this).attr("all"));
+        if (allSelected) {
+            $(this).attr("all", false);
+            $(this).text("Todos");
+            $("#reportList li span input[type='checkbox']:visible").parent().removeClass("checked");
+            $("#reportList li span input[type='checkbox']:visible").prop('checked', false);
+        } else {
+            $(this).attr("all", true);
+            $(this).text("Ninguno");
+            $("#reportList li span input[type='checkbox']:visible").parent().addClass("checked");
+            $("#reportList li span input[type='checkbox']:visible").prop('checked', true);
+        }
+    });
+
+    function selectCheckedRouters(forceCheck) {
+        var marcados = $("#btnSelectChecked").data("checked");
+        if (marcados && !forceCheck) {
+            $("#btnSelectChecked").data("checked", false).parent().children('.icon-check').css('color', '');
+            $("#routerFilter").css('color', '');
+
+            searchRouters();
+
+            $("#routerList li").each(function () {
+                $("input[type='checkbox']:visible", this).show()
+            });
+
+        } else {
+            $("#btnSelectChecked").data("checked", true).parent().children('.icon-check').css('color', 'green');
+            $("#routerFilter").css('color', 'red');
+
+            var routers = $("#routerList li"),
+                routersLength = routers.length,
+                i,
+                $checkbox;
+
+            for (i = 0; i < routersLength; i++) {
+                $checkbox = $(routers[i]).find("input[type='checkbox']");
+                if ($(routers[i]).css('display') != 'none' && $checkbox.prop('checked')) {
+                    $(routers[i]).show();
+                } else {
+                    $(routers[i]).hide();
+                }
+            }
+
+        }
+    }
+
+    $("#btnSelectChecked").click(function () {
+        selectCheckedRouters();
+    });
+
+    $("#reportList li span input[type='checkbox']").change(function () {
+        var chk = $(this);
+        if (this.checked) {
+            if ($(this).data('routers').length == 0) {
+                $.ajax({
+                    type: "Post",
+                    dataType: "json",
+                    //cache: false,
+                    url: '/Subscriptions/GetRoutersByReport',
+                    data: { id: chk.data('bind') },
+                }).done(function (data) {
+                    chk.data('routers', data);
+                    $.each(data, function (i, item) {
+                        $("#" + data[i].Id).parent().addClass("checked").parent().addClass('disabled');
+                        $("#" + data[i].Id).prop("checked", true);
+                    })
+
+                    if (chk.data('bind') == 1) {
+                        //TODOS
+                        $.each($("#reportList li span input[type='checkbox']"), function (i, item) {
+                            //Quita las marcas y deshabilita el resto de los checkboxes
+                            if ($(this).data('bind') > 1) {
+                                $(this).prop('checked', false);
+                                $(this).prop('disabled', true);
+                            }
+                        })
+                    }
+                });
+            } else {
+                var routers = $(this).data('routers');
+                $.each(routers, function (i, item) {
+                    $("#" + routers[i].Id).parent().addClass("checked").parent().addClass('disabled');
+                    $("#" + routers[i].Id).prop("checked", true);
+
+                })
+
+            }
+
+            if (chk.data('bind') == 1) {
+                //TODOS
+                $.each($("#reportList li span input[type='checkbox']"), function (i, item) {
+                    //Quita las marcas y deshabilita el resto de los checkboxes
+                    if ($(this).data('bind') > 1) {
+                        $(this).prop('checked', false).prop('disabled', true);
+                        $(this).parent().removeClass("checked").parent().addClass('disabled');
+                    }
+                })
+            }
+
+            if ($("#btnSelectChecked").data("checked")) {
+                selectCheckedRouters(true);
+            }
+        } else {
+
+            var routers = $(this).data('routers');
+            $.each(routers, function (i, item) {
+                $("#" + routers[i].Id).parent().removeClass("checked").parent().removeClass('disabled');
+                $("#" + routers[i].Id).prop("checked", false);
+
+            })
+
+            if (chk.data('bind') == 1) {
+                //TODOS
+                $.each($("#reportList li span input[type='checkbox']"), function (i, item) {
+                    //Quita las marcas y deshabilita el resto de los checkboxes
+                    if ($(this).data('bind') > 1) {
+                        $(this).prop('checked', false).prop('disabled', false);
+                        $(this).parent().parent().removeClass('disabled');
+                    }
+                })
+            }
+        }
+
+    });
+});
+$(document).ready(function () {
+
+    $("#searchUser").change(function () {
+        var username = $(this).val().toLowerCase();
+
+        if (username.length < 3) {
+            $("#userList li").each(function () {
+                $(this).show();
+            });
+            return;
+        }
+
+        $("#userList li").each(function () {
+            if ($("input:checkbox", this).attr("name").toLowerCase().indexOf(username) > -1) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    });
+
+    $("#searchRouter").change(function () {
+        var hotspot = $(this).val().toLowerCase();
+
+        if (hotspot.length < 3) {
+            $("#routerList li").each(function () {
+                $(this).show();
+            });
+            return;
+        }
+
+        $("#routerList li").each(function () {
+            if ($("input:checkbox", this).attr("name").toLowerCase().indexOf(hotspot) > -1) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    });
+
+    $("#btnSelectAllUsers").click(function () {
+        var allSelected = JSON.parse($(this).attr("all"));
+        if (allSelected) {
+            $(this).attr("all", false);
+            $(this).text("Todos");
+            $("#userList li span input[type='checkbox']:visible").parent().removeClass("checked");
+            $("#userList li span input[type='checkbox']:visible").prop('checked', false);;
+        } else {
+            $(this).attr("all", true);
+            $(this).text("Ninguno");
+            $("#userList li span input[type='checkbox']:visible").parent().addClass("checked");
+            $("#userList li span input[type='checkbox']:visible").prop('checked', true);;
+        }
+    });
+
+    $("#btnSelectAllRouters").click(function () {
+        var allSelected = JSON.parse($(this).attr("all"));
+        if (allSelected) {
+            $(this).attr("all", false);
+            $(this).text("Todos");
+            $("#routerList li span input[type='checkbox']:visible").parent().removeClass("checked");
+            $("#routerList li span input[type='checkbox']:visible").prop('checked', false);;
+        } else {
+            $(this).attr("all", true);
+            $(this).text("Ninguno");
+            $("#routerList li span input[type='checkbox']:visible").parent().addClass("checked");
+            $("#routerList li span input[type='checkbox']:visible").prop('checked', true);;
+        }
+    });
+
+    $("#btnSave").click(function () {
+        $("#pnlMessage").hide();
+        $("#pnlMessage").removeClass("alert-danger");
+        $("#pnlMessage").removeClass("alert-success")
+
+        var data = {};
+        var url = "";
+        var id = $("#hdnReportId").val();
+        var reportName = $("#txtReportName").val();
+        var routerIds = $("#routerList li input:checked").map(function () { return this.value; }).get();
+        var userIds = $("#userList li input:checked").map(function () { return this.value; }).get();
+
+        if (id != null) {
+            data = { "id": id, "reportName": reportName, "userIds": userIds, "routerIds": routerIds }
+            url = "/Reports/Edit";
+        } else {
+            data = { "reportName": reportName, "userIds": userIds, "routerIds": routerIds }
+            url = "/Reports/Create";
+        }
+
+        $.ajax({
+            type: "Post",
+            url: url,
+            data: JSON.stringify(data),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            traditional: true,
+        }).done(function (data) {
+            window.location.href = data
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            $("#pnlMessage").addClass("alert-danger");
+            $("#pnlMessage").append("<strong>Error!</strong> Ha ocurrido un error, por favor inténtalo nuevamente.");
+            $("#pnlMessage").show();
+        });;
+    });
+
+
+    $('.botshow').click(function () {
+
+        $(this).closest('tr').next('tr').show(1000);
+
+  
+        var hpid = $(this).data('hpid');
+        var hstatus = $(this).data('hstatus');
+        var data = {};
+        var url = "";
+
+        data = { "routerId": hpid, "status": hstatus }
+        url = "/Reports/Stats";
+
+
+        $.ajax({
+            type: "Post",
+            url: url,
+            data: JSON.stringify(data),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            traditional: true,
+        }).done(function (data) {
+           
+            var up24 = data["up24"] * 100;
+            var up7 = data["up7"] * 100;
+            var up30 = data["up30"] * 100;
+            var maxCon = data["maxCon"];
+            var horaMaxCon = data["horaMaxCon"];
+
+            var htmlStats = "";
+            htmlStats += '<div><table class="table"><tr>';
+            htmlStats += '<td>Max. conexiones siumultaneas (últimas 24hrs):<strong> ' + maxCon + '</strong> <span> ' +  horaMaxCon + ' </span></td>';
+            htmlStats += '<td>% Up Time (Ult 24 horas)<strong> ' + up24.toFixed(0) + '%</strong></td></tr>';
+            htmlStats += '<tr><td>% Up Time (Ult 7 días)<strong> ' + up7.toFixed(0) + '%</strong></td><td>% Up Time (Ult 30 días)<strong> ' + up30.toFixed(0) +'%</strong></td>';
+            htmlStats += '</tr></table></div>'
+
+           
+
+
+
+            htmlStats = `<div class="row">
+
+    <div class="col-lg-1">
+     </div>
+
+    <div class="col-lg-2">
+            <!-- START widget-->
+            <div class="panel widget bg-gray-darker">
+                <div class="panel-body">
+
+                   
+                    <div class="h5">Up Time (Ult 24 horas)</div>
+                    <h3 class="mt0 text-info"><strong>_up24_%</strong></h3>
+
+
+                </div>
+            </div>
+            <!-- END widget-->
+        </div>
+
+        <div class="col-lg-2">
+            <!-- START widget-->
+            <div class="panel widget bg-info">
+                <div class="panel-body ">
+
+                   
+                    <div class="h5">Up Time (Ult 7 Días)</div>
+                    <h3 class="mt0 text-info"><strong>_up7_%</strong></h3>
+                </div>
+            </div>
+            <!-- END widget-->
+        </div>
+
+        <div class="col-lg-2">
+            <!-- START widget-->
+            <div class="panel widget bg-success">
+                <div class="panel-body">
+                    
+                    <div class="h5">Up Time (Ult 30 Dias)</div>
+                    <h3 class="mt0 text-info"><strong>_up30_%</strong></h3>
+
+                </div>
+            </div>
+            <!-- END widget-->
+        </div>
+        <div class="col-lg-4">
+            <!-- START widget-->
+            <div class="panel widget bg-success">
+                <div class="panel-body">
+
+                    <div class="h5">Máx conexiones simultaneas (Ult 24 hrs) </div>
+                    <h3 class="mt0 text-info"><strong>_maxcon_</strong></h3> <small> a las <strong> _hora_ </strong><small>
+
+                </div>
+            </div>
+            <!-- END widget-->
+        </div>
+    <div class="col-lg-1">
+     </div>
+
+    </div>`;
+
+
+            var htmlStats = htmlStats.replace('_up24_', up24.toFixed(0));
+            var htmlStats = htmlStats.replace('_up30_', up30.toFixed(0));
+            var htmlStats = htmlStats.replace('_up7_', up7.toFixed(0));
+            var htmlStats = htmlStats.replace('_maxcon_', maxCon);
+            var htmlStats = htmlStats.replace('_hora_', horaMaxCon);
+
+
+            
+            
+            var idiv = 'dth-' + hpid;
+            $("#" + idiv).delay(500).html(htmlStats);
+
+
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                console.log("ocurrio un error al recuperar info")
+        });;
+
+
+    });
+
+    window.onload = function () {
+    	window.setTimeout(document.reportsForm.submit.bind(document.reportsForm), 60000);
+    };
+});
