@@ -538,4 +538,30 @@ block content
                               span.fa.fa-check
                           //  id uniform-374
                         td YPF - OPESSA Melo - Todo
-      // END row
+        // END row
+        .row
+          .col-lg-6
+            .panel.panel-default
+              .panel-heading
+                | Período
+              .panel-body
+                .form-group
+                  select.form-control.m-b(name='account')
+                    option Ayer
+                    option Últimos 7 días
+                    option Últimos 30 días
+                    option Este mes
+                    option Último mes
+                    option Personalizar
+                .form-group
+                  // Info button with label
+                  button.btn.btn-labeled.btn-info(type='button')
+                    span.btn-label
+                      i.fa.fa-download
+                    | Descargar
+                  // Info button with label
+                  button.btn.btn-labeled.btn-info(type='button')
+                    span.btn-label
+                      i.fa.fa-eye
+                    | Ver
+        // END row
