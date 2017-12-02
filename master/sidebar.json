@@ -27,6 +27,12 @@
       "href": "./dashboard.html",
       "icon": "icon-chart",
       "label": "label label-info"
+    },
+    {
+      "text": "Suscripciones",
+      "href": "./suscriptions.html",
+      "icon": "icon-feed",
+      "label": "label label-info"
     }
   ]
 }
